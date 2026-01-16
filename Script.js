@@ -34,6 +34,8 @@ const kidsActivity2 = document.getElementById("kidsActivity2");
 const kidsActivity3 = document.getElementById("kidsActivity3");
 // Event details section
 const eventTitle = document.querySelector(".event-title");
+// Booking form elements
+const dateInfo = document.querySelector(".date-info");
 const htmlElement = document.documentElement;
 
 // Arabic content
@@ -67,6 +69,10 @@ const arabicContent = {
   kidsActivity2: "ألعاب تفاعلية خفيفة",
   kidsActivity3: "قصص وحكايات ممتعة",
   eventTitle: "تفاصيل الفعالية العائلية",
+  bookingTitle: "احجز مكانك في الفعالية",
+  popupTitle: "شكراً لك!",
+  popupMessage: "تم استلام طلب الحجز بنجاح. سيتم التواصل معك خلال 24 ساعة لتأكيد الحجز.",
+  dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
 };
 
 // English content
@@ -100,6 +106,10 @@ const englishContent = {
   kidsActivity2: "Interactive Light Games",
   kidsActivity3: "Fun Stories and Tales",
   eventTitle: "Family Event Details",
+  bookingTitle: "Book Your Place at the Event",
+  popupTitle: "Thank You!",
+  popupMessage: "Your booking request has been received successfully. We will contact you within 24 hours to confirm your reservation.",
+  dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
 };
 
 let currentLang = "ar";
@@ -138,6 +148,10 @@ langToggle.addEventListener("click", () => {
     if (kidsActivity2) kidsActivity2.textContent = englishContent.kidsActivity2;
     if (kidsActivity3) kidsActivity3.textContent = englishContent.kidsActivity3;
     if (eventTitle) eventTitle.textContent = englishContent.eventTitle;
+    if (bookingTitle) bookingTitle.textContent = englishContent.bookingTitle;
+    if (popupTitle) popupTitle.textContent = englishContent.popupTitle;
+    if (popupMessage) popupMessage.textContent = englishContent.popupMessage;
+    if (dateInfo) dateInfo.textContent = englishContent.dateInfo;
     langToggle.textContent = "AR";
   } else {
     currentLang = "ar";
@@ -172,6 +186,10 @@ langToggle.addEventListener("click", () => {
     if (kidsActivity2) kidsActivity2.textContent = arabicContent.kidsActivity2;
     if (kidsActivity3) kidsActivity3.textContent = arabicContent.kidsActivity3;
     if (eventTitle) eventTitle.textContent = arabicContent.eventTitle;
+    if (bookingTitle) bookingTitle.textContent = arabicContent.bookingTitle;
+    if (popupTitle) popupTitle.textContent = arabicContent.popupTitle;
+    if (popupMessage) popupMessage.textContent = arabicContent.popupMessage;
+    if (dateInfo) dateInfo.textContent = arabicContent.dateInfo;
     langToggle.textContent = "EN";
   }
 });
@@ -220,6 +238,237 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Toggle show class on content
       kidsContent.classList.toggle("show");
+    });
+  }
+
+  // Booking Form Validation and Functionality
+  const bookingForm = document.getElementById("bookingForm");
+  const bookingTitle = document.getElementById("bookingTitle");
+  const thankYouPopup = document.getElementById("thankYouPopup");
+  const popupCloseBtn = document.getElementById("popupCloseBtn");
+  const popupTitle = document.getElementById("popupTitle");
+  const popupMessage = document.getElementById("popupMessage");
+
+  if (bookingForm) {
+    // Set minimum date to today and restrict to event days
+    setupDateRestrictions();
+
+    bookingForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      if (validateForm()) {
+        // Form is valid, show thank you popup
+        showThankYouPopup();
+        bookingForm.reset();
+      }
+    });
+
+    // Real-time validation
+    const inputs = bookingForm.querySelectorAll("input, select, textarea");
+    inputs.forEach(input => {
+      input.addEventListener("blur", function() {
+        validateField(this);
+      });
+
+      input.addEventListener("input", function() {
+        clearFieldError(this);
+      });
+    });
+  }
+
+  function validateForm() {
+    let isValid = true;
+
+    // Validate full name
+    const fullName = document.getElementById("fullName");
+    if (!fullName.value.trim()) {
+      showFieldError(fullName, "الاسم الكامل مطلوب");
+      isValid = false;
+    }
+
+    // Validate number of people
+    const numPeople = document.getElementById("numPeople");
+    if (!numPeople.value || numPeople.value < 1) {
+      showFieldError(numPeople, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+      isValid = false;
+    }
+
+    // Validate meal type
+    const mealType = document.getElementById("mealType");
+    if (!mealType.value) {
+      showFieldError(mealType, "يجب اختيار نوع البوفيه");
+      isValid = false;
+    }
+
+    // Validate booking date
+    const bookingDate = document.getElementById("bookingDate");
+    if (!bookingDate.value) {
+      showFieldError(bookingDate, "تاريخ الحجز مطلوب");
+      isValid = false;
+    } else if (!isValidDate(bookingDate.value)) {
+      showFieldError(bookingDate, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  function validateField(field) {
+    clearFieldError(field);
+
+    switch(field.id) {
+      case "fullName":
+        if (!field.value.trim()) {
+          showFieldError(field, "الاسم الكامل مطلوب");
+        }
+        break;
+      case "numPeople":
+        if (!field.value || field.value < 1) {
+          showFieldError(field, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+        }
+        break;
+      case "mealType":
+        if (!field.value) {
+          showFieldError(field, "يجب اختيار نوع البوفيه");
+        }
+        break;
+      case "bookingDate":
+        if (!field.value) {
+          showFieldError(field, "تاريخ الحجز مطلوب");
+        } else if (!isValidDate(field.value)) {
+          showFieldError(field, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+        }
+        break;
+    }
+  }
+
+  function isValidDate(dateString) {
+    const date = new Date(dateString);
+    const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
+
+    // Check if it's Thursday (4), Friday (5), or Saturday (6)
+    if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
+      return false;
+    }
+
+    // Check if it's within the event period (from Jan 20th for 1 month)
+    const currentYear = new Date().getFullYear();
+    const eventStart = new Date(currentYear, 0, 20); // January 20th
+    const eventEnd = new Date(currentYear, 1, 20); // February 20th (1 month later)
+
+    return date >= eventStart && date <= eventEnd;
+  }
+
+  function showFieldError(field, message) {
+    const formGroup = field.closest(".form-group");
+    formGroup.classList.add("error");
+
+    let errorElement = formGroup.querySelector(".error-message");
+    if (!errorElement) {
+      errorElement = document.createElement("span");
+      errorElement.className = "error-message";
+      formGroup.appendChild(errorElement);
+    }
+    errorElement.textContent = message;
+  }
+
+  function clearFieldError(field) {
+    const formGroup = field.closest(".form-group");
+    formGroup.classList.remove("error");
+
+    const errorElement = formGroup.querySelector(".error-message");
+    if (errorElement) {
+      errorElement.remove();
+    }
+  }
+
+  function setupDateRestrictions() {
+    const bookingDateInput = document.getElementById("bookingDate");
+    const today = new Date();
+
+    // Set minimum date to event start date (January 20th of current year)
+    const currentYear = today.getFullYear();
+    const eventStart = new Date(currentYear, 0, 20); // January 20th
+    const eventEnd = new Date(currentYear, 1, 20); // February 20th
+
+    // If today is before event start, set min to event start
+    // If today is after event start but before event end, set min to today
+    // If today is after event end, disable the input entirely
+    let minDate;
+    if (today < eventStart) {
+      minDate = eventStart.toISOString().split('T')[0];
+    } else if (today <= eventEnd) {
+      minDate = today.toISOString().split('T')[0];
+    } else {
+      // Event has ended
+      bookingDateInput.disabled = true;
+      bookingDateInput.placeholder = "الفعالية انتهت";
+      return;
+    }
+
+    bookingDateInput.setAttribute("min", minDate);
+    bookingDateInput.setAttribute("max", eventEnd.toISOString().split('T')[0]);
+
+    // Add input event listener to restrict to valid days
+    bookingDateInput.addEventListener("input", function() {
+      if (this.value) {
+        const selectedDate = new Date(this.value);
+        const dayOfWeek = selectedDate.getDay();
+
+        // Check if it's Thursday (4), Friday (5), or Saturday (6)
+        if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
+          // Invalid day of week
+          this.value = "";
+          showFieldError(this, "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
+          return;
+        }
+
+        // Check if it's within the event period
+        if (selectedDate < eventStart || selectedDate > eventEnd) {
+          this.value = "";
+          showFieldError(this, "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)");
+          return;
+        }
+
+        // Clear any existing errors
+        clearFieldError(this);
+      }
+    });
+
+    // Add change event for additional validation
+    bookingDateInput.addEventListener("change", function() {
+      if (this.value && !isValidDate(this.value)) {
+        this.value = "";
+        showFieldError(this, "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة");
+      }
+    });
+  }
+
+  function showThankYouPopup() {
+    if (thankYouPopup) {
+      thankYouPopup.classList.add("show");
+      document.body.style.overflow = "hidden"; // Prevent scrolling when popup is open
+    }
+  }
+
+  function hideThankYouPopup() {
+    if (thankYouPopup) {
+      thankYouPopup.classList.remove("show");
+      document.body.style.overflow = ""; // Restore scrolling
+    }
+  }
+
+  // Close popup when close button is clicked
+  if (popupCloseBtn) {
+    popupCloseBtn.addEventListener("click", hideThankYouPopup);
+  }
+
+  // Close popup when clicking outside
+  if (thankYouPopup) {
+    thankYouPopup.addEventListener("click", function(e) {
+      if (e.target === thankYouPopup || e.target.classList.contains("popup-overlay")) {
+        hideThankYouPopup();
+      }
     });
   }
 });
