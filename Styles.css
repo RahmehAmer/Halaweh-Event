@@ -781,14 +781,13 @@ h2.benefits-intro {
   width: 100%;
   height: 100%;
   z-index: 10000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
+  display: none; /* Hidden by default */
+  justify-content: center;
+  align-items: center;
 }
 
 .thank-you-popup.show {
-  opacity: 1;
-  visibility: visible;
+  display: flex; /* Show popup as flex container */
 }
 
 .popup-overlay {
@@ -797,15 +796,10 @@ h2.benefits-intro {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(232, 220, 192, 0.9) 0%, rgba(196, 90, 46, 0.8) 100%);
-  backdrop-filter: blur(5px);
+  /* No background overlay - popup appears directly above content */
 }
 
 .popup-content {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
   background: linear-gradient(135deg, #faf8f4 0%, #f5f1ea 50%, #e8dcc0 100%);
   border-radius: 20px;
   padding: 3rem 2rem;
@@ -814,12 +808,11 @@ h2.benefits-intro {
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(196, 90, 46, 0.2);
   border: 2px solid rgba(196, 90, 46, 0.1);
-  transition: all 0.3s ease;
+  position: relative;
+  z-index: 10001;
 }
 
-.thank-you-popup.show .popup-content {
-  transform: translate(-50%, -50%) scale(1);
-}
+/* Popup content is now centered using flexbox parent container */
 
 .popup-header {
   margin-bottom: 2rem;

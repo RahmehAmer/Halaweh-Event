@@ -71,7 +71,7 @@ const arabicContent = {
   eventTitle: "تفاصيل الفعالية العائلية",
   bookingTitle: "احجز مكانك في الفعالية",
   popupTitle: "شكراً لك!",
-  popupMessage: "تم استلام طلب الحجز بنجاح. سيتم التواصل معك خلال 24 ساعة لتأكيد الحجز.",
+  popupMessage: "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.",
   dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
 };
 
@@ -108,7 +108,7 @@ const englishContent = {
   eventTitle: "Family Event Details",
   bookingTitle: "Book Your Place at the Event",
   popupTitle: "Thank You!",
-  popupMessage: "Your booking request has been received successfully. We will contact you within 24 hours to confirm your reservation.",
+  popupMessage: "Booking confirmed successfully. Thank you for choosing our event.",
   dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
 };
 
@@ -210,6 +210,190 @@ themeToggle.addEventListener("click", () => {
   themeIcon.textContent = themeIcons[currentThemeIndex];
 });
 
+// Form validation functions
+function validateForm() {
+  let isValid = true;
+
+  // Validate full name
+  const fullName = document.getElementById("fullName");
+  if (!fullName.value.trim()) {
+    showFieldError(fullName, "الاسم الكامل مطلوب");
+    isValid = false;
+  }
+
+  // Validate number of people
+  const numPeople = document.getElementById("numPeople");
+  if (!numPeople.value || numPeople.value < 1) {
+    showFieldError(numPeople, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+    isValid = false;
+  }
+
+  // Validate meal type
+  const mealType = document.getElementById("mealType");
+  if (!mealType.value) {
+    showFieldError(mealType, "يجب اختيار نوع البوفيه");
+    isValid = false;
+  }
+
+  // Validate booking date
+  const bookingDate = document.getElementById("bookingDate");
+  if (!bookingDate.value) {
+    showFieldError(bookingDate, "تاريخ الحجز مطلوب");
+    isValid = false;
+  } else if (!isValidDate(bookingDate.value)) {
+    showFieldError(bookingDate, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+function validateField(field) {
+  clearFieldError(field);
+
+  switch(field.id) {
+    case "fullName":
+      if (!field.value.trim()) {
+        showFieldError(field, "الاسم الكامل مطلوب");
+      }
+      break;
+    case "numPeople":
+      if (!field.value || field.value < 1) {
+        showFieldError(field, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+      }
+      break;
+    case "mealType":
+      if (!field.value) {
+        showFieldError(field, "يجب اختيار نوع البوفيه");
+      }
+      break;
+    case "bookingDate":
+      if (!field.value) {
+        showFieldError(field, "تاريخ الحجز مطلوب");
+      } else if (!isValidDate(field.value)) {
+        showFieldError(field, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+      }
+      break;
+  }
+}
+
+function isValidDate(dateString) {
+  const date = new Date(dateString);
+  const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
+
+  // Check if it's Thursday (4), Friday (5), or Saturday (6)
+  if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
+    return false;
+  }
+
+  // Check if it's within the event period (from Jan 20th for 1 month)
+  const currentYear = new Date().getFullYear();
+  const eventStart = new Date(currentYear, 0, 20); // January 20th
+  const eventEnd = new Date(currentYear, 1, 20); // February 20th (1 month later)
+
+  return date >= eventStart && date <= eventEnd;
+}
+
+function showFieldError(field, message) {
+  const formGroup = field.closest(".form-group");
+  formGroup.classList.add("error");
+
+  let errorElement = formGroup.querySelector(".error-message");
+  if (!errorElement) {
+    errorElement = document.createElement("span");
+    errorElement.className = "error-message";
+    formGroup.appendChild(errorElement);
+  }
+  errorElement.textContent = message;
+}
+
+function clearFieldError(field) {
+  const formGroup = field.closest(".form-group");
+  formGroup.classList.remove("error");
+
+  const errorElement = formGroup.querySelector(".error-message");
+  if (errorElement) {
+    errorElement.remove();
+  }
+}
+
+function setupDateRestrictions() {
+  const bookingDateInput = document.getElementById("bookingDate");
+  const today = new Date();
+
+  // Set minimum date to event start date (January 20th of current year)
+  const currentYear = today.getFullYear();
+  const eventStart = new Date(currentYear, 0, 20); // January 20th
+  const eventEnd = new Date(currentYear, 1, 20); // February 20th
+
+  // If today is before event start, set min to event start
+  // If today is after event start but before event end, set min to today
+  // If today is after event end, disable the input entirely
+  let minDate;
+  if (today < eventStart) {
+    minDate = eventStart.toISOString().split('T')[0];
+  } else if (today <= eventEnd) {
+    minDate = today.toISOString().split('T')[0];
+  } else {
+    // Event has ended
+    bookingDateInput.disabled = true;
+    bookingDateInput.placeholder = "الفعالية انتهت";
+    return;
+  }
+
+  bookingDateInput.setAttribute("min", minDate);
+  bookingDateInput.setAttribute("max", eventEnd.toISOString().split('T')[0]);
+
+  // Add input event listener to restrict to valid days
+  bookingDateInput.addEventListener("input", function() {
+    if (this.value) {
+      const selectedDate = new Date(this.value);
+      const dayOfWeek = selectedDate.getDay();
+
+      // Check if it's Thursday (4), Friday (5), or Saturday (6)
+      if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
+        // Invalid day of week
+        this.value = "";
+        showFieldError(this, "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
+        return;
+      }
+
+      // Check if it's within the event period
+      if (selectedDate < eventStart || selectedDate > eventEnd) {
+        this.value = "";
+        showFieldError(this, "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)");
+        return;
+      }
+
+      // Clear any existing errors
+      clearFieldError(this);
+    }
+  });
+
+  // Add change event for additional validation
+  bookingDateInput.addEventListener("change", function() {
+    if (this.value && !isValidDate(this.value)) {
+      this.value = "";
+      showFieldError(this, "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة");
+    }
+  });
+}
+
+function showThankYouPopup() {
+  const thankYouPopup = document.getElementById("thankYouPopup");
+
+  if (thankYouPopup) {
+    thankYouPopup.classList.add("show");
+  }
+}
+
+function hideThankYouPopup() {
+  const thankYouPopup = document.getElementById("thankYouPopup");
+  if (thankYouPopup) {
+    thankYouPopup.classList.remove("show");
+  }
+}
+
 // Reviews Toggle Functionality
 document.addEventListener("DOMContentLoaded", () => {
   const reviewToggles = document.querySelectorAll(".review-toggle");
@@ -254,12 +438,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setupDateRestrictions();
 
     bookingForm.addEventListener("submit", function(e) {
-      e.preventDefault();
+      e.preventDefault(); // Completely disable default HTML form submission
 
+      // Validate form before showing popup
       if (validateForm()) {
-        // Form is valid, show thank you popup
         showThankYouPopup();
-        bookingForm.reset();
+        // Do NOT reset form - preserve user data
       }
     });
 
@@ -274,188 +458,6 @@ document.addEventListener("DOMContentLoaded", () => {
         clearFieldError(this);
       });
     });
-  }
-
-  function validateForm() {
-    let isValid = true;
-
-    // Validate full name
-    const fullName = document.getElementById("fullName");
-    if (!fullName.value.trim()) {
-      showFieldError(fullName, "الاسم الكامل مطلوب");
-      isValid = false;
-    }
-
-    // Validate number of people
-    const numPeople = document.getElementById("numPeople");
-    if (!numPeople.value || numPeople.value < 1) {
-      showFieldError(numPeople, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
-      isValid = false;
-    }
-
-    // Validate meal type
-    const mealType = document.getElementById("mealType");
-    if (!mealType.value) {
-      showFieldError(mealType, "يجب اختيار نوع البوفيه");
-      isValid = false;
-    }
-
-    // Validate booking date
-    const bookingDate = document.getElementById("bookingDate");
-    if (!bookingDate.value) {
-      showFieldError(bookingDate, "تاريخ الحجز مطلوب");
-      isValid = false;
-    } else if (!isValidDate(bookingDate.value)) {
-      showFieldError(bookingDate, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
-  function validateField(field) {
-    clearFieldError(field);
-
-    switch(field.id) {
-      case "fullName":
-        if (!field.value.trim()) {
-          showFieldError(field, "الاسم الكامل مطلوب");
-        }
-        break;
-      case "numPeople":
-        if (!field.value || field.value < 1) {
-          showFieldError(field, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
-        }
-        break;
-      case "mealType":
-        if (!field.value) {
-          showFieldError(field, "يجب اختيار نوع البوفيه");
-        }
-        break;
-      case "bookingDate":
-        if (!field.value) {
-          showFieldError(field, "تاريخ الحجز مطلوب");
-        } else if (!isValidDate(field.value)) {
-          showFieldError(field, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
-        }
-        break;
-    }
-  }
-
-  function isValidDate(dateString) {
-    const date = new Date(dateString);
-    const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
-
-    // Check if it's Thursday (4), Friday (5), or Saturday (6)
-    if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-      return false;
-    }
-
-    // Check if it's within the event period (from Jan 20th for 1 month)
-    const currentYear = new Date().getFullYear();
-    const eventStart = new Date(currentYear, 0, 20); // January 20th
-    const eventEnd = new Date(currentYear, 1, 20); // February 20th (1 month later)
-
-    return date >= eventStart && date <= eventEnd;
-  }
-
-  function showFieldError(field, message) {
-    const formGroup = field.closest(".form-group");
-    formGroup.classList.add("error");
-
-    let errorElement = formGroup.querySelector(".error-message");
-    if (!errorElement) {
-      errorElement = document.createElement("span");
-      errorElement.className = "error-message";
-      formGroup.appendChild(errorElement);
-    }
-    errorElement.textContent = message;
-  }
-
-  function clearFieldError(field) {
-    const formGroup = field.closest(".form-group");
-    formGroup.classList.remove("error");
-
-    const errorElement = formGroup.querySelector(".error-message");
-    if (errorElement) {
-      errorElement.remove();
-    }
-  }
-
-  function setupDateRestrictions() {
-    const bookingDateInput = document.getElementById("bookingDate");
-    const today = new Date();
-
-    // Set minimum date to event start date (January 20th of current year)
-    const currentYear = today.getFullYear();
-    const eventStart = new Date(currentYear, 0, 20); // January 20th
-    const eventEnd = new Date(currentYear, 1, 20); // February 20th
-
-    // If today is before event start, set min to event start
-    // If today is after event start but before event end, set min to today
-    // If today is after event end, disable the input entirely
-    let minDate;
-    if (today < eventStart) {
-      minDate = eventStart.toISOString().split('T')[0];
-    } else if (today <= eventEnd) {
-      minDate = today.toISOString().split('T')[0];
-    } else {
-      // Event has ended
-      bookingDateInput.disabled = true;
-      bookingDateInput.placeholder = "الفعالية انتهت";
-      return;
-    }
-
-    bookingDateInput.setAttribute("min", minDate);
-    bookingDateInput.setAttribute("max", eventEnd.toISOString().split('T')[0]);
-
-    // Add input event listener to restrict to valid days
-    bookingDateInput.addEventListener("input", function() {
-      if (this.value) {
-        const selectedDate = new Date(this.value);
-        const dayOfWeek = selectedDate.getDay();
-
-        // Check if it's Thursday (4), Friday (5), or Saturday (6)
-        if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-          // Invalid day of week
-          this.value = "";
-          showFieldError(this, "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
-          return;
-        }
-
-        // Check if it's within the event period
-        if (selectedDate < eventStart || selectedDate > eventEnd) {
-          this.value = "";
-          showFieldError(this, "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)");
-          return;
-        }
-
-        // Clear any existing errors
-        clearFieldError(this);
-      }
-    });
-
-    // Add change event for additional validation
-    bookingDateInput.addEventListener("change", function() {
-      if (this.value && !isValidDate(this.value)) {
-        this.value = "";
-        showFieldError(this, "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة");
-      }
-    });
-  }
-
-  function showThankYouPopup() {
-    if (thankYouPopup) {
-      thankYouPopup.classList.add("show");
-      document.body.style.overflow = "hidden"; // Prevent scrolling when popup is open
-    }
-  }
-
-  function hideThankYouPopup() {
-    if (thankYouPopup) {
-      thankYouPopup.classList.remove("show");
-      document.body.style.overflow = ""; // Restore scrolling
-    }
   }
 
   // Close popup when close button is clicked
@@ -473,3 +475,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Add keyboard support (ESC key to close)
+document.addEventListener("keydown", function(e) {
+  const thankYouPopup = document.getElementById("thankYouPopup");
+  if (e.key === "Escape" && thankYouPopup && thankYouPopup.classList.contains("show")) {
+    thankYouPopup.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+});
