@@ -112,6 +112,7 @@ const arabicContent = {
   instagramShareText: "إنستغرام",
   youtubeShareText: "يوتيوب",
   copyrightText: "2026 مطعم حلاوة. جميع الحقوق محفوظة.",
+  locationText: "عمان-خلدا",
 };
 
 // English content
@@ -197,6 +198,7 @@ const englishContent = {
   instagramShareText: "Instagram",
   youtubeShareText: "YouTube",
   copyrightText: "2026 Halaweh Restaurant. All rights reserved.",
+  locationText: "Amman-Khalda",
 };
 
 // Single source of truth for language state
@@ -308,7 +310,8 @@ document.addEventListener("DOMContentLoaded", () => {
     whatsappShareText: document.getElementById("whatsappShareText"),
     instagramShareText: document.getElementById("instagramShareText"),
     youtubeShareText: document.getElementById("youtubeShareText"),
-    copyrightText: document.getElementById("copyrightText")
+    copyrightText: document.getElementById("copyrightText"),
+    locationText: document.getElementById("locationText")
   };
 
   // Single function to update all text based on current language
@@ -319,9 +322,9 @@ document.addEventListener("DOMContentLoaded", () => {
     htmlElement.setAttribute("lang", lang);
     htmlElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
 
-    // Update language button
+    // Update language button (show the language you can switch TO)
     if (elements.languageBtn) {
-      elements.languageBtn.textContent = lang === "ar" ? "AR" : "EN";
+      elements.languageBtn.textContent = lang === "ar" ? "EN" : "AR";
     }
 
     // Update dropdown options visibility
@@ -739,18 +742,33 @@ if (youtubeShare) {
 // Theme Toggle Functionality
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
+const body = document.body;
 
 const themes = ["sun", "moon", "auto"];
 const themeIcons = ["☀️", "🌙", "🌓"];
-let currentThemeIndex = 0;
 
-  if (themeToggle && themeIcon) {
-themeToggle.addEventListener("click", () => {
-  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-  const newTheme = themes[currentThemeIndex];
-  body.setAttribute("data-theme", newTheme);
-  themeIcon.textContent = themeIcons[currentThemeIndex];
-    });
+// Get saved theme or default to sun
+let currentThemeIndex = 0;
+const savedTheme = localStorage.getItem("halaweh-theme");
+if (savedTheme) {
+  const savedIndex = themes.indexOf(savedTheme);
+  if (savedIndex !== -1) {
+    currentThemeIndex = savedIndex;
+    body.setAttribute("data-theme", themes[currentThemeIndex]);
+    if (themeIcon) {
+      themeIcon.textContent = themeIcons[currentThemeIndex];
+    }
   }
+}
+
+if (themeToggle && themeIcon) {
+  themeToggle.addEventListener("click", () => {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    const newTheme = themes[currentThemeIndex];
+    body.setAttribute("data-theme", newTheme);
+    themeIcon.textContent = themeIcons[currentThemeIndex];
+    localStorage.setItem("halaweh-theme", newTheme);
+  });
+}
 });
 
