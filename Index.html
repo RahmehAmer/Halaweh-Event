@@ -20,9 +20,6 @@
         </a>
 
         <div class="header-actions">
-          <button class="btn btn-secondary" id="langToggle" type="button">
-            EN
-          </button>
           <button
             class="icon-btn"
             id="themeToggle"
@@ -32,6 +29,16 @@
           >
             <span id="themeIcon" aria-hidden="true">☀️</span>
           </button>
+
+          <div class="language-dropdown">
+            <button class="btn btn-secondary language-btn" id="languageBtn" type="button">
+              AR
+            </button>
+            <div class="language-options" id="languageOptions">
+              <div class="language-option" data-lang="en" id="langOptionEN">English</div>
+              <div class="language-option" data-lang="ar" id="langOptionAR">العربية</div>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -212,44 +219,44 @@
 
       <section class="event-details" aria-label="Event Details">
         <div class="container event-container">
-          <h3 class="event-title">تفاصيل الفعالية العائلية</h3>
+          <h3 class="event-title" id="eventTitle">تفاصيل الفعالية العائلية</h3>
 
           <div class="event-card">
             <div class="event-info">
               <div class="event-item">
                 <span class="event-icon">💰</span>
-                <span class="event-text">سعر المقعد: <strong>20 دينار</strong></span>
+                <span class="event-text" id="eventPrice">سعر المقعد: <strong> 20 دينار</strong></span>
               </div>
 
               <div class="event-item">
                 <span class="event-icon">📅</span>
-                <span class="event-text">الأيام: <strong>كل خميس، جمعة، وسبت</strong></span>
+                <span class="event-text" id="eventDays">الأيام: <strong>كل خميس، جمعة، وسبت</strong></span>
               </div>
 
               <div class="event-item">
                 <span class="event-icon">📆</span>
-                <span class="event-text">فترة الفعالية: <strong>من 20/1 ولمدة شهر</strong></span>
+                <span class="event-text" id="eventPeriod">فترة الفعالية: <strong>من 20/1 ولمدة شهر</strong></span>
               </div>
 
               <div class="event-item event-times">
                 <span class="event-icon">🕒</span>
-                <div class="event-text">
-                  <strong>أوقات البوفيه:</strong>
+                <div class="event-text" id="eventTimes">
+                  <strong id="eventTimesTitle">أوقات البوفيه:</strong>
                   <div class="time-details">
-                    <div>الغداء: 3:00 عصرًا</div>
-                    <div>العشاء: 8:00 مساءً</div>
+                    <div id="lunchTime">الغداء: 3:00 عصرًا</div>
+                    <div id="dinnerTime">العشاء: 8:00 مساءً</div>
                   </div>
                 </div>
               </div>
 
               <div class="event-item">
                 <span class="event-icon">⏳</span>
-                <span class="event-text">مدة الفعالية: <strong>3 ساعات</strong></span>
+                <span class="event-text" id="eventDuration">مدة الفعالية: <strong>3 ساعات</strong></span>
               </div>
 
               <div class="event-item">
                 <span class="event-icon">👥</span>
-                <span class="event-text"> المقاعد محدودة: <strong> 200 مقعد</strong></span>
+                <span class="event-text" id="eventSeats"> المقاعد محدودة: <strong> 200 مقعد</strong></span>
               </div>
             </div>
           </div>
@@ -258,72 +265,72 @@
 
       <section class="reviews" aria-label="Reviews">
         <div class="container reviews-container">
-          <h3 class="reviews-title">شو قالوا ضيوفنا عن التجربة؟</h3>
+          <h3 class="reviews-title" id="reviewsTitle">شو قالوا ضيوفنا عن التجربة؟</h3>
 
           <div class="reviews-grid">
             <div class="review-card">
               <button class="review-toggle" data-review="1">
-                <span class="review-question">ما رأيك بالأطباق الرئيسية؟</span>
+                <span class="review-question" id="reviewQuestion1">ما رأيك بالأطباق الرئيسية؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-1">
-                <div class="review-customer-name">أحمد محمد</div>
-                <p>الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!</p>
+                <div class="review-customer-name" id="reviewCustomer1">أحمد محمد</div>
+                <p id="reviewAnswer1">الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!</p>
               </div>
             </div>
 
             <div class="review-card">
               <button class="review-toggle" data-review="2">
-                <span class="review-question">كيف كانت الأجواء العائلية؟</span>
+                <span class="review-question" id="reviewQuestion2">كيف كانت الأجواء العائلية؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-2">
-                <div class="review-customer-name">فاطمة أحمد</div>
-                <p>الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.</p>
+                <div class="review-customer-name" id="reviewCustomer2">فاطمة أحمد</div>
+                <p id="reviewAnswer2">الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.</p>
               </div>
             </div>
 
             <div class="review-card">
               <button class="review-toggle" data-review="3">
-                <span class="review-question">ما رأيك بالحلويات المقدمة؟</span>
+                <span class="review-question" id="reviewQuestion3">ما رأيك بالحلويات المقدمة؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-3">
-                <div class="review-customer-name">محمد علي</div>
-                <p>الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!</p>
+                <div class="review-customer-name" id="reviewCustomer3">محمد علي</div>
+                <p id="reviewAnswer3">الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!</p>
               </div>
             </div>
 
             <div class="review-card">
               <button class="review-toggle" data-review="4">
-                <span class="review-question">هل تُوصي بزيارة المطعم في الشتاء؟</span>
+                <span class="review-question" id="reviewQuestion4">هل تُوصي بزيارة المطعم في الشتاء؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-4">
-                <div class="review-customer-name">سارة حسن</div>
-                <p>بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.</p>
+                <div class="review-customer-name" id="reviewCustomer4">سارة حسن</div>
+                <p id="reviewAnswer4">بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.</p>
               </div>
             </div>
 
             <div class="review-card">
               <button class="review-toggle" data-review="5">
-                <span class="review-question">كيف وجدت جودة الخدمة؟</span>
+                <span class="review-question" id="reviewQuestion5">كيف وجدت جودة الخدمة؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-5">
-                <div class="review-customer-name">عمر خالد</div>
-                <p>الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل ما نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى مستوياتها.</p>
+                <div class="review-customer-name" id="reviewCustomer5">عمر خالد</div>
+                <p id="reviewAnswer5">الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل ما نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى مستوياتها.</p>
               </div>
             </div>
 
             <div class="review-card">
               <button class="review-toggle" data-review="6">
-                <span class="review-question">ما رأيك بالمشروبات المقدمة؟</span>
+                <span class="review-question" id="reviewQuestion6">ما رأيك بالمشروبات المقدمة؟</span>
                 <span class="review-arrow">▼</span>
               </button>
               <div class="review-answer" id="review-6">
-                <div class="review-customer-name">لينا محمود</div>
-                <p>المشروبات كانت متنوعة ومناسبة للفصل الشتوي. الشاي والقهوة كانوا ساخنين ولذيذين، والعصائر الطازجة كانت منعشة جداً.</p>
+                <div class="review-customer-name" id="reviewCustomer6">لينا محمود</div>
+                <p id="reviewAnswer6">المشروبات كانت متنوعة ومناسبة للفصل الشتوي. الشاي والقهوة كانوا ساخنين ولذيذين، والعصائر الطازجة كانت منعشة جداً.</p>
               </div>
             </div>
           </div>
@@ -336,36 +343,36 @@
 
           <form class="booking-form" id="bookingForm">
             <div class="form-group">
-              <label for="fullName" class="form-label">الاسم الكامل *</label>
+              <label for="fullName" class="form-label" id="fullNameLabel">الاسم الكامل *</label>
               <input type="text" id="fullName" name="fullName" class="form-input" required>
             </div>
 
             <div class="form-group">
-              <label for="numPeople" class="form-label">عدد الأشخاص *</label>
+              <label for="numPeople" class="form-label" id="numPeopleLabel">عدد الأشخاص *</label>
               <input type="number" id="numPeople" name="numPeople" class="form-input" min="1" required>
             </div>
 
             <div class="form-group">
-              <label for="mealType" class="form-label">نوع البوفيه *</label>
+              <label for="mealType" class="form-label" id="mealTypeLabel">نوع البوفيه *</label>
               <select id="mealType" name="mealType" class="form-select" required>
-                <option value="">اختر نوع البوفيه</option>
-                <option value="lunch">غداء</option>
-                <option value="dinner">عشاء</option>
+                <option value="" id="mealTypeDefault">اختر نوع البوفيه</option>
+                <option value="lunch" id="mealTypeLunch">غداء</option>
+                <option value="dinner" id="mealTypeDinner">عشاء</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="bookingDate" class="form-label">تاريخ الحجز *</label>
+              <label for="bookingDate" class="form-label" id="bookingDateLabel">تاريخ الحجز *</label>
               <input type="date" id="bookingDate" name="bookingDate" class="form-input" required>
-              <div class="date-info">الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير</div>
+              <div class="date-info" id="dateInfo">الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير</div>
             </div>
 
             <div class="form-group">
-              <label for="notes" class="form-label">ملاحظات إضافية</label>
+              <label for="notes" class="form-label" id="notesLabel">ملاحظات إضافية</label>
               <textarea id="notes" name="notes" class="form-textarea" rows="3"></textarea>
             </div>
 
-            <button type="submit" class="booking-btn">احجز الآن</button>
+            <button type="submit" class="booking-btn" id="bookingBtn">احجز الآن</button>
           </form>
         </div>
       </section>
@@ -375,7 +382,7 @@
         <div class="popup-overlay"></div>
         <div class="popup-content">
           <div class="popup-header">
-            <span class="popup-emoji">❄️</span>
+            <img src="Assets/Halaweh (1).png" alt="Halaweh Logo" class="popup-logo">
             <h2 class="popup-title" id="popupTitle">شكراً لك!</h2>
           </div>
 
@@ -400,6 +407,63 @@
         </div>
       </div>
     </main>
+
+    <footer class="footer">
+      <div class="container footer-container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4 id="policiesTitle">السياسات والشروط</h4>
+            <p id="cancellationPolicy">سياسة الإلغاء: يمكن إلغاء الحجز حتى 24 ساعة قبل موعد الفعالية مع استرداد كامل للمبلغ.</p>
+            <p id="returnPolicy">سياسة الإرجاع: لا يمكن إرجاع التذاكر بعد حضور الفعالية.</p>
+          </div>
+
+          <div class="footer-section">
+            <h4 id="supportTitle">الدعم والمساعدة</h4>
+            <a href="https://wa.me/00962796421391" class="whatsapp-link" target="_blank" id="whatsappSupport">
+              <span class="whatsapp-icon">📱</span>
+              <span id="whatsappLink">دعم واتساب</span>
+            </a>
+          </div>
+
+          <div class="footer-section">
+            <h4 id="shareEventTitle">مشاركة الفعالية</h4>
+            <button class="share-btn" id="shareBtn">
+              <span class="share-icon">📤</span>
+              <span id="shareEventText">مشاركة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p id="copyrightText">2026 مطعم حلاوة. جميع الحقوق محفوظة.</p>
+          <p class="footer-location"><span class="location-icon">📍</span> عمان-خلدا</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Social Media Share Modal -->
+    <div id="shareModal" class="share-modal">
+      <div class="share-modal-content">
+        <div class="share-modal-header">
+          <h3 id="shareTitle">مشاركة الفعالية</h3>
+          <button class="share-modal-close" id="shareModalClose">&times;</button>
+        </div>
+        <div class="share-modal-body">
+          <a href="#" class="share-option whatsapp-share" id="whatsappShare">
+            <span class="share-platform-icon">📱</span>
+            <span id="whatsappShareText">واتساب</span>
+          </a>
+          <a href="#" class="share-option instagram-share" id="instagramShare">
+            <span class="share-platform-icon">📷</span>
+            <span id="instagramShareText">إنستغرام</span>
+          </a>
+          <a href="#" class="share-option youtube-share" id="youtubeShare">
+            <span class="share-platform-icon">🎥</span>
+            <span id="youtubeShareText">يوتيوب</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <script src="./Script.js"></script>
   </body>

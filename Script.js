@@ -1,21 +1,4 @@
 // Language Toggle Functionality
-const langToggle = document.getElementById("langToggle");
-const headline = document.getElementById("headline");
-const subheadline = document.getElementById("subheadline");
-const cta = document.getElementById("cta");
-const benefitsSubtitle = document.getElementById("benefitsSubtitle");
-const benefitsIntro = document.getElementById("benefitsIntro");
-const benefit1 = document.getElementById("benefit1");
-const benefit2 = document.getElementById("benefit2");
-const benefit3 = document.getElementById("benefit3");
-const benefit4 = document.getElementById("benefit4");
-const benefit5 = document.getElementById("benefit5");
-const benefit6 = document.getElementById("benefit6");
-// Reviews section elements
-const reviewsTitle = document.querySelector(".reviews-title");
-// Buffet section elements
-const lunchTitle = document.querySelector(".buffet-lunch .buffet-title");
-const dinnerTitle = document.querySelector(".buffet-dinner .buffet-title");
 // Buffet items
 const lunchArabicCuisine = document.getElementById("lunch-arabic-cuisine");
 const lunchArabicDesserts = document.getElementById("lunch-arabic-desserts");
@@ -33,7 +16,15 @@ const kidsActivity1 = document.getElementById("kidsActivity1");
 const kidsActivity2 = document.getElementById("kidsActivity2");
 const kidsActivity3 = document.getElementById("kidsActivity3");
 // Event details section
-const eventTitle = document.querySelector(".event-title");
+const eventTitle = document.getElementById("eventTitle");
+const eventPrice = document.getElementById("eventPrice");
+const eventDays = document.getElementById("eventDays");
+const eventPeriod = document.getElementById("eventPeriod");
+const eventTimesTitle = document.getElementById("eventTimesTitle");
+const lunchTime = document.getElementById("lunchTime");
+const dinnerTime = document.getElementById("dinnerTime");
+const eventDuration = document.getElementById("eventDuration");
+const eventSeats = document.getElementById("eventSeats");
 // Booking form elements
 const dateInfo = document.querySelector(".date-info");
 const htmlElement = document.documentElement;
@@ -52,6 +43,24 @@ const arabicContent = {
   benefit5: "مشروبات باردة",
   benefit6: "أجواء شتوية عائلية",
   reviewsTitle: "شو قالوا ضيوفنا عن التجربة؟",
+  reviewQuestion1: "ما رأيك بالأطباق الرئيسية؟",
+  reviewCustomer1: "أحمد محمد",
+  reviewAnswer1: "الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!",
+  reviewQuestion2: "كيف كانت الأجواء العائلية؟",
+  reviewCustomer2: "فاطمة أحمد",
+  reviewAnswer2: "الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.",
+  reviewQuestion3: "ما رأيك بالحلويات المقدمة؟",
+  reviewCustomer3: "محمد علي",
+  reviewAnswer3: "الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!",
+  reviewQuestion4: "هل تُوصي بزيارة المطعم في الشتاء؟",
+  reviewCustomer4: "سارة حسن",
+  reviewAnswer4: "بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.",
+  reviewQuestion5: "كيف وجدت جودة الخدمة؟",
+  reviewCustomer5: "عمر خالد",
+  reviewAnswer5: "الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل ما نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى مستوياتها.",
+  reviewQuestion6: "ما رأيك بالمشروبات المقدمة؟",
+  reviewCustomer6: "لينا محمود",
+  reviewAnswer6: "المشروبات كانت متنوعة ومناسبة للفصل الشتوي. الشاي والقهوة كانوا ساخنين ولذيذين، والعصائر الطازجة كانت منعشة جداً.",
   lunchTitle: "بوفيه الغداء – 3:00 عصرًا",
   dinnerTitle: "بوفيه العشاء – 8:00 مساءً",
   lunchArabicCuisine: "مأكولات عربية",
@@ -69,10 +78,40 @@ const arabicContent = {
   kidsActivity2: "ألعاب تفاعلية خفيفة",
   kidsActivity3: "قصص وحكايات ممتعة",
   eventTitle: "تفاصيل الفعالية العائلية",
+  eventPrice: "سعر المقعد: 20 دينار",
+  eventDays: "الأيام: كل خميس، جمعة، وسبت",
+  eventPeriod: "فترة الفعالية: من 20/1 ولمدة شهر",
+  eventTimesTitle: "أوقات البوفيه:",
+  lunchTime: "الغداء: 3:00 عصرًا",
+  dinnerTime: "العشاء: 8:00 مساءً",
+  eventDuration: "مدة الفعالية: 3 ساعات",
+  eventSeats: " المقاعد محدودة:  200 مقعد",
   bookingTitle: "احجز مكانك في الفعالية",
+  bookingBtn: "احجز الآن",
+  fullNameLabel: "الاسم الكامل *",
+  numPeopleLabel: "عدد الأشخاص *",
+  mealTypeLabel: "نوع البوفيه *",
+  mealTypeDefault: "اختر نوع البوفيه",
+  mealTypeLunch: "غداء",
+  mealTypeDinner: "عشاء",
+  bookingDateLabel: "تاريخ الحجز *",
+  dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
+  notesLabel: "ملاحظات إضافية",
   popupTitle: "شكراً لك!",
   popupMessage: "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.",
-  dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
+  policiesTitle: "السياسات والشروط",
+  cancellationPolicy: "سياسة الإلغاء: يمكن إلغاء الحجز حتى 24 ساعة قبل موعد الفعالية مع استرداد كامل للمبلغ.",
+  returnPolicy: "سياسة الإرجاع: لا يمكن إرجاع التذاكر بعد حضور الفعالية.",
+  supportTitle: "الدعم والمساعدة",
+  whatsappLink: "دعم واتساب",
+  whatsappSupport: "دعم واتساب",
+  shareEventTitle: "مشاركة الفعالية",
+  shareEventText: "مشاركة",
+  shareTitle: "مشاركة الفعالية",
+  whatsappShareText: "واتساب",
+  instagramShareText: "إنستغرام",
+  youtubeShareText: "يوتيوب",
+  copyrightText: "2026 مطعم حلاوة. جميع الحقوق محفوظة.",
 };
 
 // English content
@@ -89,6 +128,24 @@ const englishContent = {
   benefit5: "Cold Drinks",
   benefit6: "Family Winter Atmosphere",
   reviewsTitle: "What Did Our Guests Say About The Experience?",
+  reviewQuestion1: "What did you think of the main dishes?",
+  reviewCustomer1: "Ahmed Mohamed",
+  reviewAnswer1: "The dishes were absolutely delicious and the authentic flavors of the Middle East were evident in every bite. Especially the Mandi and Kabsa were exceptional!",
+  reviewQuestion2: "How was the family atmosphere?",
+  reviewCustomer2: "Fatima Ahmed",
+  reviewAnswer2: "The atmosphere was very warm and comfortable, perfect for families. The children enjoyed the games and beautiful winter atmosphere, and the adults enjoyed the friendly conversations.",
+  reviewQuestion3: "What did you think of the desserts served?",
+  reviewCustomer3: "Mohamed Ali",
+  reviewAnswer3: "The desserts were amazing! From Knafeh to Baklava, everything was fresh and delicious. Especially the Knafeh with cream was irresistible!",
+  reviewQuestion4: "Do you recommend visiting the restaurant in winter?",
+  reviewCustomer4: "Sarah Hassan",
+  reviewAnswer4: "Absolutely! The indoor seating is warm and the winter decor is very beautiful. The winter buffet is an experience not to be missed, especially with reasonable prices and excellent service.",
+  reviewQuestion5: "How did you find the quality of service?",
+  reviewCustomer5: "Omar Khalid",
+  reviewAnswer5: "The service was excellent and the staff were very friendly. Everything we needed was available quickly and cleanliness was at the highest levels.",
+  reviewQuestion6: "What did you think of the drinks served?",
+  reviewCustomer6: "Lina Mahmoud",
+  reviewAnswer6: "The drinks were diverse and suitable for the winter season. The tea and coffee were hot and delicious, and the fresh juices were very refreshing.",
   lunchTitle: "Lunch Buffet – 3:00 PM",
   dinnerTitle: "Dinner Buffet – 8:00 PM",
   lunchArabicCuisine: "Arabic Cuisine",
@@ -106,109 +163,338 @@ const englishContent = {
   kidsActivity2: "Interactive Light Games",
   kidsActivity3: "Fun Stories and Tales",
   eventTitle: "Family Event Details",
+  eventPrice: "Seat Price: 20 Dinars",
+  eventDays: "Days: Every Thursday, Friday, and Saturday",
+  eventPeriod: "Event Period: From 1/20 for one month",
+  eventTimesTitle: "Buffet Times:",
+  lunchTime: "Lunch: 3:00 PM",
+  dinnerTime: "Dinner: 8:00 PM",
+  eventDuration: "Event Duration: 3 hours",
+  eventSeats: " Limited Seats: 200 seats",
   bookingTitle: "Book Your Place at the Event",
+  bookingBtn: "Book Now",
+  fullNameLabel: "Full Name *",
+  numPeopleLabel: "Number of People *",
+  mealTypeLabel: "Buffet Type *",
+  mealTypeDefault: "Select Buffet Type",
+  mealTypeLunch: "Lunch",
+  mealTypeDinner: "Dinner",
+  bookingDateLabel: "Booking Date *",
+  dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
+  notesLabel: "Additional Notes",
   popupTitle: "Thank You!",
   popupMessage: "Booking confirmed successfully. Thank you for choosing our event.",
-  dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
+  policiesTitle: "Policies & Terms",
+  cancellationPolicy: "Cancellation Policy: Bookings can be cancelled up to 24 hours before the event with full refund.",
+  returnPolicy: "Return Policy: Tickets cannot be returned after attending the event.",
+  supportTitle: "Support & Help",
+  whatsappLink: "WhatsApp Support",
+  whatsappSupport: "WhatsApp Support",
+  shareEventTitle: "Share Event",
+  shareEventText: "Share",
+  shareTitle: "Share Event",
+  whatsappShareText: "WhatsApp",
+  instagramShareText: "Instagram",
+  youtubeShareText: "YouTube",
+  copyrightText: "2026 Halaweh Restaurant. All rights reserved.",
 };
 
-let currentLang = "ar";
+// Single source of truth for language state
+let currentLang = localStorage.getItem("halaweh-lang") || "ar";
 
-langToggle.addEventListener("click", () => {
-  if (currentLang === "ar") {
-    currentLang = "en";
-    htmlElement.setAttribute("lang", "en");
-    htmlElement.setAttribute("dir", "ltr");
-    headline.textContent = englishContent.headline;
-    subheadline.textContent = englishContent.subheadline;
-    cta.textContent = englishContent.cta;
-    benefitsSubtitle.textContent = englishContent.benefitsSubtitle;
-    benefitsIntro.textContent = englishContent.benefitsIntro;
-    benefit1.textContent = englishContent.benefit1;
-    benefit2.textContent = englishContent.benefit2;
-    benefit3.textContent = englishContent.benefit3;
-    benefit4.textContent = englishContent.benefit4;
-    benefit5.textContent = englishContent.benefit5;
-    benefit6.textContent = englishContent.benefit6;
-    if (reviewsTitle) reviewsTitle.textContent = englishContent.reviewsTitle;
-    if (lunchTitle) lunchTitle.textContent = englishContent.lunchTitle;
-    if (dinnerTitle) dinnerTitle.textContent = englishContent.dinnerTitle;
-    if (lunchArabicCuisine) lunchArabicCuisine.textContent = englishContent.lunchArabicCuisine;
-    if (lunchArabicDesserts) lunchArabicDesserts.textContent = englishContent.lunchArabicDesserts;
-    if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = englishContent.lunchInternationalDesserts;
-    if (lunchHotDrinks) lunchHotDrinks.textContent = englishContent.lunchHotDrinks;
-    if (lunchColdDrinks) lunchColdDrinks.textContent = englishContent.lunchColdDrinks;
-    if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = englishContent.dinnerArabicCuisine;
-    if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = englishContent.dinnerArabicDesserts;
-    if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = englishContent.dinnerInternationalDesserts;
-    if (dinnerHotDrinks) dinnerHotDrinks.textContent = englishContent.dinnerHotDrinks;
-    if (dinnerColdDrinks) dinnerColdDrinks.textContent = englishContent.dinnerColdDrinks;
-    if (kidsTitle) kidsTitle.textContent = englishContent.kidsTitle;
-    if (kidsActivity1) kidsActivity1.textContent = englishContent.kidsActivity1;
-    if (kidsActivity2) kidsActivity2.textContent = englishContent.kidsActivity2;
-    if (kidsActivity3) kidsActivity3.textContent = englishContent.kidsActivity3;
-    if (eventTitle) eventTitle.textContent = englishContent.eventTitle;
-    if (bookingTitle) bookingTitle.textContent = englishContent.bookingTitle;
-    if (popupTitle) popupTitle.textContent = englishContent.popupTitle;
-    if (popupMessage) popupMessage.textContent = englishContent.popupMessage;
-    if (dateInfo) dateInfo.textContent = englishContent.dateInfo;
-    langToggle.textContent = "AR";
-  } else {
-    currentLang = "ar";
-    htmlElement.setAttribute("lang", "ar");
-    htmlElement.setAttribute("dir", "rtl");
-    headline.textContent = arabicContent.headline;
-    subheadline.textContent = arabicContent.subheadline;
-    cta.textContent = arabicContent.cta;
-    benefitsSubtitle.textContent = arabicContent.benefitsSubtitle;
-    benefitsIntro.textContent = arabicContent.benefitsIntro;
-    benefit1.textContent = arabicContent.benefit1;
-    benefit2.textContent = arabicContent.benefit2;
-    benefit3.textContent = arabicContent.benefit3;
-    benefit4.textContent = arabicContent.benefit4;
-    benefit5.textContent = arabicContent.benefit5;
-    benefit6.textContent = arabicContent.benefit6;
-    if (reviewsTitle) reviewsTitle.textContent = arabicContent.reviewsTitle;
-    if (lunchTitle) lunchTitle.textContent = arabicContent.lunchTitle;
-    if (dinnerTitle) dinnerTitle.textContent = arabicContent.dinnerTitle;
-    if (lunchArabicCuisine) lunchArabicCuisine.textContent = arabicContent.lunchArabicCuisine;
-    if (lunchArabicDesserts) lunchArabicDesserts.textContent = arabicContent.lunchArabicDesserts;
-    if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = arabicContent.lunchInternationalDesserts;
-    if (lunchHotDrinks) lunchHotDrinks.textContent = arabicContent.lunchHotDrinks;
-    if (lunchColdDrinks) lunchColdDrinks.textContent = arabicContent.lunchColdDrinks;
-    if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = arabicContent.dinnerArabicCuisine;
-    if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = arabicContent.dinnerArabicDesserts;
-    if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = arabicContent.dinnerInternationalDesserts;
-    if (dinnerHotDrinks) dinnerHotDrinks.textContent = arabicContent.dinnerHotDrinks;
-    if (dinnerColdDrinks) dinnerColdDrinks.textContent = arabicContent.dinnerColdDrinks;
-    if (kidsTitle) kidsTitle.textContent = arabicContent.kidsTitle;
-    if (kidsActivity1) kidsActivity1.textContent = arabicContent.kidsActivity1;
-    if (kidsActivity2) kidsActivity2.textContent = arabicContent.kidsActivity2;
-    if (kidsActivity3) kidsActivity3.textContent = arabicContent.kidsActivity3;
-    if (eventTitle) eventTitle.textContent = arabicContent.eventTitle;
-    if (bookingTitle) bookingTitle.textContent = arabicContent.bookingTitle;
-    if (popupTitle) popupTitle.textContent = arabicContent.popupTitle;
-    if (popupMessage) popupMessage.textContent = arabicContent.popupMessage;
-    if (dateInfo) dateInfo.textContent = arabicContent.dateInfo;
-    langToggle.textContent = "EN";
+document.addEventListener("DOMContentLoaded", () => {
+  // DOM Element References - All elements that need translation
+  const elements = {
+    // Language button and dropdown
+    languageBtn: document.getElementById("languageBtn"),
+    languageOptions: document.getElementById("languageOptions"),
+    langOptionEN: document.getElementById("langOptionEN"),
+    langOptionAR: document.getElementById("langOptionAR"),
+
+    // Hero section
+    headline: document.getElementById("headline"),
+    subheadline: document.getElementById("subheadline"),
+    cta: document.getElementById("cta"),
+
+    // Benefits section
+    benefitsSubtitle: document.getElementById("benefitsSubtitle"),
+    benefitsIntro: document.getElementById("benefitsIntro"),
+    benefit1: document.getElementById("benefit1"),
+    benefit2: document.getElementById("benefit2"),
+    benefit3: document.getElementById("benefit3"),
+    benefit4: document.getElementById("benefit4"),
+    benefit5: document.getElementById("benefit5"),
+    benefit6: document.getElementById("benefit6"),
+
+    // Reviews section
+    reviewsTitle: document.getElementById("reviewsTitle"),
+    reviewQuestion1: document.getElementById("reviewQuestion1"),
+    reviewCustomer1: document.getElementById("reviewCustomer1"),
+    reviewAnswer1: document.getElementById("reviewAnswer1"),
+    reviewQuestion2: document.getElementById("reviewQuestion2"),
+    reviewCustomer2: document.getElementById("reviewCustomer2"),
+    reviewAnswer2: document.getElementById("reviewAnswer2"),
+    reviewQuestion3: document.getElementById("reviewQuestion3"),
+    reviewCustomer3: document.getElementById("reviewCustomer3"),
+    reviewAnswer3: document.getElementById("reviewAnswer3"),
+    reviewQuestion4: document.getElementById("reviewQuestion4"),
+    reviewCustomer4: document.getElementById("reviewCustomer4"),
+    reviewAnswer4: document.getElementById("reviewAnswer4"),
+    reviewQuestion5: document.getElementById("reviewQuestion5"),
+    reviewCustomer5: document.getElementById("reviewCustomer5"),
+    reviewAnswer5: document.getElementById("reviewAnswer5"),
+    reviewQuestion6: document.getElementById("reviewQuestion6"),
+    reviewCustomer6: document.getElementById("reviewCustomer6"),
+    reviewAnswer6: document.getElementById("reviewAnswer6"),
+
+    // Buffet sections
+    lunchTitle: document.querySelector(".buffet-lunch .buffet-title"),
+    dinnerTitle: document.querySelector(".buffet-dinner .buffet-title"),
+    lunchArabicCuisine: document.getElementById("lunch-arabic-cuisine"),
+    lunchArabicDesserts: document.getElementById("lunch-arabic-desserts"),
+    lunchInternationalDesserts: document.getElementById("lunch-international-desserts"),
+    lunchHotDrinks: document.getElementById("lunch-hot-drinks"),
+    lunchColdDrinks: document.getElementById("lunch-cold-drinks"),
+    dinnerArabicCuisine: document.getElementById("dinner-arabic-cuisine"),
+    dinnerArabicDesserts: document.getElementById("dinner-arabic-desserts"),
+    dinnerInternationalDesserts: document.getElementById("dinner-international-desserts"),
+    dinnerHotDrinks: document.getElementById("dinner-hot-drinks"),
+    dinnerColdDrinks: document.getElementById("dinner-cold-drinks"),
+
+    // Kids activities
+    kidsTitle: document.getElementById("kidsTitle"),
+    kidsActivity1: document.getElementById("kidsActivity1"),
+    kidsActivity2: document.getElementById("kidsActivity2"),
+    kidsActivity3: document.getElementById("kidsActivity3"),
+
+    // Event details
+    eventTitle: document.getElementById("eventTitle"),
+    eventPrice: document.getElementById("eventPrice"),
+    eventDays: document.getElementById("eventDays"),
+    eventPeriod: document.getElementById("eventPeriod"),
+    eventTimesTitle: document.getElementById("eventTimesTitle"),
+    lunchTime: document.getElementById("lunchTime"),
+    dinnerTime: document.getElementById("dinnerTime"),
+    eventDuration: document.getElementById("eventDuration"),
+    eventSeats: document.getElementById("eventSeats"),
+
+    // Booking form
+    bookingTitle: document.getElementById("bookingTitle"),
+    bookingBtn: document.getElementById("bookingBtn"),
+    fullNameLabel: document.getElementById("fullNameLabel"),
+    numPeopleLabel: document.getElementById("numPeopleLabel"),
+    mealTypeLabel: document.getElementById("mealTypeLabel"),
+    mealTypeDefault: document.getElementById("mealTypeDefault"),
+    mealTypeLunch: document.getElementById("mealTypeLunch"),
+    mealTypeDinner: document.getElementById("mealTypeDinner"),
+    bookingDateLabel: document.getElementById("bookingDateLabel"),
+    dateInfo: document.getElementById("dateInfo"),
+    notesLabel: document.getElementById("notesLabel"),
+
+    // Popup
+    popupTitle: document.getElementById("popupTitle"),
+    popupMessage: document.getElementById("popupMessage"),
+
+    // Footer
+    policiesTitle: document.getElementById("policiesTitle"),
+    cancellationPolicy: document.getElementById("cancellationPolicy"),
+    returnPolicy: document.getElementById("returnPolicy"),
+    supportTitle: document.getElementById("supportTitle"),
+    whatsappLink: document.getElementById("whatsappLink"),
+    whatsappSupport: document.getElementById("whatsappSupport"),
+    shareEventTitle: document.getElementById("shareEventTitle"),
+    shareEventText: document.getElementById("shareEventText"),
+    shareTitle: document.getElementById("shareTitle"),
+    whatsappShareText: document.getElementById("whatsappShareText"),
+    instagramShareText: document.getElementById("instagramShareText"),
+    youtubeShareText: document.getElementById("youtubeShareText"),
+    copyrightText: document.getElementById("copyrightText")
+  };
+
+  // Single function to update all text based on current language
+  function updateLanguage(lang) {
+    const content = lang === "ar" ? arabicContent : englishContent;
+
+    // Update HTML attributes
+    htmlElement.setAttribute("lang", lang);
+    htmlElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+
+    // Update language button
+    if (elements.languageBtn) {
+      elements.languageBtn.textContent = lang === "ar" ? "AR" : "EN";
+    }
+
+    // Update dropdown options visibility
+    if (elements.langOptionEN) {
+      elements.langOptionEN.style.display = lang === "ar" ? "block" : "none";
+    }
+    if (elements.langOptionAR) {
+      elements.langOptionAR.style.display = lang === "en" ? "block" : "none";
+    }
+
+    // Update all text elements
+    Object.keys(elements).forEach(key => {
+      if (key !== "languageBtn" && key !== "languageOptions" && key !== "langOptionEN" && key !== "langOptionAR" && elements[key] && content[key]) {
+        elements[key].textContent = content[key];
+      }
+    });
   }
-});
 
-// Theme Toggle Functionality
-const themeToggle = document.getElementById("themeToggle");
-const themeIcon = document.getElementById("themeIcon");
-const body = document.body;
+  // Initialize language on page load
+  updateLanguage(currentLang);
 
-const themes = ["sun", "moon", "auto"];
-const themeIcons = ["☀️", "🌙", "🌓"];
-let currentThemeIndex = 0;
+  // Language dropdown functionality
+  let dropdownOpen = false;
 
-themeToggle.addEventListener("click", () => {
-  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-  const newTheme = themes[currentThemeIndex];
-  body.setAttribute("data-theme", newTheme);
-  themeIcon.textContent = themeIcons[currentThemeIndex];
-});
+  function toggleDropdown() {
+    dropdownOpen = !dropdownOpen;
+    const dropdown = elements.languageOptions;
+    const btn = elements.languageBtn;
+
+    if (dropdown && btn) {
+      const dropdownEl = btn.parentElement;
+      if (dropdownOpen) {
+        dropdownEl.classList.add("open");
+  } else {
+        dropdownEl.classList.remove("open");
+      }
+    }
+  }
+
+  function closeDropdown() {
+    dropdownOpen = false;
+    const btn = elements.languageBtn;
+    if (btn) {
+      const dropdownEl = btn.parentElement;
+      dropdownEl.classList.remove("open");
+    }
+  }
+
+  // Language button click handler
+  if (elements.languageBtn) {
+    elements.languageBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      toggleDropdown();
+    });
+  }
+
+  // Language option click handlers
+  if (elements.languageOptions) {
+    const options = elements.languageOptions.querySelectorAll(".language-option");
+    options.forEach(option => {
+      option.addEventListener("click", function() {
+        const selectedLang = this.getAttribute("data-lang");
+        if (selectedLang !== currentLang) {
+          currentLang = selectedLang;
+          localStorage.setItem("halaweh-lang", currentLang);
+          updateLanguage(currentLang);
+        }
+        closeDropdown();
+      });
+    });
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function(e) {
+    const dropdown = elements.languageBtn?.parentElement;
+    if (dropdown && !dropdown.contains(e.target)) {
+      closeDropdown();
+    }
+  });
+
+  // Booking Form Functionality
+  const bookingForm = document.getElementById("bookingForm");
+  const thankYouPopup = document.getElementById("thankYouPopup");
+  const popupCloseBtn = document.getElementById("popupCloseBtn");
+
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", function(e) {
+      e.preventDefault(); // Prevent default form submission
+
+      // Validate form
+      const isValid = validateForm();
+
+      if (isValid) {
+        console.log("Showing thank you popup");
+        // Show thank you popup
+        showThankYouPopup();
+        // Do NOT reset form - preserve user data
+      } else {
+        console.log("Form validation failed");
+      }
+    });
+  }
+
+  // Popup functionality
+  function showThankYouPopup() {
+    if (thankYouPopup) {
+      thankYouPopup.classList.add("show");
+    }
+  }
+
+  function hideThankYouPopup() {
+    if (thankYouPopup) {
+      thankYouPopup.classList.remove("show");
+    }
+  }
+
+  if (popupCloseBtn) {
+    popupCloseBtn.addEventListener("click", hideThankYouPopup);
+  }
+
+  // Close popup when clicking outside
+  if (thankYouPopup) {
+    thankYouPopup.addEventListener("click", function(e) {
+      if (e.target === thankYouPopup || e.target.classList.contains("popup-overlay")) {
+        hideThankYouPopup();
+      }
+    });
+  }
+
+  // Reviews toggle functionality
+  const reviewToggles = document.querySelectorAll(".review-toggle");
+  reviewToggles.forEach(toggle => {
+    toggle.addEventListener("click", function() {
+      const reviewId = this.getAttribute("data-review");
+      const answerDiv = document.getElementById("review-" + reviewId);
+
+      if (answerDiv) {
+        // Toggle active class on button
+        this.classList.toggle("active");
+        // Toggle show class on answer
+        answerDiv.classList.toggle("show");
+      }
+    });
+  });
+
+  // Kids activities toggle functionality
+  const kidsToggle = document.getElementById("kidsToggle");
+  const kidsContent = document.getElementById("kidsContent");
+
+  if (kidsToggle && kidsContent) {
+    kidsToggle.addEventListener("click", function() {
+      // Toggle active class on button
+      kidsToggle.classList.toggle("active");
+
+      // Toggle show class on content
+      kidsContent.classList.toggle("show");
+    });
+  }
+
+  // Hero CTA click handler - scroll to booking form
+  const heroCta = document.getElementById("cta");
+  if (heroCta) {
+    heroCta.addEventListener("click", function(e) {
+      e.preventDefault();
+      const bookingSection = document.getElementById("bookingForm");
+      if (bookingSection) {
+        bookingSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
+  }
 
 // Form validation functions
 function validateForm() {
@@ -217,31 +503,31 @@ function validateForm() {
   // Validate full name
   const fullName = document.getElementById("fullName");
   if (!fullName.value.trim()) {
-    showFieldError(fullName, "الاسم الكامل مطلوب");
+    showFieldError(fullName, currentLang === "ar" ? "الاسم الكامل مطلوب" : "Full name is required");
     isValid = false;
   }
 
   // Validate number of people
   const numPeople = document.getElementById("numPeople");
   if (!numPeople.value || numPeople.value < 1) {
-    showFieldError(numPeople, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+    showFieldError(numPeople, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر" : "Number of people must be greater than 0");
     isValid = false;
   }
 
   // Validate meal type
   const mealType = document.getElementById("mealType");
   if (!mealType.value) {
-    showFieldError(mealType, "يجب اختيار نوع البوفيه");
+    showFieldError(mealType, currentLang === "ar" ? "يجب اختيار نوع البوفيه" : "Please select buffet type");
     isValid = false;
   }
 
   // Validate booking date
   const bookingDate = document.getElementById("bookingDate");
   if (!bookingDate.value) {
-    showFieldError(bookingDate, "تاريخ الحجز مطلوب");
+    showFieldError(bookingDate, currentLang === "ar" ? "تاريخ الحجز مطلوب" : "Booking date is required");
     isValid = false;
   } else if (!isValidDate(bookingDate.value)) {
-    showFieldError(bookingDate, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+    showFieldError(bookingDate, currentLang === "ar" ? "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية" : "Date must be Thursday, Friday, or Saturday during the event period");
     isValid = false;
   }
 
@@ -254,24 +540,24 @@ function validateField(field) {
   switch(field.id) {
     case "fullName":
       if (!field.value.trim()) {
-        showFieldError(field, "الاسم الكامل مطلوب");
+        showFieldError(field, currentLang === "ar" ? "الاسم الكامل مطلوب" : "Full name is required");
       }
       break;
     case "numPeople":
       if (!field.value || field.value < 1) {
-        showFieldError(field, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
+        showFieldError(field, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر" : "Number of people must be greater than 0");
       }
       break;
     case "mealType":
       if (!field.value) {
-        showFieldError(field, "يجب اختيار نوع البوفيه");
+        showFieldError(field, currentLang === "ar" ? "يجب اختيار نوع البوفيه" : "Please select buffet type");
       }
       break;
     case "bookingDate":
       if (!field.value) {
-        showFieldError(field, "تاريخ الحجز مطلوب");
+        showFieldError(field, currentLang === "ar" ? "تاريخ الحجز مطلوب" : "Booking date is required");
       } else if (!isValidDate(field.value)) {
-        showFieldError(field, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
+        showFieldError(field, currentLang === "ar" ? "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية" : "Date must be Thursday, Friday, or Saturday during the event period");
       }
       break;
   }
@@ -337,7 +623,7 @@ function setupDateRestrictions() {
   } else {
     // Event has ended
     bookingDateInput.disabled = true;
-    bookingDateInput.placeholder = "الفعالية انتهت";
+    bookingDateInput.placeholder = currentLang === "ar" ? "الفعالية انتهت" : "Event has ended";
     return;
   }
 
@@ -354,14 +640,14 @@ function setupDateRestrictions() {
       if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
         // Invalid day of week
         this.value = "";
-        showFieldError(this, "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
+        showFieldError(this, currentLang === "ar" ? "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت" : "The event is only available on Thursdays, Fridays, and Saturdays");
         return;
       }
 
       // Check if it's within the event period
       if (selectedDate < eventStart || selectedDate > eventEnd) {
         this.value = "";
-        showFieldError(this, "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)");
+        showFieldError(this, currentLang === "ar" ? "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)" : "The date must be during the event period (January 20 - February 20)");
         return;
       }
 
@@ -374,112 +660,97 @@ function setupDateRestrictions() {
   bookingDateInput.addEventListener("change", function() {
     if (this.value && !isValidDate(this.value)) {
       this.value = "";
-      showFieldError(this, "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة");
+      showFieldError(this, currentLang === "ar" ? "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة" : "Please select a valid date from the available event days");
     }
   });
 }
 
-function showThankYouPopup() {
-  const thankYouPopup = document.getElementById("thankYouPopup");
+// Initialize date restrictions
+setupDateRestrictions();
 
-  if (thankYouPopup) {
-    thankYouPopup.classList.add("show");
-  }
-}
+// Share modal functionality
+const shareBtn = document.getElementById("shareBtn");
+const shareModal = document.getElementById("shareModal");
+const shareModalClose = document.getElementById("shareModalClose");
+const whatsappShare = document.getElementById("whatsappShare");
+const instagramShare = document.getElementById("instagramShare");
+const youtubeShare = document.getElementById("youtubeShare");
 
-function hideThankYouPopup() {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  if (thankYouPopup) {
-    thankYouPopup.classList.remove("show");
-  }
-}
-
-// Reviews Toggle Functionality
-document.addEventListener("DOMContentLoaded", () => {
-  const reviewToggles = document.querySelectorAll(".review-toggle");
-
-  reviewToggles.forEach(toggle => {
-    toggle.addEventListener("click", () => {
-      const reviewId = toggle.getAttribute("data-review");
-      const answerElement = document.getElementById(`review-${reviewId}`);
-
-      // Toggle active class on button
-      toggle.classList.toggle("active");
-
-      // Toggle show class on answer
-      answerElement.classList.toggle("show");
-    });
+// Share button click handler
+if (shareBtn && shareModal) {
+  shareBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    shareModal.classList.add("show");
   });
+}
 
-  // Kids Activities Accordion Functionality
-  const kidsToggle = document.getElementById("kidsToggle");
-  const kidsContent = document.getElementById("kidsContent");
+// Close modal handlers
+if (shareModalClose && shareModal) {
+  shareModalClose.addEventListener("click", function() {
+    shareModal.classList.remove("show");
+  });
+}
 
-  if (kidsToggle && kidsContent) {
-    kidsToggle.addEventListener("click", () => {
-      // Toggle active class on button
-      kidsToggle.classList.toggle("active");
+if (shareModal) {
+  shareModal.addEventListener("click", function(e) {
+    if (e.target === shareModal) {
+      shareModal.classList.remove("show");
+    }
+  });
+}
 
-      // Toggle show class on content
-      kidsContent.classList.toggle("show");
+// Social media sharing handlers
+const shareUrl = encodeURIComponent(window.location.href);
+const shareTextAr = encodeURIComponent("تجربة شتوية دافئة في مطعم حلاوة - فعالية عائلية رائعة!");
+const shareTextEn = encodeURIComponent("Warm Winter Experience at Halaweh Restaurant - Amazing Family Event!");
+
+if (whatsappShare) {
+  whatsappShare.addEventListener("click", function(e) {
+    e.preventDefault();
+    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
+    const whatsappUrl = `https://wa.me/?text=${text}%20${shareUrl}`;
+    window.open(whatsappUrl, "_blank");
+    shareModal.classList.remove("show");
+  });
+}
+
+if (instagramShare) {
+  instagramShare.addEventListener("click", function(e) {
+    e.preventDefault();
+    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
+    navigator.clipboard.writeText(`${text} ${window.location.href}`).then(() => {
+      alert(currentLang === "ar" ? "تم نسخ الرابط إلى الحافظة. يمكنك مشاركته على إنستغرام." : "Link copied to clipboard. You can share it on Instagram.");
     });
-  }
+    shareModal.classList.remove("show");
+  });
+}
 
-  // Booking Form Validation and Functionality
-  const bookingForm = document.getElementById("bookingForm");
-  const bookingTitle = document.getElementById("bookingTitle");
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  const popupCloseBtn = document.getElementById("popupCloseBtn");
-  const popupTitle = document.getElementById("popupTitle");
-  const popupMessage = document.getElementById("popupMessage");
-
-  if (bookingForm) {
-    // Set minimum date to today and restrict to event days
-    setupDateRestrictions();
-
-    bookingForm.addEventListener("submit", function(e) {
-      e.preventDefault(); // Completely disable default HTML form submission
-
-      // Validate form before showing popup
-      if (validateForm()) {
-        showThankYouPopup();
-        // Do NOT reset form - preserve user data
-      }
+if (youtubeShare) {
+  youtubeShare.addEventListener("click", function(e) {
+    e.preventDefault();
+    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
+    navigator.clipboard.writeText(`${text} ${window.location.href}`).then(() => {
+      alert(currentLang === "ar" ? "تم نسخ الرابط إلى الحافظة. يمكنك مشاركته على يوتيوب." : "Link copied to clipboard. You can share it on YouTube.");
     });
+    shareModal.classList.remove("show");
+  });
+}
 
-    // Real-time validation
-    const inputs = bookingForm.querySelectorAll("input, select, textarea");
-    inputs.forEach(input => {
-      input.addEventListener("blur", function() {
-        validateField(this);
-      });
+// Theme Toggle Functionality
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
 
-      input.addEventListener("input", function() {
-        clearFieldError(this);
-      });
-    });
-  }
+const themes = ["sun", "moon", "auto"];
+const themeIcons = ["☀️", "🌙", "🌓"];
+let currentThemeIndex = 0;
 
-  // Close popup when close button is clicked
-  if (popupCloseBtn) {
-    popupCloseBtn.addEventListener("click", hideThankYouPopup);
-  }
-
-  // Close popup when clicking outside
-  if (thankYouPopup) {
-    thankYouPopup.addEventListener("click", function(e) {
-      if (e.target === thankYouPopup || e.target.classList.contains("popup-overlay")) {
-        hideThankYouPopup();
-      }
+  if (themeToggle && themeIcon) {
+themeToggle.addEventListener("click", () => {
+  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  const newTheme = themes[currentThemeIndex];
+  body.setAttribute("data-theme", newTheme);
+  themeIcon.textContent = themeIcons[currentThemeIndex];
     });
   }
 });
 
-// Add keyboard support (ESC key to close)
-document.addEventListener("keydown", function(e) {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  if (e.key === "Escape" && thankYouPopup && thankYouPopup.classList.contains("show")) {
-    thankYouPopup.classList.remove("show");
-    document.body.style.overflow = "";
-  }
-});
