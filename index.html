@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Halaweh Event</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./Styles.css" />
+  </head>
+  <body data-theme="sun">
+    <header class="site-header" aria-label="Header">
+      <div class="container header-inner">
+        <a class="brand" href="#" aria-label="Halaweh">
+          <img class="brand-logo" src="./Assets/Halaweh (1).png" alt="Halaweh" />
+        </a>
+
+        <div class="header-actions">
+          <button
+            class="icon-btn"
+            id="themeToggle"
+            type="button"
+            aria-label="Change color mode"
+            title="Change color mode"
+          >
+            <span id="themeIcon" aria-hidden="true">☀️</span>
+          </button>
+
+          <div class="language-dropdown">
+            <button class="btn btn-secondary language-btn" id="languageBtn" type="button">
+              AR
+            </button>
+            <div class="language-options" id="languageOptions">
+              <div class="language-option" data-lang="en" id="langOptionEN">English</div>
+              <div class="language-option" data-lang="ar" id="langOptionAR">العربية</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Hero">
+        <div class="hero-bg" role="img" aria-label="Halaweh hero image"></div>
+
+        <div class="hero-overlay">
+          <div class="container hero-content">
+            <div class="hero-copy" id="heroCopy">
+              <h1 class="hero-title" id="headline">
+                تجربة شتوية دافئة في مطعم حلاوة
+              </h1>
+              <h2 class="hero-subtitle" id="subheadline">
+                بوفيه غداء و بوفيه عشاء كل خميس و جمعة و سبت
+              </h2>
+            </div>
+
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="#" id="cta">
+                جرب أجواء حلاوة الدافئة
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits" aria-label="Benefits">
+        <div class="container benefits-container">
+          <div class="benefits-header">
+            <h3 class="benefits-subtitle" id="benefitsSubtitle">
+              بتدور على فعالية شتوية تجمع العائلة وتقدّم تجربة طعام متكاملة في أجواء دافئة؟
+            </h3>
+            <div class="benefits-divider"></div>
+            <h2 class="benefits-intro" id="benefitsIntro">بتجربتنا رح تستمتعوا بـ:</h2>
+          </div>
+
+          <div class="benefits-infographic">
+            <div class="central-image-container">
+              <img
+                src="./Assets/benefits image.jpg"
+                alt="Halaweh winter experience"
+                class="central-image"
+              />
+            </div>
+
+            <div class="benefit-points">
+              <div class="benefit-point" style="--angle: 0deg;">
+                <div class="benefit-icon">🍽️</div>
+                <span class="benefit-label" id="benefit1">مأكولات عربية</span>
+              </div>
+              <div class="benefit-point" style="--angle: 60deg;">
+                <div class="benefit-icon">🧁</div>
+                <span class="benefit-label" id="benefit2">حلويات عربية</span>
+              </div>
+              <div class="benefit-point" style="--angle: 120deg;">
+                <div class="benefit-icon">🍰</div>
+                <span class="benefit-label" id="benefit3">حلويات عالمية</span>
+              </div>
+              <div class="benefit-point" style="--angle: 180deg;">
+                <div class="benefit-icon">☕</div>
+                <span class="benefit-label" id="benefit4">مشروبات ساخنة</span>
+              </div>
+              <div class="benefit-point" style="--angle: 240deg;">
+                <div class="benefit-icon">🥤</div>
+                <span class="benefit-label" id="benefit5">مشروبات باردة</span>
+              </div>
+              <div class="benefit-point" style="--angle: 300deg;">
+                <div class="benefit-icon">🏠</div>
+                <span class="benefit-label" id="benefit6">أجواء شتوية عائلية</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="buffets" aria-label="Buffets">
+        <div class="container buffets-container">
+          <div class="buffets-grid">
+            <div class="buffet-card buffet-lunch">
+              <div class="notebook-spiral">
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+              </div>
+              <div class="notebook-content">
+                <h3 class="buffet-title">بوفيه الغداء – 3:00 عصرًا</h3>
+                <div class="buffet-items">
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🍽️</span>
+                    <span class="buffet-text" id="lunch-arabic-cuisine">مأكولات عربية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🧁</span>
+                    <span class="buffet-text" id="lunch-arabic-desserts">حلويات عربية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🍰</span>
+                    <span class="buffet-text" id="lunch-international-desserts">حلويات عالمية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">☕</span>
+                    <span class="buffet-text" id="lunch-hot-drinks">مشروبات ساخنة</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🥤</span>
+                    <span class="buffet-text" id="lunch-cold-drinks">مشروبات باردة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="buffet-card buffet-dinner">
+              <div class="notebook-spiral">
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+              </div>
+              <div class="notebook-content">
+                <h3 class="buffet-title">بوفيه العشاء – 8:00 مساءً</h3>
+                <div class="buffet-items">
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🍽️</span>
+                    <span class="buffet-text" id="dinner-arabic-cuisine">مأكولات عربية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🧁</span>
+                    <span class="buffet-text" id="dinner-arabic-desserts">حلويات عربية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🍰</span>
+                    <span class="buffet-text" id="dinner-international-desserts">حلويات عالمية</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">☕</span>
+                    <span class="buffet-text" id="dinner-hot-drinks">مشروبات ساخنة</span>
+                  </div>
+                  <div class="buffet-item">
+                    <span class="buffet-icon">🥤</span>
+                    <span class="buffet-text" id="dinner-cold-drinks">مشروبات باردة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="kids-activities" aria-label="Kids Activities">
+        <div class="container kids-container">
+          <button class="kids-accordion-toggle" id="kidsToggle">
+            <h3 class="kids-title" id="kidsTitle"> اضغط لتعرف شو مجهزين لأطفالنا</h3>
+            <span class="kids-arrow">▼</span>
+          </button>
+          <div class="kids-content" id="kidsContent">
+            <div class="kids-activities-list">
+              <div class="kids-activity">
+                <span class="kids-icon">🎨</span>
+                <span class="kids-activity-text" id="kidsActivity1">ركن تلوين وأعمال يدوية</span>
+              </div>
+              <div class="kids-activity">
+                <span class="kids-icon">🧸</span>
+                <span class="kids-activity-text" id="kidsActivity2">ألعاب تفاعلية خفيفة</span>
+              </div>
+              <div class="kids-activity">
+                <span class="kids-icon">📖</span>
+                <span class="kids-activity-text" id="kidsActivity3">قصص وحكايات ممتعة</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="event-details" aria-label="Event Details">
+        <div class="container event-container">
+          <h3 class="event-title" id="eventTitle">تفاصيل الفعالية العائلية</h3>
+
+          <div class="event-card">
+            <div class="event-info">
+              <div class="event-item">
+                <span class="event-icon">💰</span>
+                <span class="event-text" id="eventPrice">سعر المقعد: <strong> 20 دينار</strong></span>
+              </div>
+
+              <div class="event-item">
+                <span class="event-icon">📅</span>
+                <span class="event-text" id="eventDays">الأيام: <strong>كل خميس، جمعة، وسبت</strong></span>
+              </div>
+
+              <div class="event-item">
+                <span class="event-icon">📆</span>
+                <span class="event-text" id="eventPeriod">فترة الفعالية: <strong>من 20/1 ولمدة شهر</strong></span>
+              </div>
+
+              <div class="event-item event-times">
+                <span class="event-icon">🕒</span>
+                <div class="event-text" id="eventTimes">
+                  <strong id="eventTimesTitle">أوقات البوفيه:</strong>
+                  <div class="time-details">
+                    <div id="lunchTime">الغداء: 3:00 عصرًا</div>
+                    <div id="dinnerTime">العشاء: 8:00 مساءً</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="event-item">
+                <span class="event-icon">⏳</span>
+                <span class="event-text" id="eventDuration">مدة الفعالية: <strong>3 ساعات</strong></span>
+              </div>
+
+              <div class="event-item">
+                <span class="event-icon">👥</span>
+                <span class="event-text" id="eventSeats"> المقاعد محدودة: <strong> 200 مقعد</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reviews" aria-label="Reviews">
+        <div class="container reviews-container">
+          <h3 class="reviews-title" id="reviewsTitle">شو قالوا ضيوفنا عن التجربة؟</h3>
+
+          <div class="reviews-grid">
+            <div class="review-card">
+              <button class="review-toggle" data-review="1">
+                <span class="review-question" id="reviewQuestion1">ما رأيك بالأطباق الرئيسية؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-1">
+                <div class="review-customer-name" id="reviewCustomer1">أحمد محمد</div>
+                <p id="reviewAnswer1">الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!</p>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <button class="review-toggle" data-review="2">
+                <span class="review-question" id="reviewQuestion2">كيف كانت الأجواء العائلية؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-2">
+                <div class="review-customer-name" id="reviewCustomer2">فاطمة أحمد</div>
+                <p id="reviewAnswer2">الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.</p>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <button class="review-toggle" data-review="3">
+                <span class="review-question" id="reviewQuestion3">ما رأيك بالحلويات المقدمة؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-3">
+                <div class="review-customer-name" id="reviewCustomer3">محمد علي</div>
+                <p id="reviewAnswer3">الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!</p>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <button class="review-toggle" data-review="4">
+                <span class="review-question" id="reviewQuestion4">هل تُوصي بزيارة المطعم في الشتاء؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-4">
+                <div class="review-customer-name" id="reviewCustomer4">سارة حسن</div>
+                <p id="reviewAnswer4">بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.</p>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <button class="review-toggle" data-review="5">
+                <span class="review-question" id="reviewQuestion5">كيف وجدت جودة الخدمة؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-5">
+                <div class="review-customer-name" id="reviewCustomer5">عمر خالد</div>
+                <p id="reviewAnswer5">الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل ما نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى مستوياتها.</p>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <button class="review-toggle" data-review="6">
+                <span class="review-question" id="reviewQuestion6">ما رأيك بالمشروبات المقدمة؟</span>
+                <span class="review-arrow">▼</span>
+              </button>
+              <div class="review-answer" id="review-6">
+                <div class="review-customer-name" id="reviewCustomer6">لينا محمود</div>
+                <p id="reviewAnswer6">المشروبات كانت متنوعة ومناسبة للفصل الشتوي. الشاي والقهوة كانوا ساخنين ولذيذين، والعصائر الطازجة كانت منعشة جداً.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="booking" aria-label="Booking">
+        <div class="container booking-container">
+          <h3 class="booking-title" id="bookingTitle">احجز مكانك في الفعالية</h3>
+
+          <form class="booking-form" id="bookingForm">
+            <div class="form-group">
+              <label for="fullName" class="form-label" id="fullNameLabel">الاسم الكامل *</label>
+              <input type="text" id="fullName" name="fullName" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label for="numPeople" class="form-label" id="numPeopleLabel">عدد الأشخاص *</label>
+              <input type="number" id="numPeople" name="numPeople" class="form-input" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="mealType" class="form-label" id="mealTypeLabel">نوع البوفيه *</label>
+              <select id="mealType" name="mealType" class="form-select" required>
+                <option value="" id="mealTypeDefault">اختر نوع البوفيه</option>
+                <option value="lunch" id="mealTypeLunch">غداء</option>
+                <option value="dinner" id="mealTypeDinner">عشاء</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bookingDate" class="form-label" id="bookingDateLabel">تاريخ الحجز *</label>
+              <input type="date" id="bookingDate" name="bookingDate" class="form-input" required>
+              <div class="date-info" id="dateInfo">الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير</div>
+            </div>
+
+            <div class="form-group">
+              <label for="notes" class="form-label" id="notesLabel">ملاحظات إضافية</label>
+              <textarea id="notes" name="notes" class="form-textarea" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="booking-btn" id="bookingBtn">احجز الآن</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Thank You Popup -->
+      <div id="thankYouPopup" class="thank-you-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+          <div class="popup-header">
+            <img src="Assets/Halaweh (1).png" alt="Halaweh Logo" class="popup-logo">
+            <h2 class="popup-title" id="popupTitle">شكراً لك!</h2>
+          </div>
+
+          <div class="popup-body">
+            <p class="popup-message" id="popupMessage">
+              تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.
+            </p>
+
+            <div class="popup-winter-effects">
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+              <div class="snowflake">❄</div>
+            </div>
+          </div>
+
+          <button class="popup-close-btn" id="popupCloseBtn">إغلاق</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4 id="policiesTitle">السياسات والشروط</h4>
+            <p id="cancellationPolicy">سياسة الإلغاء: يمكن إلغاء الحجز حتى 24 ساعة قبل موعد الفعالية مع استرداد كامل للمبلغ.</p>
+            <p id="returnPolicy">سياسة الإرجاع: لا يمكن إرجاع التذاكر بعد حضور الفعالية.</p>
+          </div>
+
+          <div class="footer-section">
+            <h4 id="supportTitle">الدعم والمساعدة</h4>
+            <a href="https://wa.me/00962796421391" class="whatsapp-link" target="_blank" id="whatsappSupport">
+              <span class="whatsapp-icon">📱</span>
+              <span id="whatsappLink">دعم واتساب</span>
+            </a>
+          </div>
+
+          <div class="footer-section">
+            <h4 id="shareEventTitle">مشاركة الفعالية</h4>
+            <button class="share-btn" id="shareBtn">
+              <span class="share-icon">📤</span>
+              <span id="shareEventText">مشاركة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p id="copyrightText">2026 مطعم حلاوة. جميع الحقوق محفوظة.</p>
+          <p class="footer-location"><span class="location-icon">📍</span><span id="locationText">عمان-خلدا</span></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Social Media Share Modal -->
+    <div id="shareModal" class="share-modal">
+      <div class="share-modal-content">
+        <div class="share-modal-header">
+          <h3 id="shareTitle">مشاركة الفعالية</h3>
+          <button class="share-modal-close" id="shareModalClose">&times;</button>
+        </div>
+        <div class="share-modal-body">
+          <a href="#" class="share-option whatsapp-share" id="whatsappShare">
+            <span class="share-platform-icon">📱</span>
+            <span id="whatsappShareText">واتساب</span>
+          </a>
+          <a href="#" class="share-option instagram-share" id="instagramShare">
+            <span class="share-platform-icon">📷</span>
+            <span id="instagramShareText">إنستغرام</span>
+          </a>
+          <a href="#" class="share-option youtube-share" id="youtubeShare">
+            <span class="share-platform-icon">🎥</span>
+            <span id="youtubeShareText">يوتيوب</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="./Script.js"></script>
+  </body>
+</html>
