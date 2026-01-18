@@ -11,6 +11,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./Styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   </head>
   <body data-theme="sun">
     <header class="site-header" aria-label="Header">
@@ -30,15 +32,14 @@
             <span id="themeIcon" aria-hidden="true">☀️</span>
           </button>
 
-          <div class="language-dropdown">
-            <button class="btn btn-secondary language-btn" id="languageBtn" type="button">
-              AR
-            </button>
-            <div class="language-options" id="languageOptions">
-              <div class="language-option" data-lang="en" id="langOptionEN">English</div>
-              <div class="language-option" data-lang="ar" id="langOptionAR">العربية</div>
-            </div>
-          </div>
+          <button
+            class="btn btn-secondary language-btn"
+            id="languageBtn"
+            type="button"
+            aria-label="Change language"
+          >
+            AR
+          </button>
         </div>
       </div>
     </header>
@@ -66,6 +67,66 @@
           </div>
         </div>
       </section>
+
+      <!-- Booking Popup Modal -->
+      <div class="booking-popup" id="bookingPopup">
+        <div class="booking-popup-overlay" id="bookingPopupOverlay"></div>
+        <div class="booking-popup-content">
+          <div class="booking-popup-header">
+            <h3 class="booking-popup-title" id="bookingPopupTitle">احجز الآن</h3>
+            <button class="booking-popup-close" id="bookingPopupClose">×</button>
+          </div>
+          <div class="booking-popup-body">
+            <form class="booking-form" id="bookingFormPopup">
+              <div class="form-group">
+                <label for="popupName" class="form-label" id="popupNameLabel">الاسم *</label>
+                <input type="text" id="popupName" name="popupName" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="popupPhone" class="form-label" id="popupPhoneLabel">رقم الهاتف *</label>
+                <input type="tel" id="popupPhone" name="popupPhone" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="popupEmail" class="form-label" id="popupEmailLabel">البريد الإلكتروني</label>
+                <input type="email" id="popupEmail" name="popupEmail" class="form-input">
+              </div>
+
+              <div class="form-group">
+                <label for="popupGuests" class="form-label" id="popupGuestsLabel">عدد الضيوف *</label>
+                <select id="popupGuests" name="popupGuests" class="form-select" required>
+                  <option value="">اختر العدد</option>
+                  <option value="1">1 ضيف</option>
+                  <option value="2">2 ضيوف</option>
+                  <option value="3">3 ضيوف</option>
+                  <option value="4">4 ضيوف</option>
+                  <option value="5">5 ضيوف</option>
+                  <option value="6">6+ ضيوف</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="popupBookingDate" class="form-label" id="popupBookingDateLabel">تاريخ الحجز *</label>
+                <div class="custom-date-picker">
+                  <input type="text" id="popupBookingDate" name="popupBookingDate" class="form-input" placeholder="اختر التاريخ" required>
+                  <button type="button" class="calendar-toggle-btn" id="popupCalendarToggle">
+                    📅
+                  </button>
+                </div>
+                <div class="date-info" id="popupDateInfo">الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير</div>
+              </div>
+
+              <div class="form-group">
+                <label for="popupMessage" class="form-label" id="popupMessageLabel">ملاحظات إضافية</label>
+                <textarea id="popupMessage" name="popupMessage" class="form-textarea" rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="booking-btn" id="popupBookingBtn">احجز الآن</button>
+            </form>
+          </div>
+        </div>
+      </div>
 
       <section class="benefits" aria-label="Benefits">
         <div class="container benefits-container">
@@ -359,7 +420,12 @@
 
             <div class="form-group">
               <label for="bookingDate" class="form-label" id="bookingDateLabel">تاريخ الحجز *</label>
-              <input type="date" id="bookingDate" name="bookingDate" class="form-input" required>
+              <div class="custom-date-picker">
+                <input type="text" id="bookingDate" name="bookingDate" class="form-input" placeholder="اختر التاريخ">
+                <button type="button" class="calendar-toggle-btn" id="calendarToggle">
+                  📅
+                </button>
+              </div>
               <div class="date-info" id="dateInfo">الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير</div>
             </div>
 
