@@ -57,12 +57,16 @@
               <h2 class="hero-subtitle" id="subheadline">
                 بوفيه غداء و بوفيه عشاء كل خميس و جمعة و سبت
               </h2>
+              <p class="hero-location" id="heroLocation">
+                عمان - خلدا
+              </p>
+            
             </div>
 
             <div class="hero-cta">
-              <a class="btn btn-primary" href="#" id="cta">
+              <button class="btn btn-primary" id="cta">
                 جرب أجواء حلاوة الدافئة
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -85,7 +89,7 @@
 
               <div class="form-group">
                 <label for="popupPhone" class="form-label" id="popupPhoneLabel">رقم الهاتف *</label>
-                <input type="tel" id="popupPhone" name="popupPhone" class="form-input" required>
+                <input type="tel" id="popupPhone" name="popupPhone" class="form-input" placeholder="00962XXXX" required>
               </div>
 
               <div class="form-group">
@@ -95,21 +99,13 @@
 
               <div class="form-group">
                 <label for="popupGuests" class="form-label" id="popupGuestsLabel">عدد الضيوف *</label>
-                <select id="popupGuests" name="popupGuests" class="form-select" required>
-                  <option value="">اختر العدد</option>
-                  <option value="1">1 ضيف</option>
-                  <option value="2">2 ضيوف</option>
-                  <option value="3">3 ضيوف</option>
-                  <option value="4">4 ضيوف</option>
-                  <option value="5">5 ضيوف</option>
-                  <option value="6">6+ ضيوف</option>
-                </select>
+                <input type="number" id="popupGuests" name="popupGuests" class="form-input" min="1" max="200" required>
               </div>
 
               <div class="form-group">
                 <label for="popupBookingDate" class="form-label" id="popupBookingDateLabel">تاريخ الحجز *</label>
                 <div class="custom-date-picker">
-                  <input type="text" id="popupBookingDate" name="popupBookingDate" class="form-input" placeholder="اختر التاريخ" required>
+                  <input type="date" id="popupBookingDate" name="popupBookingDate" class="form-input" required>
                   <button type="button" class="calendar-toggle-btn" id="popupCalendarToggle">
                     📅
                   </button>
@@ -405,6 +401,11 @@
             </div>
 
             <div class="form-group">
+              <label for="mobile" class="form-label">رقم الموبايل</label>
+              <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="00962XXXX">
+            </div>
+
+            <div class="form-group">
               <label for="numPeople" class="form-label" id="numPeopleLabel">عدد الأشخاص *</label>
               <input type="number" id="numPeople" name="numPeople" class="form-input" min="1" required>
             </div>
@@ -421,7 +422,7 @@
             <div class="form-group">
               <label for="bookingDate" class="form-label" id="bookingDateLabel">تاريخ الحجز *</label>
               <div class="custom-date-picker">
-                <input type="text" id="bookingDate" name="bookingDate" class="form-input" placeholder="اختر التاريخ">
+                <input type="text" id="bookingDate" name="bookingDate" class="form-input">
                 <button type="button" class="calendar-toggle-btn" id="calendarToggle">
                   📅
                 </button>

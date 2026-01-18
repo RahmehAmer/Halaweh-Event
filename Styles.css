@@ -355,7 +355,7 @@ body {
   align-items: center;
   background-color: transparent;
   z-index: 1000;
-  padding: 0 2rem;
+  padding: 2rem 2rem;
 }
 
 .header-inner {
@@ -565,6 +565,18 @@ html[dir="ltr"] .header-actions {
   line-height: 1.4;
   -webkit-text-stroke: 1px rgba(196, 90, 46, 0.7);
   paint-order: stroke fill;
+  margin-bottom: 1rem;
+}
+
+.hero-location {
+  font-family: "Tajawal", sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  line-height: 1.4;
+  opacity: 0.8;
+  margin-bottom: 2rem;
 }
 
 .hero-cta {
@@ -2133,6 +2145,39 @@ html[dir="ltr"] .benefit-point:nth-child(even) {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
+[data-theme="moon"] .calendar-header {
+  background: linear-gradient(135deg, rgba(196, 90, 46, 0.3) 0%, rgba(196, 90, 46, 0.5) 100%);
+  border-bottom: 2px solid var(--primary-cta);
+}
+
+[data-theme="moon"] .calendar-nav {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-theme="moon"] .calendar-nav:hover {
+  color: var(--primary-cta) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="moon"] .calendar-month-year {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+[data-theme="moon"] .calendar-weekdays {
+  background: rgba(196, 90, 46, 0.2);
+  border-bottom: 1px solid rgba(196, 90, 46, 0.4);
+}
+
+[data-theme="moon"] .calendar-weekday {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
 [data-theme="auto"] .custom-calendar {
   background: #f5f5f5;
   border-color: var(--primary-cta);
@@ -2253,14 +2298,33 @@ html[dir="ltr"] .benefit-point:nth-child(even) {
 }
 
 [data-theme="moon"] .calendar-day.valid {
-  background: linear-gradient(135deg, rgba(196, 90, 46, 0.25) 0%, rgba(196, 90, 46, 0.35) 100%);
+  background: linear-gradient(135deg, rgba(196, 90, 46, 0.4) 0%, rgba(196, 90, 46, 0.6) 100%);
   border-color: var(--primary-cta);
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
 [data-theme="moon"] .calendar-day.disabled {
-  color: #666;
-  background: rgba(255, 255, 255, 0.05);
-  opacity: 0.4;
+  color: #888888 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  opacity: 0.6 !important;
+  font-weight: 400 !important;
+}
+
+[data-theme="moon"] .calendar-day {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="moon"] .calendar-day:hover:not(.disabled) {
+  color: #ffffff !important;
+  background: rgba(196, 90, 46, 0.5) !important;
+  border-color: rgba(196, 90, 46, 0.8) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  transform: scale(1.05) !important;
 }
 
 [data-theme="auto"] .calendar-day.valid {
@@ -2542,7 +2606,7 @@ html[dir="ltr"] .benefit-point:nth-child(even) {
 
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   max-width: 1000px;
   margin: 0 auto;
@@ -2838,6 +2902,47 @@ html[dir="ltr"] .benefit-point:nth-child(even) {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+[data-theme="moon"] .booking-form .form-input,
+[data-theme="moon"] .booking-form .form-select,
+[data-theme="moon"] .booking-form .form-textarea {
+  background-color: var(--content-bg);
+  color: var(--text-color);
+  border-color: rgba(196, 90, 46, 0.4);
+}
+
+[data-theme="moon"] .booking-form .form-label {
+  color: var(--text-color);
+}
+
+[data-theme="auto"] .booking-form .form-input,
+[data-theme="auto"] .booking-form .form-select,
+[data-theme="auto"] .booking-form .form-textarea {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border-color: rgba(139, 115, 85, 0.4);
+}
+
+[data-theme="auto"] .booking-form .form-label {
+  color: #ffffff !important;
+}
+
+[data-theme="auto"] .booking-form .form-input::placeholder,
+[data-theme="auto"] .booking-form .form-textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="auto"] .booking-form .form-input:focus,
+[data-theme="auto"] .booking-form .form-select:focus,
+[data-theme="auto"] .booking-form .form-textarea:focus {
+  border-color: var(--primary-cta);
+  box-shadow: 0 0 0 3px rgba(212, 101, 58, 0.1);
+}
+
+[data-theme="auto"] .booking-btn {
+  background-color: var(--primary-cta);
+  color: #ffffff;
 }
 
 /* Responsive Design for Booking Popup */

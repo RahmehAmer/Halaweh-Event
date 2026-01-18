@@ -33,6 +33,7 @@ const htmlElement = document.documentElement;
 const arabicContent = {
   headline: "تجربة شتوية دافئة في مطعم حلاوة",
   subheadline: "بوفيه غداء و بوفيه عشاء كل خميس و جمعة و سبت",
+  heroLocation: "عمان - خلدا",
   cta: "جرب أجواء حلاوة الدافئة",
   benefitsSubtitle: "بتدور على فعالية شتوية تجمع العائلة وتقدّم تجربة طعام متكاملة في أجواء دافئة؟",
   benefitsIntro: "بتجربتنا رح تستمتعوا بـ:",
@@ -119,6 +120,7 @@ const arabicContent = {
 const englishContent = {
   headline: "Warm Winter Experience at Halaweh Restaurant",
   subheadline: "Lunch Buffet & Dinner Buffet Every Thursday, Friday & Saturday",
+  heroLocation: "Amman - Khalda",
   cta: "Experience Halaweh's Warm Atmosphere",
   benefitsSubtitle: "Looking for a winter event that brings the family together and offers a complete food experience in a warm atmosphere?",
   benefitsIntro: "With our experience, you'll enjoy:",
@@ -172,7 +174,7 @@ const englishContent = {
   dinnerTime: "Dinner: 8:00 PM",
   eventDuration: "Event Duration: 3 hours",
   eventSeats: " Limited Seats: 200 seats",
-  bookingTitle: "Book Your Place at the Event",
+  bookingTitle: "Book Your Place at Event",
   bookingBtn: "Book Now",
   fullNameLabel: "Full Name *",
   numPeopleLabel: "Number of People *",
@@ -213,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hero section
     headline: document.getElementById("headline"),
     subheadline: document.getElementById("subheadline"),
+    heroLocation: document.getElementById("heroLocation"),
     cta: document.getElementById("cta"),
 
     // Benefits section
@@ -330,6 +333,15 @@ document.addEventListener("DOMContentLoaded", () => {
         elements[key].textContent = content[key];
       }
     });
+
+    // Update main booking form labels
+    updateMainFormLabels();
+    
+    // Update popup form labels
+    updatePopupFormLabels();
+    
+    // Update thank you message
+    updateThankYouMessage();
   }
 
   // Initialize language on page load
@@ -495,9 +507,75 @@ document.head.appendChild(snowfallStyle);
   if (ctaButton) {
     ctaButton.addEventListener("click", function(e) {
       e.preventDefault();
-      bookingPopup.classList.add("show");
+      e.stopPropagation();
+      
+      // Prevent any scroll behavior
+      window.scrollTo(0, 0);
       document.body.style.overflow = "hidden";
+      
+      // Show popup
+      bookingPopup.classList.add("show");
+      
+      // Clear additional notes field
+      const messageInput = document.getElementById("popupMessage");
+      if (messageInput) {
+        messageInput.value = "";
+      }
+      
+      // Update popup form labels based on language
+      updatePopupFormLabels();
     });
+  }
+
+  // Update popup form labels based on language
+  function updatePopupFormLabels() {
+    const popupTitle = document.getElementById("bookingPopupTitle");
+    const nameLabel = document.getElementById("popupNameLabel");
+    const phoneLabel = document.getElementById("popupPhoneLabel");
+    const phoneInput = document.getElementById("popupPhone");
+    const emailLabel = document.getElementById("popupEmailLabel");
+    const guestsLabel = document.getElementById("popupGuestsLabel");
+    const guestsInput = document.getElementById("popupGuests");
+    const dateLabel = document.getElementById("popupBookingDateLabel");
+    const messageLabel = document.getElementById("popupMessageLabel");
+    const messageInput = document.getElementById("popupMessage");
+    const dateInfo = document.getElementById("popupDateInfo");
+    const bookingBtn = document.getElementById("popupBookingBtn");
+    
+    // Check current theme
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    
+    if (currentLang === "en") {
+      if (popupTitle) popupTitle.textContent = "Book Now";
+      if (nameLabel) nameLabel.textContent = "Name *";
+      if (phoneLabel) phoneLabel.textContent = "Phone *";
+      if (emailLabel) emailLabel.textContent = "Email";
+      if (guestsLabel) guestsLabel.textContent = "Number of Guests *";
+      if (guestsInput) guestsInput.placeholder = "Enter number of guests (1-200)";
+      if (dateLabel) dateLabel.textContent = "Booking Date *";
+      if (messageLabel) messageLabel.textContent = "Additional Notes";
+      if (messageInput) messageInput.placeholder = "";
+      if (dateInfo) dateInfo.textContent = "Event available on Thursdays, Fridays, and Saturdays from January 20 to February 20";
+      if (bookingBtn) bookingBtn.textContent = "Book Now";
+    }
+    
+    // Update phone placeholder based on theme
+    if (phoneInput) {
+      if (currentTheme === "moon") {
+        phoneInput.placeholder = "00962XXX";
+      } else {
+        phoneInput.placeholder = "00962XXXX";
+      }
+    }
+  }
+
+  // Update main booking form labels based on language
+  function updateMainFormLabels() {
+    const mobileLabel = document.querySelector('label[for="mobile"]');
+    
+    if (currentLang === "en" && mobileLabel) {
+      mobileLabel.textContent = "Mobile Number";
+    }
   }
 
   // Close popup when close button is clicked
@@ -516,10 +594,15 @@ document.head.appendChild(snowfallStyle);
     });
   }
 
-  // Handle popup form submission
+  // Handle popup form submission with validation
   if (bookingFormPopup) {
     bookingFormPopup.addEventListener("submit", function(e) {
       e.preventDefault();
+      
+      // Validate form
+      if (!validatePopupForm()) {
+        return;
+      }
       
       // Get form data
       const formData = new FormData(bookingFormPopup);
@@ -529,6 +612,9 @@ document.head.appendChild(snowfallStyle);
       const guests = formData.get("popupGuests");
       const date = formData.get("popupBookingDate");
       const message = formData.get("popupMessage");
+      
+      // Update thank you message based on language
+      updateThankYouMessage();
       
       // Show thank you popup with snow
       showThankYouPopup();
@@ -542,25 +628,130 @@ document.head.appendChild(snowfallStyle);
     });
   }
 
-  // Initialize Flatpickr for popup calendar
+  // Validate popup form
+  function validatePopupForm() {
+    const name = document.getElementById("popupName").value.trim();
+    const phone = document.getElementById("popupPhone").value.trim();
+    const guests = document.getElementById("popupGuests").value;
+    const date = document.getElementById("popupBookingDate").value;
+    const email = document.getElementById("popupEmail").value.trim();
+    
+    // Name validation
+    if (!name) {
+      alert(currentLang === "ar" ? "الرجاء إدخال الاسم" : "Please enter your name");
+      document.getElementById("popupName").focus();
+      return false;
+    }
+    
+    if (name.length < 2) {
+      alert(currentLang === "ar" ? "الاسم يجب أن يكون حرفين على الأقل" : "Name must be at least 2 characters");
+      document.getElementById("popupName").focus();
+      return false;
+    }
+    
+    // Phone validation
+    if (!phone) {
+      alert(currentLang === "ar" ? "الرجاء إدخال رقم الهاتف" : "Please enter your phone number");
+      document.getElementById("popupPhone").focus();
+      return false;
+    }
+    
+    // Jordan phone validation (00962XXXXXXXXX or 07XXXXXXXX)
+    const phoneRegex = /^(00962|07)\d{8}$/;
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+      alert(currentLang === "ar" ? "الرجاء إدخال رقم هاتف أردني صحيح" : "Please enter a valid Jordanian phone number");
+      document.getElementById("popupPhone").focus();
+      return false;
+    }
+    
+    // Email validation (if provided)
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert(currentLang === "ar" ? "الرجاء إدخال بريد إلكتروني صحيح" : "Please enter a valid email address");
+        document.getElementById("popupEmail").focus();
+        return false;
+      }
+    }
+    
+    // Guests validation
+    if (!guests) {
+      alert(currentLang === "ar" ? "الرجاء إدخال عدد الضيوف" : "Please enter number of guests");
+      document.getElementById("popupGuests").focus();
+      return false;
+    }
+    
+    const guestsNum = parseInt(guests);
+    if (guestsNum < 1 || guestsNum > 200) {
+      alert(currentLang === "ar" ? "عدد الضيوف يجب أن يكون بين 1 و 200" : "Number of guests must be between 1 and 200");
+      document.getElementById("popupGuests").focus();
+      return false;
+    }
+    
+    // Date validation
+    if (!date) {
+      alert(currentLang === "ar" ? "الرجاء اختيار تاريخ الحجز" : "Please select a booking date");
+      document.getElementById("popupBookingDate").focus();
+      return false;
+    }
+    
+    // Check if date is within allowed range and on allowed day
+    const selectedDate = new Date(date);
+    const minDate = new Date("2026-01-20");
+    const maxDate = new Date("2026-02-20");
+    const dayOfWeek = selectedDate.getDay();
+    const isAllowedDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6; // Thu, Fri, Sat
+    
+    if (selectedDate < minDate || selectedDate > maxDate) {
+      alert(currentLang === "ar" ? "التاريخ يجب أن يكون بين 20 يناير و 20 فبراير 2026" : "Date must be between January 20 and February 20, 2026");
+      document.getElementById("popupBookingDate").focus();
+      return false;
+    }
+    
+    if (!isAllowedDay) {
+      alert(currentLang === "ar" ? "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت" : "Event is only available on Thursdays, Fridays, and Saturdays");
+      document.getElementById("popupBookingDate").focus();
+      return false;
+    }
+    
+    return true;
+  }
+
+  // Update thank you message based on language
+  function updateThankYouMessage() {
+    const thankYouTitle = document.getElementById("thankYouTitle");
+    const thankYouMessage = document.getElementById("thankYouMessage");
+    const thankYouCloseBtn = document.getElementById("thankYouCloseBtn");
+    
+    if (thankYouTitle && thankYouMessage) {
+      if (currentLang === "en") {
+        thankYouTitle.textContent = "Booking Confirmed!";
+        thankYouMessage.textContent = "Booking confirmed successfully. Thank you for choosing our event.";
+        if (thankYouCloseBtn) thankYouCloseBtn.textContent = "Close";
+      } else {
+        thankYouTitle.textContent = "تم تأكيد الحجز!";
+        thankYouMessage.textContent = "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.";
+        if (thankYouCloseBtn) thankYouCloseBtn.textContent = "اغلاق";
+      }
+    }
+  }
+
+  // Set date input min/max values for native date picker
   const popupBookingDateInput = document.getElementById("popupBookingDate");
   if (popupBookingDateInput) {
-    flatpickr(popupBookingDateInput, {
-      locale: currentLang === "ar" ? "ar" : "default",
-      minDate: new Date(2026, 0, 20), // January 20, 2026
-      maxDate: new Date(2026, 1, 20), // February 20, 2026
-      disable: [
-        function(date) {
-          const dayOfWeek = date.getDay();
-          return dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6; // Only Thu, Fri, Sat
-        }
-      ],
-      dateFormat: currentLang === "ar" ? "Y-m-d" : "Y-m-d",
-      animate: true,
-      position: "auto center",
-      theme: "light",
-      inline: false,
-      static: false
+    popupBookingDateInput.min = "2026-01-20";
+    popupBookingDateInput.max = "2026-02-20";
+    
+    // Add date validation
+    popupBookingDateInput.addEventListener("change", function() {
+      const selectedDate = new Date(this.value);
+      const dayOfWeek = selectedDate.getDay();
+      const isAllowedDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6; // Thu, Fri, Sat
+      
+      if (!isAllowedDay) {
+        this.value = "";
+        alert("الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
+      }
     });
   }
 
@@ -602,12 +793,28 @@ function validateForm() {
   if (!fullName.value.trim()) {
     showFieldError(fullName, currentLang === "ar" ? "الاسم الكامل مطلوب" : "Full name is required");
     isValid = false;
+  } else if (fullName.value.trim().length < 2) {
+    showFieldError(fullName, currentLang === "ar" ? "الاسم يجب أن يكون حرفين على الأقل" : "Name must be at least 2 characters");
+    isValid = false;
+  }
+
+  // Validate mobile number (optional but if provided must be valid)
+  const mobile = document.getElementById("mobile");
+  if (mobile && mobile.value.trim()) {
+    const phoneRegex = /^(00962|07)\d{8}$/;
+    if (!phoneRegex.test(mobile.value.replace(/\s/g, ''))) {
+      showFieldError(mobile, currentLang === "ar" ? "الرجاء إدخال رقم هاتف أردني صحيح" : "Please enter a valid Jordanian phone number");
+      isValid = false;
+    }
   }
 
   // Validate number of people
   const numPeople = document.getElementById("numPeople");
   if (!numPeople.value || numPeople.value < 1) {
     showFieldError(numPeople, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر" : "Number of people must be greater than 0");
+    isValid = false;
+  } else if (numPeople.value > 200) {
+    showFieldError(numPeople, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون 200 أو أقل" : "Number of people must be 200 or less");
     isValid = false;
   }
 
