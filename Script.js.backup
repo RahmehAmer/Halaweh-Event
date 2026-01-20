@@ -1,38 +1,175 @@
-// Language Toggle Functionality
-// Buffet items
-const lunchArabicCuisine = document.getElementById("lunch-arabic-cuisine");
-const lunchArabicDesserts = document.getElementById("lunch-arabic-desserts");
-const lunchInternationalDesserts = document.getElementById("lunch-international-desserts");
-const lunchHotDrinks = document.getElementById("lunch-hot-drinks");
-const lunchColdDrinks = document.getElementById("lunch-cold-drinks");
-const dinnerArabicCuisine = document.getElementById("dinner-arabic-cuisine");
-const dinnerArabicDesserts = document.getElementById("dinner-arabic-desserts");
-const dinnerInternationalDesserts = document.getElementById("dinner-international-desserts");
-const dinnerHotDrinks = document.getElementById("dinner-hot-drinks");
-const dinnerColdDrinks = document.getElementById("dinner-cold-drinks");
-// Kids activities section
-const kidsTitle = document.getElementById("kidsTitle");
-const kidsActivity1 = document.getElementById("kidsActivity1");
-const kidsActivity2 = document.getElementById("kidsActivity2");
-const kidsActivity3 = document.getElementById("kidsActivity3");
-// Event details section
-const eventTitle = document.getElementById("eventTitle");
-const eventPrice = document.getElementById("eventPrice");
-const eventDays = document.getElementById("eventDays");
-const eventPeriod = document.getElementById("eventPeriod");
-const eventTimesTitle = document.getElementById("eventTimesTitle");
-const lunchTime = document.getElementById("lunchTime");
-const dinnerTime = document.getElementById("dinnerTime");
-const eventDuration = document.getElementById("eventDuration");
-const eventSeats = document.getElementById("eventSeats");
-// Booking form elements
-const dateInfo = document.querySelector(".date-info");
-const htmlElement = document.documentElement;
+console.log("Script loading...");
 
-// Arabic content
+// IMMEDIATE TEST - No delay
+console.log("=== IMMEDIATE TEST ===");
+const immediateInput = document.getElementById("bookingDate");
+const immediateBtn = document.getElementById("calendarIconBtn");
+const immediateCal = document.getElementById("customCalendar");
+
+console.log("IMMEDIATE TEST - Element existence:", {
+  input: !!immediateInput,
+  btn: !!immediateBtn,
+  calendar: !!immediateCal
+});
+
+// Define calendar function immediately
+function showWorkingCalendar() {
+  const calendar = document.getElementById("customCalendar");
+  if (!calendar) {
+    console.error("Calendar element not found!");
+    return;
+  }
+  
+  console.log("Showing working calendar...");
+  
+  let calendarHTML = `
+    <div style="background: white; border: 2px solid #ccc; border-radius: 8px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;">
+      <button onclick="closeCalendar()" style="position: absolute; top: 5px; right: 5px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; z-index: 1;">×</button>
+  `;
+  
+  // Generate calendars for January and February 2026
+  const months = [
+    { name: "January 2026", year: 2026, month: 0, daysInMonth: 31 },
+    { name: "February 2026", year: 2026, month: 1, daysInMonth: 28 }
+  ];
+  
+  months.forEach(monthData => {
+    const firstDay = new Date(monthData.year, monthData.month, 1).getDay();
+    
+    calendarHTML += `
+      <div style="margin-bottom: 15px;">
+        <div style="text-align: center; font-weight: bold; margin-bottom: 10px; color: #333;">${monthData.name}</div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-size: 12px;">
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Sun</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Mon</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Tue</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Wed</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Thu</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Fri</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Sat</div>
+    `;
+    
+    // Add empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+      calendarHTML += '<div style="padding: 5px;"></div>';
+    }
+    
+    // Add days of the month
+    for (let day = 1; day <= monthData.daysInMonth; day++) {
+      const date = new Date(monthData.year, monthData.month, day);
+      const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
+      
+      // Check if date is within valid range and correct day
+      let isEnabled = false;
+      if (monthData.month === 0) { // January
+        isEnabled = day >= 20 && (dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6);
+      } else if (monthData.month === 1) { // February
+        isEnabled = day <= 20 && (dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6);
+      }
+      
+      if (isEnabled) {
+        calendarHTML += `
+          <div style="padding: 8px; text-align: center; background: #4CAF50; color: white; cursor: pointer; border-radius: 4px; font-weight: bold;"
+               onclick="selectDate(${monthData.year}, ${monthData.month}, ${day})">${day}</div>
+        `;
+      } else {
+        calendarHTML += `
+          <div style="padding: 8px; text-align: center; background: #f0f0f0; color: #ccc; cursor: not-allowed;">${day}</div>
+        `;
+      }
+    }
+    
+    calendarHTML += `
+        </div>
+      </div>
+    `;
+  });
+  
+  calendarHTML += `
+      <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
+        Available: Thu, Fri, Sat from Jan 20 to Feb 20, 2026
+      </div>
+    </div>
+  `;
+  
+  calendar.innerHTML = calendarHTML;
+  calendar.style.display = 'block';
+  calendar.style.visibility = 'visible';
+  calendar.style.opacity = '1';
+  calendar.style.zIndex = '9999';
+  calendar.style.position = 'fixed';
+  calendar.style.top = '50%';
+  calendar.style.left = '50%';
+  calendar.style.transform = 'translate(-50%, -50%)';
+  console.log("Calendar displayed successfully with professional styling");
+}
+
+// Global function for date selection
+window.selectDate = function(year, month, day) {
+  const input = document.getElementById("bookingDate");
+  const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  input.value = formattedDate;
+  
+  // Hide calendar
+  closeCalendar();
+  
+  console.log("Date selected:", formattedDate);
+};
+
+// Global function to close calendar
+window.closeCalendar = function() {
+  const calendar = document.getElementById("customCalendar");
+  if (calendar) {
+    calendar.style.display = 'none';
+    console.log("Calendar closed");
+  }
+};
+
+// Click outside to close
+document.addEventListener('click', function(e) {
+  const calendar = document.getElementById("customCalendar");
+  if (calendar && calendar.style.display === 'block' && 
+      !calendar.contains(e.target) && 
+      e.target.id !== 'bookingDate' && 
+      e.target.id !== 'calendarIconBtn') {
+    closeCalendar();
+  }
+});
+
+// Escape key to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeCalendar();
+  }
+});
+
+if (immediateInput) {
+  immediateInput.addEventListener('click', function() {
+    console.log("IMMEDIATE TEST: Input clicked!");
+    showWorkingCalendar();
+  });
+}
+
+if (immediateBtn) {
+  immediateBtn.addEventListener('click', function() {
+    console.log("IMMEDIATE TEST: Button clicked!");
+    showWorkingCalendar();
+  });
+}
+
+// Simple test outside DOMContentLoaded
+  console.log("=== OUTSIDE DOM TEST ===");
+  setTimeout(() => {
+    console.log("Delayed test running...");
+    // This delayed test is no longer needed since immediate test works
+    console.log("Delayed test skipped - immediate test is working");
+  }, 2000);
+
+// Complete language content - FIXED: Removed HTML tags from content
 const arabicContent = {
   headline: "تجربة شتوية دافئة في مطعم حلاوة",
   subheadline: "بوفيه غداء و بوفيه عشاء كل خميس و جمعة و سبت",
+  heroLocation: "عمان - خلدا",
   cta: "جرب أجواء حلاوة الدافئة",
   benefitsSubtitle: "بتدور على فعالية شتوية تجمع العائلة وتقدّم تجربة طعام متكاملة في أجواء دافئة؟",
   benefitsIntro: "بتجربتنا رح تستمتعوا بـ:",
@@ -43,19 +180,25 @@ const arabicContent = {
   benefit5: "مشروبات باردة",
   benefit6: "أجواء شتوية عائلية",
   reviewsTitle: "شو قالوا ضيوفنا عن التجربة؟",
-  reviewQuestion1: "ما رأيك بالأطباق الرئيسية؟",
+  reviewQuestion1: "ما رأيك في الأطباق الرئيسية؟",
   reviewCustomer1: "أحمد محمد",
-  reviewAnswer1: "الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!",
+  reviewAnswer1: "الأطباق كانت لذيذة والنكهات الأصلية للشرق الأوسط واضحة في كل قضمة. خاصة المندي والكبسة كانت استثنائية!",
   reviewQuestion2: "كيف كانت الأجواء العائلية؟",
   reviewCustomer2: "فاطمة أحمد",
-  reviewAnswer2: "الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.",
-  reviewQuestion3: "ما رأيك بالحلويات المقدمة؟",
+  reviewAnswer2: "الأجواء كانت دافئة ومريحة جداً، مناسبة للعائلات. الأطفال استمتعوا بالألعاب والأجواء الشتوية الجميلة، والكبار استمتعوا بالمحادثات الودية.",
+  reviewQuestion3: "ما رأيك في الحلويات المقدمة؟",
   reviewCustomer3: "محمد علي",
-  reviewAnswer3: "الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!",
-  reviewQuestion4: "هل تُوصي بزيارة المطعم في الشتاء؟",
+  reviewAnswer3: "الحلويات كانت رائعة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خاصة الكنافة بالكريمة كانت لا تقاوم!",
+  reviewQuestion4: "هل تنصح بزيارة المطعم في الشتاء؟",
   reviewCustomer4: "سارة حسن",
-  reviewAnswer4: "بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.",
-  lunchTitle: "بوفيه الغداء – 3:00 عصرًا",
+  reviewAnswer4: "بالتأكيد! الجلوس الداخلي دافئ والديكور الشتوي جميل جداً. بوفيه الشتاء هي تجربة لا تفوت، خاصة مع الأسعار المعقولة والخدمة الممتازة.",
+  reviewQuestion5: "كيف وجدت جودة الخدمة؟",
+  reviewCustomer5: "عمر خالد",
+  reviewAnswer5: "الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل شيء نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى المستويات.",
+  reviewQuestion6: "ما رأيك في المشروبات المقدمة؟",
+  reviewCustomer6: "لينا محمود",
+  reviewAnswer6: "المشروبات كانت متنوعة ومناسبة لموسم الشتاء. الشاي والقهوة كانتا ساخنتين ولذيذتين، والعصائر الطازجة كانت منعشة جداً.",
+  lunchTitle: "بوفيه الغداء – 3:00 مساءً",
   dinnerTitle: "بوفيه العشاء – 8:00 مساءً",
   lunchArabicCuisine: "مأكولات عربية",
   lunchArabicDesserts: "حلويات عربية",
@@ -67,8 +210,8 @@ const arabicContent = {
   dinnerInternationalDesserts: "حلويات عالمية",
   dinnerHotDrinks: "مشروبات ساخنة",
   dinnerColdDrinks: "مشروبات باردة",
-  kidsTitle: "🎨 اضغط لتعرف شو مجهزين لأطفالنا",
-  kidsActivity1: "ركن تلوين وأعمال يدوية",
+  kidsTitle: "🎨 اضغط لاكتشاف ما أعددناه لأطفالنا",
+  kidsActivity1: "ركن الفنون والحرف",
   kidsActivity2: "ألعاب تفاعلية خفيفة",
   kidsActivity3: "قصص وحكايات ممتعة",
   eventTitle: "تفاصيل الفعالية العائلية",
@@ -76,30 +219,42 @@ const arabicContent = {
   eventDays: "الأيام: كل خميس، جمعة، وسبت",
   eventPeriod: "فترة الفعالية: من 20/1 ولمدة شهر",
   eventTimesTitle: "أوقات البوفيه:",
-  lunchTime: "الغداء: 3:00 عصرًا",
+  lunchTime: "الغداء: 3:00 مساءً",
   dinnerTime: "العشاء: 8:00 مساءً",
   eventDuration: "مدة الفعالية: 3 ساعات",
-  eventSeats: " المقاعد محدودة:  200 مقعد",
+  eventSeats: "مقاعد محدودة: 200 مقعد",
   bookingTitle: "احجز مكانك في الفعالية",
-  fullNameLabel: "الاسم الكامل *",
-  numPeopleLabel: "عدد الأشخاص *",
-  mealTypeLabel: "نوع البوفيه *",
-  mealTypeDefault: "اختر نوع البوفيه",
-  mealTypeLunch: "غداء",
-  mealTypeDinner: "عشاء",
+  bookingBtn: "احجز الآن",
+  bookingFullNameLabel: "الاسم *",
+  bookingMobileLabel: "رقم الموبايل *",
+  bookingEmailLabel: "البريد الإلكتروني *",
+  bookingNumPeopleLabel: "عدد الأشخاص *",
   bookingDateLabel: "تاريخ الحجز *",
-  dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
-  notesLabel: "ملاحظات إضافية",
+  bookingDateInfo: "الفعالية متاحة أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير 2026",
   popupTitle: "شكراً لك!",
   popupMessage: "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.",
+  policiesTitle: "السياسات والشروط",
+  cancellationPolicy: "سياسة الإلغاء: يمكن إلغاء الحجز حتى 24 ساعة قبل موعد الفعالية مع استرداد كامل للمبلغ.",
+  returnPolicy: "سياسة الإرجاع: لا يمكن إرجاع التذاكر بعد حضور الفعالية.",
+  supportTitle: "الدعم والمساعدة",
+  whatsappLink: "دعم واتساب",
+  whatsappSupport: "دعم واتساب",
+  shareEventTitle: "مشاركة الفعالية",
+  shareEventText: "مشاركة",
+  shareTitle: "مشاركة الفعالية",
+  whatsappShareText: "واتساب",
+  instagramShareText: "إنستغرام",
+  youtubeShareText: "يوتيوب",
+  copyrightText: "2026 مطعم حلاوة. جميع الحقوق محفوظة.",
+  locationText: "عمان-خلدا"
 };
 
-// English content
 const englishContent = {
   headline: "Warm Winter Experience at Halaweh Restaurant",
   subheadline: "Lunch Buffet & Dinner Buffet Every Thursday, Friday & Saturday",
+  heroLocation: "Amman - Khalda",
   cta: "Experience Halaweh's Warm Atmosphere",
-  benefitsSubtitle: "Looking for a winter event that brings the family together and offers a complete food experience in a warm atmosphere?",
+  benefitsSubtitle: "Looking for a winter event that brings family together and offers a complete food experience in a warm atmosphere?",
   benefitsIntro: "With our experience, you'll enjoy:",
   benefit1: "Arabic Cuisine",
   benefit2: "Arabic Desserts",
@@ -113,13 +268,19 @@ const englishContent = {
   reviewAnswer1: "The dishes were absolutely delicious and the authentic flavors of the Middle East were evident in every bite. Especially the Mandi and Kabsa were exceptional!",
   reviewQuestion2: "How was the family atmosphere?",
   reviewCustomer2: "Fatima Ahmed",
-  reviewAnswer2: "The atmosphere was very warm and comfortable, perfect for families. The children enjoyed the games and beautiful winter atmosphere, and the adults enjoyed the friendly conversations.",
+  reviewAnswer2: "The atmosphere was very warm and comfortable, perfect for families. The children enjoyed the games and beautiful winter atmosphere, and the adults enjoyed friendly conversations.",
   reviewQuestion3: "What did you think of the desserts served?",
   reviewCustomer3: "Mohamed Ali",
   reviewAnswer3: "The desserts were amazing! From Knafeh to Baklava, everything was fresh and delicious. Especially the Knafeh with cream was irresistible!",
   reviewQuestion4: "Do you recommend visiting the restaurant in winter?",
   reviewCustomer4: "Sarah Hassan",
   reviewAnswer4: "Absolutely! The indoor seating is warm and the winter decor is very beautiful. The winter buffet is an experience not to be missed, especially with reasonable prices and excellent service.",
+  reviewQuestion5: "How did you find the quality of service?",
+  reviewCustomer5: "Omar Khalid",
+  reviewAnswer5: "The service was excellent and the staff were very friendly. Everything we needed was available quickly and cleanliness was at the highest levels.",
+  reviewQuestion6: "What did you think of the drinks served?",
+  reviewCustomer6: "Lina Mahmoud",
+  reviewAnswer6: "The drinks were diverse and suitable for the winter season. The tea and coffee were hot and delicious, and the fresh juices were very refreshing.",
   lunchTitle: "Lunch Buffet – 3:00 PM",
   dinnerTitle: "Dinner Buffet – 8:00 PM",
   lunchArabicCuisine: "Arabic Cuisine",
@@ -144,632 +305,330 @@ const englishContent = {
   lunchTime: "Lunch: 3:00 PM",
   dinnerTime: "Dinner: 8:00 PM",
   eventDuration: "Event Duration: 3 hours",
-  eventSeats: " Limited Seats: 200 seats",
-  bookingTitle: "Book Your Place at the Event",
-  fullNameLabel: "Full Name *",
-  numPeopleLabel: "Number of People *",
-  mealTypeLabel: "Buffet Type *",
-  mealTypeDefault: "Select Buffet Type",
-  mealTypeLunch: "Lunch",
-  mealTypeDinner: "Dinner",
+  eventSeats: "Limited Seats: 200 seats",
+  bookingTitle: "Book Your Place at Event",
+  bookingBtn: "Book Now",
+  bookingFullNameLabel: "Name *",
+  bookingMobileLabel: "Mobile Number *",
+  bookingEmailLabel: "Email Address *",
+  bookingNumPeopleLabel: "Number of People *",
   bookingDateLabel: "Booking Date *",
-  dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
-  notesLabel: "Additional Notes",
+  bookingDateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20, 2026",
   popupTitle: "Thank You!",
   popupMessage: "Booking confirmed successfully. Thank you for choosing our event.",
+  policiesTitle: "Policies & Terms",
+  cancellationPolicy: "Cancellation Policy: Bookings can be cancelled up to 24 hours before the event with a full refund.",
+  returnPolicy: "Return Policy: Tickets cannot be returned after attending the event.",
+  supportTitle: "Support & Help",
+  whatsappLink: "WhatsApp Support",
+  whatsappSupport: "WhatsApp Support",
+  shareEventTitle: "Share Event",
+  shareEventText: "Share",
+  shareTitle: "Share Event",
+  whatsappShareText: "WhatsApp",
+  instagramShareText: "Instagram",
+  youtubeShareText: "YouTube",
+  copyrightText: "2026 Halaweh Restaurant. All rights reserved.",
+  locationText: "Amman-Khalda"
 };
 
-let currentLang = "ar";
+// Initialize
+let currentLang = localStorage.getItem("halaweh-lang") || "ar";
 
-// Language Toggle Event Listener will be added inside DOMContentLoaded
-    subheadline.textContent = englishContent.subheadline;
-    cta.textContent = englishContent.cta;
-    benefitsSubtitle.textContent = englishContent.benefitsSubtitle;
-    benefitsIntro.textContent = englishContent.benefitsIntro;
-    benefit1.textContent = englishContent.benefit1;
-    benefit2.textContent = englishContent.benefit2;
-    benefit3.textContent = englishContent.benefit3;
-    benefit4.textContent = englishContent.benefit4;
-    benefit5.textContent = englishContent.benefit5;
-    benefit6.textContent = englishContent.benefit6;
-    if (reviewsTitle) reviewsTitle.textContent = englishContent.reviewsTitle;
-    if (reviewQuestion1) reviewQuestion1.textContent = englishContent.reviewQuestion1;
-    if (reviewCustomer1) reviewCustomer1.textContent = englishContent.reviewCustomer1;
-    if (reviewAnswer1) reviewAnswer1.textContent = englishContent.reviewAnswer1;
-    if (reviewQuestion2) reviewQuestion2.textContent = englishContent.reviewQuestion2;
-    if (reviewCustomer2) reviewCustomer2.textContent = englishContent.reviewCustomer2;
-    if (reviewAnswer2) reviewAnswer2.textContent = englishContent.reviewAnswer2;
-    if (reviewQuestion3) reviewQuestion3.textContent = englishContent.reviewQuestion3;
-    if (reviewCustomer3) reviewCustomer3.textContent = englishContent.reviewCustomer3;
-    if (reviewAnswer3) reviewAnswer3.textContent = englishContent.reviewAnswer3;
-    if (reviewQuestion4) reviewQuestion4.textContent = englishContent.reviewQuestion4;
-    if (reviewCustomer4) reviewCustomer4.textContent = englishContent.reviewCustomer4;
-    if (reviewAnswer4) reviewAnswer4.textContent = englishContent.reviewAnswer4;
-    if (lunchTitle) lunchTitle.textContent = englishContent.lunchTitle;
-    if (dinnerTitle) dinnerTitle.textContent = englishContent.dinnerTitle;
-    if (lunchArabicCuisine) lunchArabicCuisine.textContent = englishContent.lunchArabicCuisine;
-    if (lunchArabicDesserts) lunchArabicDesserts.textContent = englishContent.lunchArabicDesserts;
-    if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = englishContent.lunchInternationalDesserts;
-    if (lunchHotDrinks) lunchHotDrinks.textContent = englishContent.lunchHotDrinks;
-    if (lunchColdDrinks) lunchColdDrinks.textContent = englishContent.lunchColdDrinks;
-    if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = englishContent.dinnerArabicCuisine;
-    if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = englishContent.dinnerArabicDesserts;
-    if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = englishContent.dinnerInternationalDesserts;
-    if (dinnerHotDrinks) dinnerHotDrinks.textContent = englishContent.dinnerHotDrinks;
-    if (dinnerColdDrinks) dinnerColdDrinks.textContent = englishContent.dinnerColdDrinks;
-    if (kidsTitle) kidsTitle.textContent = englishContent.kidsTitle;
-    if (kidsActivity1) kidsActivity1.textContent = englishContent.kidsActivity1;
-    if (kidsActivity2) kidsActivity2.textContent = englishContent.kidsActivity2;
-    if (kidsActivity3) kidsActivity3.textContent = englishContent.kidsActivity3;
-    if (eventTitle) eventTitle.textContent = englishContent.eventTitle;
-    if (eventPrice) eventPrice.textContent = englishContent.eventPrice;
-    if (eventDays) eventDays.textContent = englishContent.eventDays;
-    if (eventPeriod) eventPeriod.textContent = englishContent.eventPeriod;
-    if (eventTimesTitle) eventTimesTitle.textContent = englishContent.eventTimesTitle;
-    if (lunchTime) lunchTime.textContent = englishContent.lunchTime;
-    if (dinnerTime) dinnerTime.textContent = englishContent.dinnerTime;
-    if (eventDuration) eventDuration.textContent = englishContent.eventDuration;
-    if (eventSeats) eventSeats.textContent = englishContent.eventSeats;
-    if (bookingTitle) bookingTitle.textContent = englishContent.bookingTitle;
-    if (fullNameLabel) fullNameLabel.textContent = englishContent.fullNameLabel;
-    if (numPeopleLabel) numPeopleLabel.textContent = englishContent.numPeopleLabel;
-    if (mealTypeLabel) mealTypeLabel.textContent = englishContent.mealTypeLabel;
-    if (mealTypeDefault) mealTypeDefault.textContent = englishContent.mealTypeDefault;
-    if (mealTypeLunch) mealTypeLunch.textContent = englishContent.mealTypeLunch;
-    if (mealTypeDinner) mealTypeDinner.textContent = englishContent.mealTypeDinner;
-    if (bookingDateLabel) bookingDateLabel.textContent = englishContent.bookingDateLabel;
-    if (notesLabel) notesLabel.textContent = englishContent.notesLabel;
-    if (popupTitle) popupTitle.textContent = englishContent.popupTitle;
-    if (popupMessage) popupMessage.textContent = englishContent.popupMessage;
-    if (dateInfo) dateInfo.textContent = englishContent.dateInfo;
-    langToggle.textContent = "AR";
-    benefitsIntro.textContent = arabicContent.benefitsIntro;
-    benefit1.textContent = arabicContent.benefit1;
-    benefit2.textContent = arabicContent.benefit2;
-    benefit3.textContent = arabicContent.benefit3;
-    benefit4.textContent = arabicContent.benefit4;
-    benefit5.textContent = arabicContent.benefit5;
-    benefit6.textContent = arabicContent.benefit6;
-    if (reviewsTitle) reviewsTitle.textContent = arabicContent.reviewsTitle;
-    if (reviewQuestion1) reviewQuestion1.textContent = arabicContent.reviewQuestion1;
-    if (reviewCustomer1) reviewCustomer1.textContent = arabicContent.reviewCustomer1;
-    if (reviewAnswer1) reviewAnswer1.textContent = arabicContent.reviewAnswer1;
-    if (reviewQuestion2) reviewQuestion2.textContent = arabicContent.reviewQuestion2;
-    if (reviewCustomer2) reviewCustomer2.textContent = arabicContent.reviewCustomer2;
-    if (reviewAnswer2) reviewAnswer2.textContent = arabicContent.reviewAnswer2;
-    if (reviewQuestion3) reviewQuestion3.textContent = arabicContent.reviewQuestion3;
-    if (reviewCustomer3) reviewCustomer3.textContent = arabicContent.reviewCustomer3;
-    if (reviewAnswer3) reviewAnswer3.textContent = arabicContent.reviewAnswer3;
-    if (reviewQuestion4) reviewQuestion4.textContent = arabicContent.reviewQuestion4;
-    if (reviewCustomer4) reviewCustomer4.textContent = arabicContent.reviewCustomer4;
-    if (reviewAnswer4) reviewAnswer4.textContent = arabicContent.reviewAnswer4;
-    if (lunchTitle) lunchTitle.textContent = arabicContent.lunchTitle;
-    if (dinnerTitle) dinnerTitle.textContent = arabicContent.dinnerTitle;
-    if (lunchArabicCuisine) lunchArabicCuisine.textContent = arabicContent.lunchArabicCuisine;
-    if (lunchArabicDesserts) lunchArabicDesserts.textContent = arabicContent.lunchArabicDesserts;
-    if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = arabicContent.lunchInternationalDesserts;
-    if (lunchHotDrinks) lunchHotDrinks.textContent = arabicContent.lunchHotDrinks;
-    if (lunchColdDrinks) lunchColdDrinks.textContent = arabicContent.lunchColdDrinks;
-    if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = arabicContent.dinnerArabicCuisine;
-    if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = arabicContent.dinnerArabicDesserts;
-    if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = arabicContent.dinnerInternationalDesserts;
-    if (dinnerHotDrinks) dinnerHotDrinks.textContent = arabicContent.dinnerHotDrinks;
-    if (dinnerColdDrinks) dinnerColdDrinks.textContent = arabicContent.dinnerColdDrinks;
-    if (kidsTitle) kidsTitle.textContent = arabicContent.kidsTitle;
-    if (kidsActivity1) kidsActivity1.textContent = arabicContent.kidsActivity1;
-    if (kidsActivity2) kidsActivity2.textContent = arabicContent.kidsActivity2;
-    if (kidsActivity3) kidsActivity3.textContent = arabicContent.kidsActivity3;
-    if (eventTitle) eventTitle.textContent = arabicContent.eventTitle;
-    if (eventPrice) eventPrice.textContent = arabicContent.eventPrice;
-    if (eventDays) eventDays.textContent = arabicContent.eventDays;
-    if (eventPeriod) eventPeriod.textContent = arabicContent.eventPeriod;
-    if (eventTimesTitle) eventTimesTitle.textContent = arabicContent.eventTimesTitle;
-    if (lunchTime) lunchTime.textContent = arabicContent.lunchTime;
-    if (dinnerTime) dinnerTime.textContent = arabicContent.dinnerTime;
-    if (eventDuration) eventDuration.textContent = arabicContent.eventDuration;
-    if (eventSeats) eventSeats.textContent = arabicContent.eventSeats;
-    if (bookingTitle) bookingTitle.textContent = arabicContent.bookingTitle;
-    if (fullNameLabel) fullNameLabel.textContent = arabicContent.fullNameLabel;
-    if (numPeopleLabel) numPeopleLabel.textContent = arabicContent.numPeopleLabel;
-    if (mealTypeLabel) mealTypeLabel.textContent = arabicContent.mealTypeLabel;
-    if (mealTypeDefault) mealTypeDefault.textContent = arabicContent.mealTypeDefault;
-    if (mealTypeLunch) mealTypeLunch.textContent = arabicContent.mealTypeLunch;
-    if (mealTypeDinner) mealTypeDinner.textContent = arabicContent.mealTypeDinner;
-    if (bookingDateLabel) bookingDateLabel.textContent = arabicContent.bookingDateLabel;
-    if (notesLabel) notesLabel.textContent = arabicContent.notesLabel;
-  // Language toggle completed
-
-// Theme Toggle Functionality
-const themeToggle = document.getElementById("themeToggle");
-const themeIcon = document.getElementById("themeIcon");
-const body = document.body;
-
-const themes = ["sun", "moon", "auto"];
-const themeIcons = ["☀️", "🌙", "🌓"];
-let currentThemeIndex = 0;
-
-themeToggle.addEventListener("click", () => {
-  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-  const newTheme = themes[currentThemeIndex];
-  body.setAttribute("data-theme", newTheme);
-  themeIcon.textContent = themeIcons[currentThemeIndex];
-});
-
-// Form validation functions
-function validateForm() {
-  let isValid = true;
-
-  // Validate full name
-  const fullName = document.getElementById("fullName");
-  if (!fullName.value.trim()) {
-    showFieldError(fullName, "الاسم الكامل مطلوب");
-    isValid = false;
-  }
-
-  // Validate number of people
-  const numPeople = document.getElementById("numPeople");
-  if (!numPeople.value || numPeople.value < 1) {
-    showFieldError(numPeople, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
-    isValid = false;
-  }
-
-  // Validate meal type
-  const mealType = document.getElementById("mealType");
-  if (!mealType.value) {
-    showFieldError(mealType, "يجب اختيار نوع البوفيه");
-    isValid = false;
-  }
-
-  // Validate booking date
-  const bookingDate = document.getElementById("bookingDate");
-  if (!bookingDate.value) {
-    showFieldError(bookingDate, "تاريخ الحجز مطلوب");
-    isValid = false;
-  } else if (!isValidDate(bookingDate.value)) {
-    showFieldError(bookingDate, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
-    isValid = false;
-  }
-
-  return isValid;
-}
-
-function validateField(field) {
-  clearFieldError(field);
-
-  switch(field.id) {
-    case "fullName":
-      if (!field.value.trim()) {
-        showFieldError(field, "الاسم الكامل مطلوب");
-      }
-      break;
-    case "numPeople":
-      if (!field.value || field.value < 1) {
-        showFieldError(field, "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر");
-      }
-      break;
-    case "mealType":
-      if (!field.value) {
-        showFieldError(field, "يجب اختيار نوع البوفيه");
-      }
-      break;
-    case "bookingDate":
-      if (!field.value) {
-        showFieldError(field, "تاريخ الحجز مطلوب");
-      } else if (!isValidDate(field.value)) {
-        showFieldError(field, "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية");
-      }
-      break;
-  }
-}
-
-function isValidDate(dateString) {
-  const date = new Date(dateString);
-  const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
-
-  // Check if it's Thursday (4), Friday (5), or Saturday (6)
-  if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-    return false;
-  }
-
-  // Check if it's within the event period (from Jan 20th for 1 month)
-  const currentYear = new Date().getFullYear();
-  const eventStart = new Date(currentYear, 0, 20); // January 20th
-  const eventEnd = new Date(currentYear, 1, 20); // February 20th (1 month later)
-
-  return date >= eventStart && date <= eventEnd;
-}
-
-function showFieldError(field, message) {
-  const formGroup = field.closest(".form-group");
-  formGroup.classList.add("error");
-
-  let errorElement = formGroup.querySelector(".error-message");
-  if (!errorElement) {
-    errorElement = document.createElement("span");
-    errorElement.className = "error-message";
-    formGroup.appendChild(errorElement);
-  }
-  errorElement.textContent = message;
-}
-
-function clearFieldError(field) {
-  const formGroup = field.closest(".form-group");
-  formGroup.classList.remove("error");
-
-  const errorElement = formGroup.querySelector(".error-message");
-  if (errorElement) {
-    errorElement.remove();
-  }
-}
-
-function setupDateRestrictions() {
-  const bookingDateInput = document.getElementById("bookingDate");
-  const today = new Date();
-
-  // Set minimum date to event start date (January 20th of current year)
-  const currentYear = today.getFullYear();
-  const eventStart = new Date(currentYear, 0, 20); // January 20th
-  const eventEnd = new Date(currentYear, 1, 20); // February 20th
-
-  // If today is before event start, set min to event start
-  // If today is after event start but before event end, set min to today
-  // If today is after event end, disable the input entirely
-  let minDate;
-  if (today < eventStart) {
-    minDate = eventStart.toISOString().split('T')[0];
-  } else if (today <= eventEnd) {
-    minDate = today.toISOString().split('T')[0];
-  } else {
-    // Event has ended
-    bookingDateInput.disabled = true;
-    bookingDateInput.placeholder = "الفعالية انتهت";
-    return;
-  }
-
-  bookingDateInput.setAttribute("min", minDate);
-  bookingDateInput.setAttribute("max", eventEnd.toISOString().split('T')[0]);
-
-  // Add input event listener to restrict to valid days
-  bookingDateInput.addEventListener("input", function() {
-    if (this.value) {
-      const selectedDate = new Date(this.value);
-      const dayOfWeek = selectedDate.getDay();
-
-      // Check if it's Thursday (4), Friday (5), or Saturday (6)
-      if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-        // Invalid day of week
-        this.value = "";
-        showFieldError(this, "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
-        return;
-      }
-
-      // Check if it's within the event period
-      if (selectedDate < eventStart || selectedDate > eventEnd) {
-        this.value = "";
-        showFieldError(this, "التاريخ يجب أن يكون خلال فترة الفعالية (20 يناير - 20 فبراير)");
-        return;
-      }
-
-      // Clear any existing errors
-      clearFieldError(this);
+// Wait for DOM
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DOM loaded, initializing...");
+  
+  // Get ALL elements
+  const elements = {
+    // Hero section
+    headline: document.getElementById("headline"),
+    subheadline: document.getElementById("subheadline"),
+    heroLocation: document.getElementById("heroLocation"),
+    cta: document.getElementById("cta"),
+    
+    // Benefits section
+    benefitsSubtitle: document.getElementById("benefitsSubtitle"),
+    benefitsIntro: document.getElementById("benefitsIntro"),
+    benefit1: document.getElementById("benefit1"),
+    benefit2: document.getElementById("benefit2"),
+    benefit3: document.getElementById("benefit3"),
+    benefit4: document.getElementById("benefit4"),
+    benefit5: document.getElementById("benefit5"),
+    benefit6: document.getElementById("benefit6"),
+    
+    // Reviews section
+    reviewsTitle: document.getElementById("reviewsTitle"),
+    reviewQuestion1: document.getElementById("reviewQuestion1"),
+    reviewCustomer1: document.getElementById("reviewCustomer1"),
+    reviewAnswer1: document.getElementById("reviewAnswer1"),
+    reviewQuestion2: document.getElementById("reviewQuestion2"),
+    reviewCustomer2: document.getElementById("reviewCustomer2"),
+    reviewAnswer2: document.getElementById("reviewAnswer2"),
+    reviewQuestion3: document.getElementById("reviewQuestion3"),
+    reviewCustomer3: document.getElementById("reviewCustomer3"),
+    reviewAnswer3: document.getElementById("reviewAnswer3"),
+    reviewQuestion4: document.getElementById("reviewQuestion4"),
+    reviewCustomer4: document.getElementById("reviewCustomer4"),
+    reviewAnswer4: document.getElementById("reviewAnswer4"),
+    reviewQuestion5: document.getElementById("reviewQuestion5"),
+    reviewCustomer5: document.getElementById("reviewCustomer5"),
+    reviewAnswer5: document.getElementById("reviewAnswer5"),
+    reviewQuestion6: document.getElementById("reviewQuestion6"),
+    reviewCustomer6: document.getElementById("reviewCustomer6"),
+    reviewAnswer6: document.getElementById("reviewAnswer6"),
+    
+    // Buffet sections
+    lunchTitle: document.querySelector(".buffet-lunch .buffet-title"),
+    dinnerTitle: document.querySelector(".buffet-dinner .buffet-title"),
+    lunchArabicCuisine: document.getElementById("lunch-arabic-cuisine"),
+    lunchArabicDesserts: document.getElementById("lunch-arabic-desserts"),
+    lunchInternationalDesserts: document.getElementById("lunch-international-desserts"),
+    lunchHotDrinks: document.getElementById("lunch-hot-drinks"),
+    lunchColdDrinks: document.getElementById("lunch-cold-drinks"),
+    dinnerArabicCuisine: document.getElementById("dinner-arabic-cuisine"),
+    dinnerArabicDesserts: document.getElementById("dinner-arabic-desserts"),
+    dinnerInternationalDesserts: document.getElementById("dinner-international-desserts"),
+    dinnerHotDrinks: document.getElementById("dinner-hot-drinks"),
+    dinnerColdDrinks: document.getElementById("dinner-cold-drinks"),
+    
+    // Kids activities section
+    kidsTitle: document.getElementById("kidsTitle"),
+    kidsActivity1: document.getElementById("kidsActivity1"),
+    kidsActivity2: document.getElementById("kidsActivity2"),
+    kidsActivity3: document.getElementById("kidsActivity3"),
+    
+    // Event details section
+    eventTitle: document.getElementById("eventTitle"),
+    eventPrice: document.getElementById("eventPrice"),
+    eventDays: document.getElementById("eventDays"),
+    eventPeriod: document.getElementById("eventPeriod"),
+    eventTimesTitle: document.getElementById("eventTimesTitle"),
+    lunchTime: document.getElementById("lunchTime"),
+    dinnerTime: document.getElementById("dinnerTime"),
+    eventDuration: document.getElementById("eventDuration"),
+    eventSeats: document.getElementById("eventSeats"),
+    
+    // Booking form elements
+    bookingTitle: document.getElementById("bookingTitle"),
+    bookingBtn: document.getElementById("bookingBtn"),
+    bookingFullNameLabel: document.getElementById("bookingFullNameLabel"),
+    bookingMobileLabel: document.getElementById("bookingMobileLabel"),
+    bookingEmailLabel: document.getElementById("bookingEmailLabel"),
+    bookingNumPeopleLabel: document.getElementById("bookingNumPeopleLabel"),
+    bookingDateLabel: document.getElementById("bookingDateLabel"),
+    bookingDateInfo: document.getElementById("bookingDateInfo"),
+    
+    // Other elements
+    languageBtn: document.getElementById("languageBtn"),
+    themeToggle: document.getElementById("themeToggle"),
+    themeIcon: document.getElementById("themeIcon"),
+    htmlElement: document.documentElement
+  };
+  
+  console.log("All elements found:", elements);
+  
+  // Update language function
+  function updateLanguage(lang) {
+    const content = lang === "ar" ? arabicContent : englishContent;
+    
+    // Update HTML attributes
+    elements.htmlElement.setAttribute("lang", lang);
+    elements.htmlElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    
+    // Update language button
+    if (elements.languageBtn) {
+      elements.languageBtn.textContent = lang === "ar" ? "EN" : "AR";
     }
-  });
-
-  // Add change event for additional validation
-  bookingDateInput.addEventListener("change", function() {
-    if (this.value && !isValidDate(this.value)) {
-      this.value = "";
-      showFieldError(this, "يرجى اختيار تاريخ صحيح من أيام الفعالية المتاحة");
-    }
-  });
-}
-
-function showThankYouPopup() {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-
-  if (thankYouPopup) {
-    thankYouPopup.classList.add("show");
-  }
-}
-
-function hideThankYouPopup() {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  if (thankYouPopup) {
-    thankYouPopup.classList.remove("show");
-  }
-}
-
-// Reviews Toggle Functionality
-document.addEventListener("DOMContentLoaded", () => {
-  // DOM Element References
-  const langToggle = document.getElementById("langToggle");
-  const headline = document.getElementById("headline");
-  const subheadline = document.getElementById("subheadline");
-  const cta = document.getElementById("cta");
-  const benefitsSubtitle = document.getElementById("benefitsSubtitle");
-  const benefitsIntro = document.getElementById("benefitsIntro");
-  const benefit1 = document.getElementById("benefit1");
-  const benefit2 = document.getElementById("benefit2");
-  const benefit3 = document.getElementById("benefit3");
-  const benefit4 = document.getElementById("benefit4");
-  const benefit5 = document.getElementById("benefit5");
-  const benefit6 = document.getElementById("benefit6");
-
-  // Reviews section elements
-  const reviewsTitle = document.getElementById("reviewsTitle");
-  const reviewQuestion1 = document.getElementById("reviewQuestion1");
-  const reviewCustomer1 = document.getElementById("reviewCustomer1");
-  const reviewAnswer1 = document.getElementById("reviewAnswer1");
-  const reviewQuestion2 = document.getElementById("reviewQuestion2");
-  const reviewCustomer2 = document.getElementById("reviewCustomer2");
-  const reviewAnswer2 = document.getElementById("reviewAnswer2");
-  const reviewQuestion3 = document.getElementById("reviewQuestion3");
-  const reviewCustomer3 = document.getElementById("reviewCustomer3");
-  const reviewAnswer3 = document.getElementById("reviewAnswer3");
-  const reviewQuestion4 = document.getElementById("reviewQuestion4");
-  const reviewCustomer4 = document.getElementById("reviewCustomer4");
-  const reviewAnswer4 = document.getElementById("reviewAnswer4");
-
-  // Buffet section elements
-  const lunchTitle = document.querySelector(".buffet-lunch .buffet-title");
-  const dinnerTitle = document.querySelector(".buffet-dinner .buffet-title");
-
-  // Initialize language toggle button text
-  if (langToggle) {
-    langToggle.textContent = "EN"; // Show "EN" initially since page loads in Arabic
-  }
-
-  // Language Toggle Event Listener
-  if (langToggle) {
-    langToggle.addEventListener("click", () => {
-      if (currentLang === "ar") {
-        currentLang = "en";
-        htmlElement.setAttribute("lang", "en");
-        htmlElement.setAttribute("dir", "ltr");
-        if (headline) headline.textContent = englishContent.headline;
-        if (subheadline) subheadline.textContent = englishContent.subheadline;
-        if (cta) cta.textContent = englishContent.cta;
-        if (benefitsSubtitle) benefitsSubtitle.textContent = englishContent.benefitsSubtitle;
-        if (benefitsIntro) benefitsIntro.textContent = englishContent.benefitsIntro;
-        if (benefit1) benefit1.textContent = englishContent.benefit1;
-        if (benefit2) benefit2.textContent = englishContent.benefit2;
-        if (benefit3) benefit3.textContent = englishContent.benefit3;
-        if (benefit4) benefit4.textContent = englishContent.benefit4;
-        if (benefit5) benefit5.textContent = englishContent.benefit5;
-        if (benefit6) benefit6.textContent = englishContent.benefit6;
-        if (reviewsTitle) reviewsTitle.textContent = englishContent.reviewsTitle;
-        if (reviewQuestion1) reviewQuestion1.textContent = englishContent.reviewQuestion1;
-        if (reviewCustomer1) reviewCustomer1.textContent = englishContent.reviewCustomer1;
-        if (reviewAnswer1) reviewAnswer1.textContent = englishContent.reviewAnswer1;
-        if (reviewQuestion2) reviewQuestion2.textContent = englishContent.reviewQuestion2;
-        if (reviewCustomer2) reviewCustomer2.textContent = englishContent.reviewCustomer2;
-        if (reviewAnswer2) reviewAnswer2.textContent = englishContent.reviewAnswer2;
-        if (reviewQuestion3) reviewQuestion3.textContent = englishContent.reviewQuestion3;
-        if (reviewCustomer3) reviewCustomer3.textContent = englishContent.reviewCustomer3;
-        if (reviewAnswer3) reviewAnswer3.textContent = englishContent.reviewAnswer3;
-        if (reviewQuestion4) reviewQuestion4.textContent = englishContent.reviewQuestion4;
-        if (reviewCustomer4) reviewCustomer4.textContent = englishContent.reviewCustomer4;
-        if (reviewAnswer4) reviewAnswer4.textContent = englishContent.reviewAnswer4;
-        if (lunchTitle) lunchTitle.textContent = englishContent.lunchTitle;
-        if (dinnerTitle) dinnerTitle.textContent = englishContent.dinnerTitle;
-        if (lunchArabicCuisine) lunchArabicCuisine.textContent = englishContent.lunchArabicCuisine;
-        if (lunchArabicDesserts) lunchArabicDesserts.textContent = englishContent.lunchArabicDesserts;
-        if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = englishContent.lunchInternationalDesserts;
-        if (lunchHotDrinks) lunchHotDrinks.textContent = englishContent.lunchHotDrinks;
-        if (lunchColdDrinks) lunchColdDrinks.textContent = englishContent.lunchColdDrinks;
-        if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = englishContent.dinnerArabicCuisine;
-        if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = englishContent.dinnerArabicDesserts;
-        if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = englishContent.dinnerInternationalDesserts;
-        if (dinnerHotDrinks) dinnerHotDrinks.textContent = englishContent.dinnerHotDrinks;
-        if (dinnerColdDrinks) dinnerColdDrinks.textContent = englishContent.dinnerColdDrinks;
-        if (kidsTitle) kidsTitle.textContent = englishContent.kidsTitle;
-        if (kidsActivity1) kidsActivity1.textContent = englishContent.kidsActivity1;
-        if (kidsActivity2) kidsActivity2.textContent = englishContent.kidsActivity2;
-        if (kidsActivity3) kidsActivity3.textContent = englishContent.kidsActivity3;
-        if (eventTitle) eventTitle.textContent = englishContent.eventTitle;
-        if (eventPrice) eventPrice.textContent = englishContent.eventPrice;
-        if (eventDays) eventDays.textContent = englishContent.eventDays;
-        if (eventPeriod) eventPeriod.textContent = englishContent.eventPeriod;
-        if (eventTimesTitle) eventTimesTitle.textContent = englishContent.eventTimesTitle;
-        if (lunchTime) lunchTime.textContent = englishContent.lunchTime;
-        if (dinnerTime) dinnerTime.textContent = englishContent.dinnerTime;
-        if (eventDuration) eventDuration.textContent = englishContent.eventDuration;
-        if (eventSeats) eventSeats.textContent = englishContent.eventSeats;
-        if (bookingTitle) bookingTitle.textContent = englishContent.bookingTitle;
-        if (fullNameLabel) fullNameLabel.textContent = englishContent.fullNameLabel;
-        if (numPeopleLabel) numPeopleLabel.textContent = englishContent.numPeopleLabel;
-        if (mealTypeLabel) mealTypeLabel.textContent = englishContent.mealTypeLabel;
-        if (mealTypeDefault) mealTypeDefault.textContent = englishContent.mealTypeDefault;
-        if (mealTypeLunch) mealTypeLunch.textContent = englishContent.mealTypeLunch;
-        if (mealTypeDinner) mealTypeDinner.textContent = englishContent.mealTypeDinner;
-        if (bookingDateLabel) bookingDateLabel.textContent = englishContent.bookingDateLabel;
-        if (dateInfo) dateInfo.textContent = englishContent.dateInfo;
-        if (notesLabel) notesLabel.textContent = englishContent.notesLabel;
-        if (popupTitle) popupTitle.textContent = englishContent.popupTitle;
-        if (popupMessage) popupMessage.textContent = englishContent.popupMessage;
-        langToggle.textContent = "AR";
-      } else {
-        currentLang = "ar";
-        htmlElement.setAttribute("lang", "ar");
-        htmlElement.setAttribute("dir", "rtl");
-        if (headline) headline.textContent = arabicContent.headline;
-        if (subheadline) subheadline.textContent = arabicContent.subheadline;
-        if (cta) cta.textContent = arabicContent.cta;
-        if (benefitsSubtitle) benefitsSubtitle.textContent = arabicContent.benefitsSubtitle;
-        if (benefitsIntro) benefitsIntro.textContent = arabicContent.benefitsIntro;
-        if (benefit1) benefit1.textContent = arabicContent.benefit1;
-        if (benefit2) benefit2.textContent = arabicContent.benefit2;
-        if (benefit3) benefit3.textContent = arabicContent.benefit3;
-        if (benefit4) benefit4.textContent = arabicContent.benefit4;
-        if (benefit5) benefit5.textContent = arabicContent.benefit5;
-        if (benefit6) benefit6.textContent = arabicContent.benefit6;
-        if (reviewsTitle) reviewsTitle.textContent = arabicContent.reviewsTitle;
-        if (reviewQuestion1) reviewQuestion1.textContent = arabicContent.reviewQuestion1;
-        if (reviewCustomer1) reviewCustomer1.textContent = arabicContent.reviewCustomer1;
-        if (reviewAnswer1) reviewAnswer1.textContent = arabicContent.reviewAnswer1;
-        if (reviewQuestion2) reviewQuestion2.textContent = arabicContent.reviewQuestion2;
-        if (reviewCustomer2) reviewCustomer2.textContent = arabicContent.reviewCustomer2;
-        if (reviewAnswer2) reviewAnswer2.textContent = arabicContent.reviewAnswer2;
-        if (reviewQuestion3) reviewQuestion3.textContent = arabicContent.reviewQuestion3;
-        if (reviewCustomer3) reviewCustomer3.textContent = arabicContent.reviewCustomer3;
-        if (reviewAnswer3) reviewAnswer3.textContent = arabicContent.reviewAnswer3;
-        if (reviewQuestion4) reviewQuestion4.textContent = arabicContent.reviewQuestion4;
-        if (reviewCustomer4) reviewCustomer4.textContent = arabicContent.reviewCustomer4;
-        if (reviewAnswer4) reviewAnswer4.textContent = arabicContent.reviewAnswer4;
-        if (lunchTitle) lunchTitle.textContent = arabicContent.lunchTitle;
-        if (dinnerTitle) dinnerTitle.textContent = arabicContent.dinnerTitle;
-        if (lunchArabicCuisine) lunchArabicCuisine.textContent = arabicContent.lunchArabicCuisine;
-        if (lunchArabicDesserts) lunchArabicDesserts.textContent = arabicContent.lunchArabicDesserts;
-        if (lunchInternationalDesserts) lunchInternationalDesserts.textContent = arabicContent.lunchInternationalDesserts;
-        if (lunchHotDrinks) lunchHotDrinks.textContent = arabicContent.lunchHotDrinks;
-        if (lunchColdDrinks) lunchColdDrinks.textContent = arabicContent.lunchColdDrinks;
-        if (dinnerArabicCuisine) dinnerArabicCuisine.textContent = arabicContent.dinnerArabicCuisine;
-        if (dinnerArabicDesserts) dinnerArabicDesserts.textContent = arabicContent.dinnerArabicDesserts;
-        if (dinnerInternationalDesserts) dinnerInternationalDesserts.textContent = arabicContent.dinnerInternationalDesserts;
-        if (dinnerHotDrinks) dinnerHotDrinks.textContent = arabicContent.dinnerHotDrinks;
-        if (dinnerColdDrinks) dinnerColdDrinks.textContent = arabicContent.dinnerColdDrinks;
-        if (kidsTitle) kidsTitle.textContent = arabicContent.kidsTitle;
-        if (kidsActivity1) kidsActivity1.textContent = arabicContent.kidsActivity1;
-        if (kidsActivity2) kidsActivity2.textContent = arabicContent.kidsActivity2;
-        if (kidsActivity3) kidsActivity3.textContent = arabicContent.kidsActivity3;
-        if (eventTitle) eventTitle.textContent = arabicContent.eventTitle;
-        if (eventPrice) eventPrice.textContent = arabicContent.eventPrice;
-        if (eventDays) eventDays.textContent = arabicContent.eventDays;
-        if (eventPeriod) eventPeriod.textContent = arabicContent.eventPeriod;
-        if (eventTimesTitle) eventTimesTitle.textContent = arabicContent.eventTimesTitle;
-        if (lunchTime) lunchTime.textContent = arabicContent.lunchTime;
-        if (dinnerTime) dinnerTime.textContent = arabicContent.dinnerTime;
-        if (eventDuration) eventDuration.textContent = arabicContent.eventDuration;
-        if (eventSeats) eventSeats.textContent = arabicContent.eventSeats;
-        if (bookingTitle) bookingTitle.textContent = arabicContent.bookingTitle;
-        if (fullNameLabel) fullNameLabel.textContent = arabicContent.fullNameLabel;
-        if (numPeopleLabel) numPeopleLabel.textContent = arabicContent.numPeopleLabel;
-        if (mealTypeLabel) mealTypeLabel.textContent = arabicContent.mealTypeLabel;
-        if (mealTypeDefault) mealTypeDefault.textContent = arabicContent.mealTypeDefault;
-        if (mealTypeLunch) mealTypeLunch.textContent = arabicContent.mealTypeLunch;
-        if (mealTypeDinner) mealTypeDinner.textContent = arabicContent.mealTypeDinner;
-        if (bookingDateLabel) bookingDateLabel.textContent = arabicContent.bookingDateLabel;
-        if (dateInfo) dateInfo.textContent = arabicContent.dateInfo;
-        if (notesLabel) notesLabel.textContent = arabicContent.notesLabel;
-        if (popupTitle) popupTitle.textContent = arabicContent.popupTitle;
-        if (popupMessage) popupMessage.textContent = arabicContent.popupMessage;
-        langToggle.textContent = "EN";
+    
+    // Update ALL text elements
+    Object.keys(elements).forEach(key => {
+      if (key !== "languageBtn" && elements[key] && content[key]) {
+        elements[key].textContent = content[key];
       }
     });
+    
+    console.log("Language updated to:", lang);
   }
-
+  
+  // Initialize language
+  updateLanguage(currentLang);
+  
+  // Language button click handler
+  if (elements.languageBtn) {
+    elements.languageBtn.addEventListener("click", function(e) {
+      console.log("Language button clicked!");
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle language
+      currentLang = currentLang === "ar" ? "en" : "ar";
+      localStorage.setItem("halaweh-lang", currentLang);
+      updateLanguage(currentLang);
+      
+      console.log("Language changed to:", currentLang);
+    });
+    console.log("Language button listener attached");
+  }
+  
+  // Theme toggle
+  const themes = ["sun", "moon", "auto"];
+  const themeIcons = ["☀️", "🌙", "🌓"];
+  let currentThemeIndex = themes.indexOf(localStorage.getItem("halaweh-theme") || "sun");
+  
+  // Set initial theme
+  if (document.body) {
+    document.body.setAttribute("data-theme", themes[currentThemeIndex]);
+  }
+  if (elements.themeIcon) {
+    elements.themeIcon.textContent = themeIcons[currentThemeIndex];
+  }
+  
+  if (elements.themeToggle) {
+    elements.themeToggle.addEventListener("click", function() {
+      console.log("Theme button clicked!");
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      const newTheme = themes[currentThemeIndex];
+      
+      if (document.body) {
+        document.body.setAttribute("data-theme", newTheme);
+      }
+      if (elements.themeIcon) {
+        elements.themeIcon.textContent = themeIcons[currentThemeIndex];
+      }
+      
+      localStorage.setItem("halaweh-theme", newTheme);
+      console.log("Theme changed to:", newTheme);
+    });
+    console.log("Theme button listener attached");
+  }
+  
+  // Review toggles
   const reviewToggles = document.querySelectorAll(".review-toggle");
-
-  reviewToggles.forEach(toggle => {
-    toggle.addEventListener("click", () => {
-      const reviewId = toggle.getAttribute("data-review");
-      const answerElement = document.getElementById(`review-${reviewId}`);
-
-      // Toggle active class on button
-      toggle.classList.toggle("active");
-
-      // Toggle show class on answer
-      answerElement.classList.toggle("show");
+  console.log("Review toggles found:", reviewToggles.length);
+  
+  reviewToggles.forEach((toggle, index) => {
+    toggle.addEventListener("click", function() {
+      console.log(`Review toggle ${index + 1} clicked!`);
+      const reviewId = this.getAttribute("data-review");
+      const answerDiv = document.getElementById("review-" + reviewId);
+      
+      if (answerDiv) {
+        // Close all other reviews
+        reviewToggles.forEach(otherToggle => {
+          if (otherToggle !== this) {
+            otherToggle.classList.remove("active");
+            const otherId = otherToggle.getAttribute("data-review");
+            const otherAnswer = document.getElementById("review-" + otherId);
+            if (otherAnswer) {
+              otherAnswer.classList.remove("show");
+            }
+          }
+        });
+        
+        // Toggle current review
+        this.classList.toggle("active");
+        answerDiv.classList.toggle("show");
+      }
     });
   });
-
-  // Kids Activities Accordion Functionality
-  const kidsToggle = document.getElementById("kidsToggle");
-  const kidsContent = document.getElementById("kidsContent");
-
-  if (kidsToggle && kidsContent) {
-    kidsToggle.addEventListener("click", () => {
-      // Toggle active class on button
-      kidsToggle.classList.toggle("active");
-
-      // Toggle show class on content
-      kidsContent.classList.toggle("show");
+  
+  // CTA button
+  if (elements.cta) {
+    elements.cta.addEventListener("click", function(e) {
+      console.log("CTA button clicked!");
+      e.preventDefault();
+      e.stopPropagation();
+      alert("CTA working!");
     });
   }
-
-  // Booking Form Validation and Functionality
+  
+  // Booking form functionality
   const bookingForm = document.getElementById("bookingForm");
-  const bookingTitle = document.getElementById("bookingTitle");
-  const fullNameLabel = document.getElementById("fullNameLabel");
-  const numPeopleLabel = document.getElementById("numPeopleLabel");
-  const mealTypeLabel = document.getElementById("mealTypeLabel");
-  const mealTypeDefault = document.getElementById("mealTypeDefault");
-  const mealTypeLunch = document.getElementById("mealTypeLunch");
-  const mealTypeDinner = document.getElementById("mealTypeDinner");
-  const bookingDateLabel = document.getElementById("bookingDateLabel");
-  const notesLabel = document.getElementById("notesLabel");
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  const popupCloseBtn = document.getElementById("popupCloseBtn");
-  const popupTitle = document.getElementById("popupTitle");
-  const popupMessage = document.getElementById("popupMessage");
-
+  
+  // Get calendar elements after DOM is loaded
+  const bookingDateInput = document.getElementById("bookingDate");
+  const calendarIconBtn = document.getElementById("calendarIconBtn");
+  const customCalendar = document.getElementById("customCalendar");
+  
+  console.log("Calendar elements check:", {
+    bookingDateInput: bookingDateInput,
+    calendarIconBtn: calendarIconBtn,
+    customCalendar: customCalendar,
+    bookingDateInputHTML: bookingDateInput ? bookingDateInput.outerHTML.substring(0, 100) : 'NOT FOUND',
+    calendarIconBtnHTML: calendarIconBtn ? calendarIconBtn.outerHTML : 'NOT FOUND',
+    customCalendarHTML: customCalendar ? customCalendar.outerHTML.substring(0, 100) : 'NOT FOUND'
+  });
+  
+  // Booking form submission
   if (bookingForm) {
-    // Set minimum date to today and restrict to event days
-    setupDateRestrictions();
-
     bookingForm.addEventListener("submit", function(e) {
-      e.preventDefault(); // Completely disable default HTML form submission
-
-      // Get the submit button
-      const submitBtn = bookingForm.querySelector('.booking-btn');
-
-      // Add loading state to button
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'جارٍ الحجز...';
-
-      // Validate form before showing popup
-      if (validateForm()) {
-        // Simulate processing time (you can remove setTimeout in production)
-        setTimeout(() => {
-          showThankYouPopup();
-          // Reset button state after popup shows
-          submitBtn.classList.remove('loading');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'احجز الآن';
-          // Do NOT reset form - preserve user data
-        }, 800); // 800ms delay for better UX
-      } else {
-        // If validation fails, reset button immediately
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'احجز الآن';
+      e.preventDefault();
+      
+      // Get form values
+      const fullName = document.getElementById("bookingFullName").value.trim();
+      const mobile = document.getElementById("bookingMobile").value.trim();
+      const email = document.getElementById("bookingEmail").value.trim();
+      const numPeople = document.getElementById("bookingNumPeople").value;
+      const bookingDate = document.getElementById("bookingDate").value;
+      
+      // Validation
+      let isValid = true;
+      let errorMessage = "";
+      
+      // Name validation
+      if (fullName.length < 2) {
+        isValid = false;
+        errorMessage += currentLang === "ar" ? 
+          "• الاسم يجب أن يكون على الأقل حرفين\n" : 
+          "• Name must be at least 2 characters\n";
       }
-    });
-
-    // Real-time validation
-    const inputs = bookingForm.querySelectorAll("input, select, textarea");
-    inputs.forEach(input => {
-      input.addEventListener("blur", function() {
-        validateField(this);
-      });
-
-      input.addEventListener("input", function() {
-        clearFieldError(this);
-      });
-    });
-  }
-
-  // Close popup when close button is clicked
-  if (popupCloseBtn) {
-    popupCloseBtn.addEventListener("click", hideThankYouPopup);
-  }
-
-  // Close popup when clicking outside
-  if (thankYouPopup) {
-    thankYouPopup.addEventListener("click", function(e) {
-      if (e.target === thankYouPopup || e.target.classList.contains("popup-overlay")) {
-        hideThankYouPopup();
+      
+      // Mobile validation
+      // Remove all non-digit characters except + for validation
+      const cleanMobile = mobile.replace(/[^\d+]/g, '');
+      const mobilePattern = /^[\+]?[0-9]{10,15}$/;
+      if (!mobilePattern.test(cleanMobile)) {
+        isValid = false;
+        errorMessage += currentLang === "ar" ? 
+          "• رقم الموبايل يجب أن يكون 10-15 رقم\n" : 
+          "• Mobile number must be 10-15 digits\n";
       }
+      
+      // Email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        isValid = false;
+        errorMessage += currentLang === "ar" ? 
+          "• البريد الإلكتروني غير صالح\n" : 
+          "• Email address is invalid\n";
+      }
+      
+      // Number of people validation
+      const peopleNum = parseInt(numPeople);
+      if (isNaN(peopleNum) || peopleNum < 1 || peopleNum > 200) {
+        isValid = false;
+        errorMessage += currentLang === "ar" ? 
+          "• عدد الأشخاص يجب أن يكون بين 1 و 200\n" : 
+          "• Number of people must be between 1 and 200\n";
+      }
+      
+      // Date validation
+      if (!bookingDate) {
+        isValid = false;
+        errorMessage += currentLang === "ar" ? 
+          "• يرجى اختيار تاريخ الحجز\n" : 
+          "• Please select a booking date\n";
+      }
+      
+      if (!isValid) {
+        alert(currentLang === "ar" ? 
+          "خطأ في النموذج:\n" + errorMessage : 
+          "Form errors:\n" + errorMessage);
+        return;
+      }
+      
+      // If valid, show thank you popup
+      showThankYouPopup();
+      bookingForm.reset();
     });
-  }
-});
-
-// Add keyboard support (ESC key to close)
-document.addEventListener("keydown", function(e) {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  if (e.key === "Escape" && thankYouPopup && thankYouPopup.classList.contains("show")) {
-    thankYouPopup.classList.remove("show");
-    document.body.style.overflow = "";
-  }
-});

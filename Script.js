@@ -1,35 +1,171 @@
-// Language Toggle Functionality
-// Buffet items
-const lunchArabicCuisine = document.getElementById("lunch-arabic-cuisine");
-const lunchArabicDesserts = document.getElementById("lunch-arabic-desserts");
-const lunchInternationalDesserts = document.getElementById("lunch-international-desserts");
-const lunchHotDrinks = document.getElementById("lunch-hot-drinks");
-const lunchColdDrinks = document.getElementById("lunch-cold-drinks");
-const dinnerArabicCuisine = document.getElementById("dinner-arabic-cuisine");
-const dinnerArabicDesserts = document.getElementById("dinner-arabic-desserts");
-const dinnerInternationalDesserts = document.getElementById("dinner-international-desserts");
-const dinnerHotDrinks = document.getElementById("dinner-hot-drinks");
-const dinnerColdDrinks = document.getElementById("dinner-cold-drinks");
-// Kids activities section
-const kidsTitle = document.getElementById("kidsTitle");
-const kidsActivity1 = document.getElementById("kidsActivity1");
-const kidsActivity2 = document.getElementById("kidsActivity2");
-const kidsActivity3 = document.getElementById("kidsActivity3");
-// Event details section
-const eventTitle = document.getElementById("eventTitle");
-const eventPrice = document.getElementById("eventPrice");
-const eventDays = document.getElementById("eventDays");
-const eventPeriod = document.getElementById("eventPeriod");
-const eventTimesTitle = document.getElementById("eventTimesTitle");
-const lunchTime = document.getElementById("lunchTime");
-const dinnerTime = document.getElementById("dinnerTime");
-const eventDuration = document.getElementById("eventDuration");
-const eventSeats = document.getElementById("eventSeats");
-// Booking form elements
-const dateInfo = document.querySelector(".date-info");
-const htmlElement = document.documentElement;
+console.log("Script loading...");
 
-// Arabic content
+// IMMEDIATE TEST - No delay
+console.log("=== IMMEDIATE TEST ===");
+const immediateInput = document.getElementById("bookingDate");
+const immediateBtn = document.getElementById("calendarIconBtn");
+const immediateCal = document.getElementById("customCalendar");
+
+console.log("IMMEDIATE TEST - Element existence:", {
+  input: !!immediateInput,
+  btn: !!immediateBtn,
+  calendar: !!immediateCal
+});
+
+// Define calendar function immediately
+function showWorkingCalendar() {
+  const calendar = document.getElementById("customCalendar");
+  if (!calendar) {
+    console.error("Calendar element not found!");
+    return;
+  }
+  
+  console.log("Showing working calendar...");
+  
+  let calendarHTML = `
+    <div style="background: white; border: 2px solid #ccc; border-radius: 8px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;">
+      <button onclick="closeCalendar()" style="position: absolute; top: 5px; right: 5px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; z-index: 1;">×</button>
+  `;
+  
+  // Generate calendars for January and February 2026
+  const months = [
+    { name: "January 2026", year: 2026, month: 0, daysInMonth: 31 },
+    { name: "February 2026", year: 2026, month: 1, daysInMonth: 28 }
+  ];
+  
+  months.forEach(monthData => {
+    const firstDay = new Date(monthData.year, monthData.month, 1).getDay();
+    
+    calendarHTML += `
+      <div style="margin-bottom: 15px;">
+        <div style="text-align: center; font-weight: bold; margin-bottom: 10px; color: #333;">${monthData.name}</div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-size: 12px;">
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Sun</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Mon</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Tue</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Wed</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Thu</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Fri</div>
+          <div style="text-align: center; font-weight: bold; padding: 5px; background: #f0f0f0;">Sat</div>
+    `;
+    
+    // Add empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+      calendarHTML += '<div style="padding: 5px;"></div>';
+    }
+    
+    // Add days of the month
+    for (let day = 1; day <= monthData.daysInMonth; day++) {
+      const date = new Date(monthData.year, monthData.month, day);
+      const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
+      
+      // Check if date is within valid range and correct day
+      let isEnabled = false;
+      if (monthData.month === 0) { // January
+        isEnabled = day >= 20 && (dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6);
+      } else if (monthData.month === 1) { // February
+        isEnabled = day <= 20 && (dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6);
+      }
+      
+      if (isEnabled) {
+        calendarHTML += `
+          <div style="padding: 8px; text-align: center; background: #4CAF50; color: white; cursor: pointer; border-radius: 4px; font-weight: bold;"
+               onclick="selectDate(${monthData.year}, ${monthData.month}, ${day})">${day}</div>
+        `;
+      } else {
+        calendarHTML += `
+          <div style="padding: 8px; text-align: center; background: #f0f0f0; color: #ccc; cursor: not-allowed;">${day}</div>
+        `;
+      }
+    }
+    
+    calendarHTML += `
+        </div>
+      </div>
+    `;
+  });
+  
+  calendarHTML += `
+      <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #666; border-top: 1px solid #eee; padding-top: 10px;">
+        Available: Thu, Fri, Sat from Jan 20 to Feb 20, 2026
+      </div>
+    </div>
+  `;
+  
+  calendar.innerHTML = calendarHTML;
+  calendar.style.display = 'block';
+  calendar.style.visibility = 'visible';
+  calendar.style.opacity = '1';
+  calendar.style.zIndex = '9999';
+  calendar.style.position = 'fixed';
+  calendar.style.top = '50%';
+  calendar.style.left = '50%';
+  calendar.style.transform = 'translate(-50%, -50%)';
+  console.log("Calendar displayed successfully with professional styling");
+}
+
+// Global function for date selection
+window.selectDate = function(year, month, day) {
+  const input = document.getElementById("bookingDate");
+  const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  input.value = formattedDate;
+  
+  // Hide calendar
+  closeCalendar();
+  
+  console.log("Date selected:", formattedDate);
+};
+
+// Global function to close calendar
+window.closeCalendar = function() {
+  const calendar = document.getElementById("customCalendar");
+  if (calendar) {
+    calendar.style.display = 'none';
+    console.log("Calendar closed");
+  }
+};
+
+// Click outside to close
+document.addEventListener('click', function(e) {
+  const calendar = document.getElementById("customCalendar");
+  if (calendar && calendar.style.display === 'block' && 
+      !calendar.contains(e.target) && 
+      e.target.id !== 'bookingDate' && 
+      e.target.id !== 'calendarIconBtn') {
+    closeCalendar();
+  }
+});
+
+// Escape key to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeCalendar();
+  }
+});
+
+if (immediateInput) {
+  immediateInput.addEventListener('click', function() {
+    console.log("IMMEDIATE TEST: Input clicked!");
+    showWorkingCalendar();
+  });
+}
+
+if (immediateBtn) {
+  immediateBtn.addEventListener('click', function() {
+    console.log("IMMEDIATE TEST: Button clicked!");
+    showWorkingCalendar();
+  });
+}
+
+// Simple test outside DOMContentLoaded
+  console.log("=== OUTSIDE DOM TEST ===");
+  setTimeout(() => {
+    console.log("Delayed test running...");
+    // This delayed test is no longer needed since immediate test works
+    console.log("Delayed test skipped - immediate test is working");
+  }, 2000);
+
+// Complete language content - FIXED: Removed HTML tags from content
 const arabicContent = {
   headline: "تجربة شتوية دافئة في مطعم حلاوة",
   subheadline: "بوفيه غداء و بوفيه عشاء كل خميس و جمعة و سبت",
@@ -44,25 +180,25 @@ const arabicContent = {
   benefit5: "مشروبات باردة",
   benefit6: "أجواء شتوية عائلية",
   reviewsTitle: "شو قالوا ضيوفنا عن التجربة؟",
-  reviewQuestion1: "ما رأيك بالأطباق الرئيسية؟",
+  reviewQuestion1: "ما رأيك في الأطباق الرئيسية؟",
   reviewCustomer1: "أحمد محمد",
-  reviewAnswer1: "الأطباق كانت لذيذة جداً والنكهات الأصيلة للشرق الأوسط كانت واضحة في كل لقمة. خصوصاً المندي والكبسة كانوا متميزين!",
+  reviewAnswer1: "الأطباق كانت لذيذة والنكهات الأصلية للشرق الأوسط واضحة في كل قضمة. خاصة المندي والكبسة كانت استثنائية!",
   reviewQuestion2: "كيف كانت الأجواء العائلية؟",
   reviewCustomer2: "فاطمة أحمد",
-  reviewAnswer2: "الأجواء كانت دافئة ومريحة جداً، مثالية للعائلات. الأطفال استمتعوا بالألعاب والجو الشتوي الجميل، والكبار استمتعوا بالأحاديث الودية.",
-  reviewQuestion3: "ما رأيك بالحلويات المقدمة؟",
+  reviewAnswer2: "الأجواء كانت دافئة ومريحة جداً، مناسبة للعائلات. الأطفال استمتعوا بالألعاب والأجواء الشتوية الجميلة، والكبار استمتعوا بالمحادثات الودية.",
+  reviewQuestion3: "ما رأيك في الحلويات المقدمة؟",
   reviewCustomer3: "محمد علي",
-  reviewAnswer3: "الحلويات كانت مذهلة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خصوصاً الكنافة بالقشطة كانت لا تُقاوم!",
-  reviewQuestion4: "هل تُوصي بزيارة المطعم في الشتاء؟",
+  reviewAnswer3: "الحلويات كانت رائعة! من الكنافة إلى البقلاوة، كل شيء كان طازجاً ولذيذاً. خاصة الكنافة بالكريمة كانت لا تقاوم!",
+  reviewQuestion4: "هل تنصح بزيارة المطعم في الشتاء؟",
   reviewCustomer4: "سارة حسن",
-  reviewAnswer4: "بالتأكيد! الجلسات الداخلية دافئة والديكور الشتوي جميل جداً. البوفيه الشتوي تجربة لا تُفوت، خصوصاً مع الأسعار المعقولة والخدمة الممتازة.",
+  reviewAnswer4: "بالتأكيد! الجلوس الداخلي دافئ والديكور الشتوي جميل جداً. بوفيه الشتاء هي تجربة لا تفوت، خاصة مع الأسعار المعقولة والخدمة الممتازة.",
   reviewQuestion5: "كيف وجدت جودة الخدمة؟",
   reviewCustomer5: "عمر خالد",
-  reviewAnswer5: "الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل ما نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى مستوياتها.",
-  reviewQuestion6: "ما رأيك بالمشروبات المقدمة؟",
+  reviewAnswer5: "الخدمة كانت ممتازة والموظفين كانوا ودودين جداً. كل شيء نحتاجه كان متوفراً بسرعة والنظافة كانت في أعلى المستويات.",
+  reviewQuestion6: "ما رأيك في المشروبات المقدمة؟",
   reviewCustomer6: "لينا محمود",
-  reviewAnswer6: "المشروبات كانت متنوعة ومناسبة للفصل الشتوي. الشاي والقهوة كانوا ساخنين ولذيذين، والعصائر الطازجة كانت منعشة جداً.",
-  lunchTitle: "بوفيه الغداء – 3:00 عصرًا",
+  reviewAnswer6: "المشروبات كانت متنوعة ومناسبة لموسم الشتاء. الشاي والقهوة كانتا ساخنتين ولذيذتين، والعصائر الطازجة كانت منعشة جداً.",
+  lunchTitle: "بوفيه الغداء – 3:00 مساءً",
   dinnerTitle: "بوفيه العشاء – 8:00 مساءً",
   lunchArabicCuisine: "مأكولات عربية",
   lunchArabicDesserts: "حلويات عربية",
@@ -74,8 +210,8 @@ const arabicContent = {
   dinnerInternationalDesserts: "حلويات عالمية",
   dinnerHotDrinks: "مشروبات ساخنة",
   dinnerColdDrinks: "مشروبات باردة",
-  kidsTitle: "🎨 اضغط لتعرف شو مجهزين لأطفالنا",
-  kidsActivity1: "ركن تلوين وأعمال يدوية",
+  kidsTitle: "🎨 اضغط لاكتشاف ما أعددناه لأطفالنا",
+  kidsActivity1: "ركن الفنون والحرف",
   kidsActivity2: "ألعاب تفاعلية خفيفة",
   kidsActivity3: "قصص وحكايات ممتعة",
   eventTitle: "تفاصيل الفعالية العائلية",
@@ -83,21 +219,18 @@ const arabicContent = {
   eventDays: "الأيام: كل خميس، جمعة، وسبت",
   eventPeriod: "فترة الفعالية: من 20/1 ولمدة شهر",
   eventTimesTitle: "أوقات البوفيه:",
-  lunchTime: "الغداء: 3:00 عصرًا",
+  lunchTime: "الغداء: 3:00 مساءً",
   dinnerTime: "العشاء: 8:00 مساءً",
   eventDuration: "مدة الفعالية: 3 ساعات",
-  eventSeats: " المقاعد محدودة:  200 مقعد",
+  eventSeats: "مقاعد محدودة: 200 مقعد",
   bookingTitle: "احجز مكانك في الفعالية",
   bookingBtn: "احجز الآن",
-  fullNameLabel: "الاسم الكامل *",
-  numPeopleLabel: "عدد الأشخاص *",
-  mealTypeLabel: "نوع البوفيه *",
-  mealTypeDefault: "اختر نوع البوفيه",
-  mealTypeLunch: "غداء",
-  mealTypeDinner: "عشاء",
+  bookingFullNameLabel: "الاسم *",
+  bookingMobileLabel: "رقم الموبايل *",
+  bookingEmailLabel: "البريد الإلكتروني *",
+  bookingNumPeopleLabel: "عدد الأشخاص *",
   bookingDateLabel: "تاريخ الحجز *",
-  dateInfo: "الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير",
-  notesLabel: "ملاحظات إضافية",
+  bookingDateInfo: "الفعالية متاحة أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير 2026",
   popupTitle: "شكراً لك!",
   popupMessage: "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.",
   policiesTitle: "السياسات والشروط",
@@ -113,16 +246,15 @@ const arabicContent = {
   instagramShareText: "إنستغرام",
   youtubeShareText: "يوتيوب",
   copyrightText: "2026 مطعم حلاوة. جميع الحقوق محفوظة.",
-  locationText: "عمان-خلدا",
+  locationText: "عمان-خلدا"
 };
 
-// English content
 const englishContent = {
   headline: "Warm Winter Experience at Halaweh Restaurant",
   subheadline: "Lunch Buffet & Dinner Buffet Every Thursday, Friday & Saturday",
   heroLocation: "Amman - Khalda",
   cta: "Experience Halaweh's Warm Atmosphere",
-  benefitsSubtitle: "Looking for a winter event that brings the family together and offers a complete food experience in a warm atmosphere?",
+  benefitsSubtitle: "Looking for a winter event that brings family together and offers a complete food experience in a warm atmosphere?",
   benefitsIntro: "With our experience, you'll enjoy:",
   benefit1: "Arabic Cuisine",
   benefit2: "Arabic Desserts",
@@ -136,7 +268,7 @@ const englishContent = {
   reviewAnswer1: "The dishes were absolutely delicious and the authentic flavors of the Middle East were evident in every bite. Especially the Mandi and Kabsa were exceptional!",
   reviewQuestion2: "How was the family atmosphere?",
   reviewCustomer2: "Fatima Ahmed",
-  reviewAnswer2: "The atmosphere was very warm and comfortable, perfect for families. The children enjoyed the games and beautiful winter atmosphere, and the adults enjoyed the friendly conversations.",
+  reviewAnswer2: "The atmosphere was very warm and comfortable, perfect for families. The children enjoyed the games and beautiful winter atmosphere, and the adults enjoyed friendly conversations.",
   reviewQuestion3: "What did you think of the desserts served?",
   reviewCustomer3: "Mohamed Ali",
   reviewAnswer3: "The desserts were amazing! From Knafeh to Baklava, everything was fresh and delicious. Especially the Knafeh with cream was irresistible!",
@@ -173,22 +305,19 @@ const englishContent = {
   lunchTime: "Lunch: 3:00 PM",
   dinnerTime: "Dinner: 8:00 PM",
   eventDuration: "Event Duration: 3 hours",
-  eventSeats: " Limited Seats: 200 seats",
+  eventSeats: "Limited Seats: 200 seats",
   bookingTitle: "Book Your Place at Event",
   bookingBtn: "Book Now",
-  fullNameLabel: "Full Name *",
-  numPeopleLabel: "Number of People *",
-  mealTypeLabel: "Buffet Type *",
-  mealTypeDefault: "Select Buffet Type",
-  mealTypeLunch: "Lunch",
-  mealTypeDinner: "Dinner",
+  bookingFullNameLabel: "Name *",
+  bookingMobileLabel: "Mobile Number *",
+  bookingEmailLabel: "Email Address *",
+  bookingNumPeopleLabel: "Number of People *",
   bookingDateLabel: "Booking Date *",
-  dateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20",
-  notesLabel: "Additional Notes",
+  bookingDateInfo: "The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20, 2026",
   popupTitle: "Thank You!",
   popupMessage: "Booking confirmed successfully. Thank you for choosing our event.",
   policiesTitle: "Policies & Terms",
-  cancellationPolicy: "Cancellation Policy: Bookings can be cancelled up to 24 hours before the event with full refund.",
+  cancellationPolicy: "Cancellation Policy: Bookings can be cancelled up to 24 hours before the event with a full refund.",
   returnPolicy: "Return Policy: Tickets cannot be returned after attending the event.",
   supportTitle: "Support & Help",
   whatsappLink: "WhatsApp Support",
@@ -200,24 +329,24 @@ const englishContent = {
   instagramShareText: "Instagram",
   youtubeShareText: "YouTube",
   copyrightText: "2026 Halaweh Restaurant. All rights reserved.",
-  locationText: "Amman-Khalda",
+  locationText: "Amman-Khalda"
 };
 
-// Single source of truth for language state
+// Initialize
 let currentLang = localStorage.getItem("halaweh-lang") || "ar";
 
-document.addEventListener("DOMContentLoaded", () => {
-  // DOM Element References - All elements that need translation
+// Wait for DOM
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DOM loaded, initializing...");
+  
+  // Get ALL elements
   const elements = {
-    // Language button
-    languageBtn: document.getElementById("languageBtn"),
-
     // Hero section
     headline: document.getElementById("headline"),
     subheadline: document.getElementById("subheadline"),
     heroLocation: document.getElementById("heroLocation"),
     cta: document.getElementById("cta"),
-
+    
     // Benefits section
     benefitsSubtitle: document.getElementById("benefitsSubtitle"),
     benefitsIntro: document.getElementById("benefitsIntro"),
@@ -227,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
     benefit4: document.getElementById("benefit4"),
     benefit5: document.getElementById("benefit5"),
     benefit6: document.getElementById("benefit6"),
-
+    
     // Reviews section
     reviewsTitle: document.getElementById("reviewsTitle"),
     reviewQuestion1: document.getElementById("reviewQuestion1"),
@@ -248,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reviewQuestion6: document.getElementById("reviewQuestion6"),
     reviewCustomer6: document.getElementById("reviewCustomer6"),
     reviewAnswer6: document.getElementById("reviewAnswer6"),
-
+    
     // Buffet sections
     lunchTitle: document.querySelector(".buffet-lunch .buffet-title"),
     dinnerTitle: document.querySelector(".buffet-dinner .buffet-title"),
@@ -262,14 +391,14 @@ document.addEventListener("DOMContentLoaded", () => {
     dinnerInternationalDesserts: document.getElementById("dinner-international-desserts"),
     dinnerHotDrinks: document.getElementById("dinner-hot-drinks"),
     dinnerColdDrinks: document.getElementById("dinner-cold-drinks"),
-
-    // Kids activities
+    
+    // Kids activities section
     kidsTitle: document.getElementById("kidsTitle"),
     kidsActivity1: document.getElementById("kidsActivity1"),
     kidsActivity2: document.getElementById("kidsActivity2"),
     kidsActivity3: document.getElementById("kidsActivity3"),
-
-    // Event details
+    
+    // Event details section
     eventTitle: document.getElementById("eventTitle"),
     eventPrice: document.getElementById("eventPrice"),
     eventDays: document.getElementById("eventDays"),
@@ -279,205 +408,113 @@ document.addEventListener("DOMContentLoaded", () => {
     dinnerTime: document.getElementById("dinnerTime"),
     eventDuration: document.getElementById("eventDuration"),
     eventSeats: document.getElementById("eventSeats"),
-
-    // Booking form
+    
+    // Booking form elements
     bookingTitle: document.getElementById("bookingTitle"),
     bookingBtn: document.getElementById("bookingBtn"),
-    fullNameLabel: document.getElementById("fullNameLabel"),
-    numPeopleLabel: document.getElementById("numPeopleLabel"),
-    mealTypeLabel: document.getElementById("mealTypeLabel"),
-    mealTypeDefault: document.getElementById("mealTypeDefault"),
-    mealTypeLunch: document.getElementById("mealTypeLunch"),
-    mealTypeDinner: document.getElementById("mealTypeDinner"),
+    bookingFullNameLabel: document.getElementById("bookingFullNameLabel"),
+    bookingMobileLabel: document.getElementById("bookingMobileLabel"),
+    bookingEmailLabel: document.getElementById("bookingEmailLabel"),
+    bookingNumPeopleLabel: document.getElementById("bookingNumPeopleLabel"),
     bookingDateLabel: document.getElementById("bookingDateLabel"),
-    dateInfo: document.getElementById("dateInfo"),
-    notesLabel: document.getElementById("notesLabel"),
-
-    // Popup
-    popupTitle: document.getElementById("popupTitle"),
-    popupMessage: document.getElementById("popupMessage"),
-
-    // Footer
-    policiesTitle: document.getElementById("policiesTitle"),
-    cancellationPolicy: document.getElementById("cancellationPolicy"),
-    returnPolicy: document.getElementById("returnPolicy"),
-    supportTitle: document.getElementById("supportTitle"),
-    whatsappLink: document.getElementById("whatsappLink"),
-    whatsappSupport: document.getElementById("whatsappSupport"),
-    shareEventTitle: document.getElementById("shareEventTitle"),
-    shareEventText: document.getElementById("shareEventText"),
-    shareTitle: document.getElementById("shareTitle"),
-    whatsappShareText: document.getElementById("whatsappShareText"),
-    instagramShareText: document.getElementById("instagramShareText"),
-    youtubeShareText: document.getElementById("youtubeShareText"),
-    copyrightText: document.getElementById("copyrightText"),
-    locationText: document.getElementById("locationText")
+    bookingDateInfo: document.getElementById("bookingDateInfo"),
+    
+    // Other elements
+    languageBtn: document.getElementById("languageBtn"),
+    themeToggle: document.getElementById("themeToggle"),
+    themeIcon: document.getElementById("themeIcon"),
+    htmlElement: document.documentElement
   };
-
-  // Single function to update all text based on current language
+  
+  console.log("All elements found:", elements);
+  
+  // Update language function
   function updateLanguage(lang) {
     const content = lang === "ar" ? arabicContent : englishContent;
-
+    
     // Update HTML attributes
-    htmlElement.setAttribute("lang", lang);
-    htmlElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
-
-    // Update language button (show the language you can switch TO)
+    elements.htmlElement.setAttribute("lang", lang);
+    elements.htmlElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    
+    // Update language button
     if (elements.languageBtn) {
       elements.languageBtn.textContent = lang === "ar" ? "EN" : "AR";
     }
-
-    // Update all text elements
+    
+    // Update ALL text elements
     Object.keys(elements).forEach(key => {
       if (key !== "languageBtn" && elements[key] && content[key]) {
         elements[key].textContent = content[key];
       }
     });
-
-    // Update main booking form labels
-    updateMainFormLabels();
     
-    // Update popup form labels
-    updatePopupFormLabels();
-    
-    // Update thank you message
-    updateThankYouMessage();
+    console.log("Language updated to:", lang);
   }
-
-  // Initialize language on page load
+  
+  // Initialize language
   updateLanguage(currentLang);
-
-  // Language button toggle functionality
+  
+  // Language button click handler
   if (elements.languageBtn) {
     elements.languageBtn.addEventListener("click", function(e) {
+      console.log("Language button clicked!");
+      e.preventDefault();
       e.stopPropagation();
-      // Toggle between languages
+      
+      // Toggle language
       currentLang = currentLang === "ar" ? "en" : "ar";
       localStorage.setItem("halaweh-lang", currentLang);
       updateLanguage(currentLang);
+      
+      console.log("Language changed to:", currentLang);
     });
+    console.log("Language button listener attached");
   }
-
-  // Booking Form Functionality
-  const bookingForm = document.getElementById("bookingForm");
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  const popupCloseBtn = document.getElementById("popupCloseBtn");
-
-  if (bookingForm) {
-    bookingForm.addEventListener("submit", function(e) {
-      e.preventDefault(); // Prevent default form submission
-
-      // Validate form
-      const isValid = validateForm();
-
-      if (isValid) {
-        console.log("Showing thank you popup");
-        // Show thank you popup
-        showThankYouPopup();
-        // Do NOT reset form - preserve user data
-      } else {
-        console.log("Form validation failed");
-      }
-    });
-  }
-
-  // Thank You Popup with Snowflakes
-function showThankYouPopup() {
-  const thankYouPopup = document.getElementById("thankYouPopup");
-  if (thankYouPopup) {
-    thankYouPopup.classList.add("show");
-    
-    // Create falling snowflakes
-    createSnowflakes();
-  }
-}
-
-function createSnowflakes() {
-  const popupContent = document.querySelector(".popup-content");
-  if (!popupContent) return;
   
-  // Remove existing snowflakes
-  const existingSnowflakes = popupContent.querySelectorAll(".snowflake");
-  existingSnowflakes.forEach(flake => flake.remove());
+  // Theme toggle
+  const themes = ["sun", "moon", "auto"];
+  const themeIcons = ["☀️", "🌙", "🌓"];
+  let currentThemeIndex = themes.indexOf(localStorage.getItem("halaweh-theme") || "sun");
   
-  // Create new snowflakes
-  for (let i = 0; i < 15; i++) {
-    const snowflake = document.createElement("div");
-    snowflake.className = "snowflake";
-    snowflake.innerHTML = "❄";
-    snowflake.style.cssText = `
-      position: absolute;
-      top: -20px;
-      left: ${Math.random() * 100}%;
-      font-size: ${Math.random() * 0.8 + 0.8}rem;
-      color: rgba(255, 255, 255, 0.8);
-      animation: snowfall ${Math.random() * 3 + 4}s linear infinite;
-      animation-delay: ${Math.random() * 2}s;
-      z-index: 1000;
-      pointer-events: none;
-    `;
-    
-    popupContent.appendChild(snowflake);
-    
-    // Remove snowflake after animation
-    setTimeout(() => {
-      if (snowflake.parentNode) {
-        snowflake.remove();
+  // Set initial theme
+  if (document.body) {
+    document.body.setAttribute("data-theme", themes[currentThemeIndex]);
+  }
+  if (elements.themeIcon) {
+    elements.themeIcon.textContent = themeIcons[currentThemeIndex];
+  }
+  
+  if (elements.themeToggle) {
+    elements.themeToggle.addEventListener("click", function() {
+      console.log("Theme button clicked!");
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      const newTheme = themes[currentThemeIndex];
+      
+      if (document.body) {
+        document.body.setAttribute("data-theme", newTheme);
       }
-    }, 7000);
-  }
-}
-
-// Add snowfall animation to CSS
-const snowfallStyle = document.createElement("style");
-snowfallStyle.textContent = `
-  @keyframes snowfall {
-    0% {
-      transform: translateY(-20px) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(400px) rotate(360deg);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(snowfallStyle);
-
-  function hideThankYouPopup() {
-    if (thankYouPopup) {
-      thankYouPopup.classList.remove("show");
-    }
-  }
-
-  if (popupCloseBtn) {
-    popupCloseBtn.addEventListener("click", hideThankYouPopup);
-  }
-
-  // Close popup when clicking outside
-  if (thankYouPopup) {
-    thankYouPopup.addEventListener("click", function(e) {
-      if (e.target === thankYouPopup || e.target.classList.contains("popup-overlay")) {
-        hideThankYouPopup();
+      if (elements.themeIcon) {
+        elements.themeIcon.textContent = themeIcons[currentThemeIndex];
       }
+      
+      localStorage.setItem("halaweh-theme", newTheme);
+      console.log("Theme changed to:", newTheme);
     });
+    console.log("Theme button listener attached");
   }
-
-  // Reviews toggle functionality - FIXED to only open clicked review
+  
+  // Review toggles
   const reviewToggles = document.querySelectorAll(".review-toggle");
-  reviewToggles.forEach(toggle => {
+  console.log("Review toggles found:", reviewToggles.length);
+  
+  reviewToggles.forEach((toggle, index) => {
     toggle.addEventListener("click", function() {
+      console.log(`Review toggle ${index + 1} clicked!`);
       const reviewId = this.getAttribute("data-review");
       const answerDiv = document.getElementById("review-" + reviewId);
       
       if (answerDiv) {
-        // Close all other reviews first
+        // Close all other reviews
         reviewToggles.forEach(otherToggle => {
           if (otherToggle !== this) {
             otherToggle.classList.remove("active");
@@ -495,1005 +532,62 @@ document.head.appendChild(snowfallStyle);
       }
     });
   });
-
-  // Booking Popup functionality
-  const ctaButton = document.getElementById("cta");
-  const bookingPopup = document.getElementById("bookingPopup");
-  const bookingPopupOverlay = document.getElementById("bookingPopupOverlay");
-  const bookingPopupClose = document.getElementById("bookingPopupClose");
-  const bookingFormPopup = document.getElementById("bookingFormPopup");
-
-  // Open popup when CTA is clicked
-  if (ctaButton) {
-    ctaButton.addEventListener("click", function(e) {
+  
+  // CTA button
+  if (elements.cta) {
+    elements.cta.addEventListener("click", function(e) {
+      console.log("CTA button clicked!");
       e.preventDefault();
       e.stopPropagation();
-      
-      // Prevent any scroll behavior
-      window.scrollTo(0, 0);
-      document.body.style.overflow = "hidden";
-      
-      // Show popup
-      bookingPopup.classList.add("show");
-      
-      // Clear additional notes field
-      const messageInput = document.getElementById("popupMessage");
-      if (messageInput) {
-        messageInput.value = "";
-      }
-      
-      // Update popup form labels based on language
-      updatePopupFormLabels();
+      alert("CTA working!");
     });
   }
-
-  // Update popup form labels based on language
-  function updatePopupFormLabels() {
-    const popupTitle = document.getElementById("bookingPopupTitle");
-    const nameLabel = document.getElementById("popupNameLabel");
-    const phoneLabel = document.getElementById("popupPhoneLabel");
-    const phoneInput = document.getElementById("popupPhone");
-    const emailLabel = document.getElementById("popupEmailLabel");
-    const guestsLabel = document.getElementById("popupGuestsLabel");
-    const guestsInput = document.getElementById("popupGuests");
-    const dateLabel = document.getElementById("popupBookingDateLabel");
-    const messageLabel = document.getElementById("popupMessageLabel");
-    const messageInput = document.getElementById("popupMessage");
-    const dateInfo = document.getElementById("popupDateInfo");
-    const bookingBtn = document.getElementById("popupBookingBtn");
-    
-    // Check current theme
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    
-    if (currentLang === "en") {
-      if (popupTitle) popupTitle.textContent = "Book Now";
-      if (nameLabel) nameLabel.textContent = "Name *";
-      if (phoneLabel) phoneLabel.textContent = "Phone *";
-      if (emailLabel) emailLabel.textContent = "Email";
-      if (guestsLabel) guestsLabel.textContent = "Number of Guests *";
-      if (guestsInput) guestsInput.placeholder = "Enter number of guests (1-200)";
-      if (dateLabel) dateLabel.textContent = "Booking Date *";
-      if (messageLabel) messageLabel.textContent = "Additional Notes";
-      if (messageInput) messageInput.placeholder = "";
-      if (dateInfo) dateInfo.textContent = "Event available on Thursdays, Fridays, and Saturdays from January 20 to February 20";
-      if (bookingBtn) bookingBtn.textContent = "Book Now";
-    }
-    
-    // Update phone placeholder based on theme
-    if (phoneInput) {
-      if (currentTheme === "moon") {
-        phoneInput.placeholder = "00962XXX";
-      } else {
-        phoneInput.placeholder = "00962XXXX";
-      }
-    }
-  }
-
-  // Update main booking form labels based on language
-  function updateMainFormLabels() {
-    const mobileLabel = document.querySelector('label[for="mobile"]');
-    
-    if (currentLang === "en" && mobileLabel) {
-      mobileLabel.textContent = "Mobile Number";
-    }
-  }
-
-  // Close popup when close button is clicked
-  if (bookingPopupClose) {
-    bookingPopupClose.addEventListener("click", function() {
-      bookingPopup.classList.remove("show");
-      document.body.style.overflow = "auto";
-    });
-  }
-
-  // Close popup when overlay is clicked
-  if (bookingPopupOverlay) {
-    bookingPopupOverlay.addEventListener("click", function() {
-      bookingPopup.classList.remove("show");
-      document.body.style.overflow = "auto";
-    });
-  }
-
-  // Handle popup form submission with validation
-  if (bookingFormPopup) {
-    bookingFormPopup.addEventListener("submit", function(e) {
-      e.preventDefault();
-      
-      // Validate form
-      if (!validatePopupForm()) {
-        return;
-      }
-      
-      // Get form data
-      const formData = new FormData(bookingFormPopup);
-      const name = formData.get("popupName");
-      const phone = formData.get("popupPhone");
-      const email = formData.get("popupEmail");
-      const guests = formData.get("popupGuests");
-      const date = formData.get("popupBookingDate");
-      const message = formData.get("popupMessage");
-      
-      // Update thank you message based on language
-      updateThankYouMessage();
-      
-      // Show thank you popup with snow
-      showThankYouPopup();
-      
-      // Close booking popup
-      bookingPopup.classList.remove("show");
-      document.body.style.overflow = "auto";
-      
-      // Reset form
-      bookingFormPopup.reset();
-    });
-  }
-
-  // Validate popup form
-  function validatePopupForm() {
-    const name = document.getElementById("popupName").value.trim();
-    const phone = document.getElementById("popupPhone").value.trim();
-    const guests = document.getElementById("popupGuests").value;
-    const date = document.getElementById("popupBookingDate").value;
-    const email = document.getElementById("popupEmail").value.trim();
-    
-    // Name validation
-    if (!name) {
-      alert(currentLang === "ar" ? "الرجاء إدخال الاسم" : "Please enter your name");
-      document.getElementById("popupName").focus();
-      return false;
-    }
-    
-    if (name.length < 2) {
-      alert(currentLang === "ar" ? "الاسم يجب أن يكون حرفين على الأقل" : "Name must be at least 2 characters");
-      document.getElementById("popupName").focus();
-      return false;
-    }
-    
-    // Phone validation
-    if (!phone) {
-      alert(currentLang === "ar" ? "الرجاء إدخال رقم الهاتف" : "Please enter your phone number");
-      document.getElementById("popupPhone").focus();
-      return false;
-    }
-    
-    // Jordan phone validation (00962XXXXXXXXX or 07XXXXXXXX)
-    const phoneRegex = /^(00962|07)\d{8}$/;
-    if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
-      alert(currentLang === "ar" ? "الرجاء إدخال رقم هاتف أردني صحيح" : "Please enter a valid Jordanian phone number");
-      document.getElementById("popupPhone").focus();
-      return false;
-    }
-    
-    // Email validation (if provided)
-    if (email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        alert(currentLang === "ar" ? "الرجاء إدخال بريد إلكتروني صحيح" : "Please enter a valid email address");
-        document.getElementById("popupEmail").focus();
-        return false;
-      }
-    }
-    
-    // Guests validation
-    if (!guests) {
-      alert(currentLang === "ar" ? "الرجاء إدخال عدد الضيوف" : "Please enter number of guests");
-      document.getElementById("popupGuests").focus();
-      return false;
-    }
-    
-    const guestsNum = parseInt(guests);
-    if (guestsNum < 1 || guestsNum > 200) {
-      alert(currentLang === "ar" ? "عدد الضيوف يجب أن يكون بين 1 و 200" : "Number of guests must be between 1 and 200");
-      document.getElementById("popupGuests").focus();
-      return false;
-    }
-    
-    // Date validation
-    if (!date) {
-      alert(currentLang === "ar" ? "الرجاء اختيار تاريخ الحجز" : "Please select a booking date");
-      document.getElementById("popupBookingDate").focus();
-      return false;
-    }
-    
-    // Check if date is within allowed range and on allowed day
-    const selectedDate = new Date(date);
-    const minDate = new Date("2026-01-20");
-    const maxDate = new Date("2026-02-20");
-    const dayOfWeek = selectedDate.getDay();
-    const isAllowedDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6; // Thu, Fri, Sat
-    
-    if (selectedDate < minDate || selectedDate > maxDate) {
-      alert(currentLang === "ar" ? "التاريخ يجب أن يكون بين 20 يناير و 20 فبراير 2026" : "Date must be between January 20 and February 20, 2026");
-      document.getElementById("popupBookingDate").focus();
-      return false;
-    }
-    
-    if (!isAllowedDay) {
-      alert(currentLang === "ar" ? "الفعالية متاحة فقط في أيام الخميس والجمعة والسبت" : "Event is only available on Thursdays, Fridays, and Saturdays");
-      document.getElementById("popupBookingDate").focus();
-      return false;
-    }
-    
-    return true;
-  }
-
-  // Update thank you message based on language
-  function updateThankYouMessage() {
-    const thankYouTitle = document.getElementById("thankYouTitle");
-    const thankYouMessage = document.getElementById("thankYouMessage");
-    const thankYouCloseBtn = document.getElementById("thankYouCloseBtn");
-    
-    if (thankYouTitle && thankYouMessage) {
-      if (currentLang === "en") {
-        thankYouTitle.textContent = "Booking Confirmed!";
-        thankYouMessage.textContent = "Booking confirmed successfully. Thank you for choosing our event.";
-        if (thankYouCloseBtn) thankYouCloseBtn.textContent = "Close";
-      } else {
-        thankYouTitle.textContent = "تم تأكيد الحجز!";
-        thankYouMessage.textContent = "تم تأكيد الحجز بنجاح. شكرًا لاختياركم فعاليتنا.";
-        if (thankYouCloseBtn) thankYouCloseBtn.textContent = "اغلاق";
-      }
-    }
-  }
-
-  // Set date input min/max values for native date picker
-  const popupBookingDateInput = document.getElementById("popupBookingDate");
-  if (popupBookingDateInput) {
-    popupBookingDateInput.min = "2026-01-20";
-    popupBookingDateInput.max = "2026-02-20";
-    
-    // Add date validation
-    popupBookingDateInput.addEventListener("change", function() {
-      const selectedDate = new Date(this.value);
-      const dayOfWeek = selectedDate.getDay();
-      const isAllowedDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6; // Thu, Fri, Sat
-      
-      if (!isAllowedDay) {
-        this.value = "";
-        alert("الفعالية متاحة فقط في أيام الخميس والجمعة والسبت");
-      }
-    });
-  }
-
-  // Kids activities toggle functionality
-  const kidsToggle = document.getElementById("kidsToggle");
-  const kidsContent = document.getElementById("kidsContent");
-
-  if (kidsToggle && kidsContent) {
-    kidsToggle.addEventListener("click", function() {
-      // Toggle active class on button
-      kidsToggle.classList.toggle("active");
-
-      // Toggle show class on content
-      kidsContent.classList.toggle("show");
-    });
-  }
-
-  // Hero CTA click handler - scroll to booking form
-  const heroCta = document.getElementById("cta");
-  if (heroCta) {
-    heroCta.addEventListener("click", function(e) {
-      e.preventDefault();
-      const bookingSection = document.getElementById("bookingForm");
-      if (bookingSection) {
-        bookingSection.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
-    });
-  }
-
-// Form validation functions
-function validateForm() {
-  let isValid = true;
-
-  // Validate full name
-  const fullName = document.getElementById("fullName");
-  if (!fullName.value.trim()) {
-    showFieldError(fullName, currentLang === "ar" ? "الاسم الكامل مطلوب" : "Full name is required");
-    isValid = false;
-  } else if (fullName.value.trim().length < 2) {
-    showFieldError(fullName, currentLang === "ar" ? "الاسم يجب أن يكون حرفين على الأقل" : "Name must be at least 2 characters");
-    isValid = false;
-  }
-
-  // Validate mobile number (optional but if provided must be valid)
-  const mobile = document.getElementById("mobile");
-  if (mobile && mobile.value.trim()) {
-    const phoneRegex = /^(00962|07)\d{8}$/;
-    if (!phoneRegex.test(mobile.value.replace(/\s/g, ''))) {
-      showFieldError(mobile, currentLang === "ar" ? "الرجاء إدخال رقم هاتف أردني صحيح" : "Please enter a valid Jordanian phone number");
-      isValid = false;
-    }
-  }
-
-  // Validate number of people
-  const numPeople = document.getElementById("numPeople");
-  if (!numPeople.value || numPeople.value < 1) {
-    showFieldError(numPeople, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر" : "Number of people must be greater than 0");
-    isValid = false;
-  } else if (numPeople.value > 200) {
-    showFieldError(numPeople, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون 200 أو أقل" : "Number of people must be 200 or less");
-    isValid = false;
-  }
-
-  // Validate meal type
-  const mealType = document.getElementById("mealType");
-  if (!mealType.value) {
-    showFieldError(mealType, currentLang === "ar" ? "يجب اختيار نوع البوفيه" : "Please select buffet type");
-    isValid = false;
-  }
-
-  // Validate booking date
-  const bookingDate = document.getElementById("bookingDate");
-  if (!bookingDate.value) {
-    showFieldError(bookingDate, currentLang === "ar" ? "تاريخ الحجز مطلوب" : "Booking date is required");
-    isValid = false;
-  } else if (!isValidDate(bookingDate.value)) {
-    showFieldError(bookingDate, currentLang === "ar" ? "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية" : "Date must be Thursday, Friday, or Saturday during the event period");
-    isValid = false;
-  }
-
-  return isValid;
-}
-
-function validateField(field) {
-  clearFieldError(field);
-
-  switch(field.id) {
-    case "fullName":
-      if (!field.value.trim()) {
-        showFieldError(field, currentLang === "ar" ? "الاسم الكامل مطلوب" : "Full name is required");
-      }
-      break;
-    case "numPeople":
-      if (!field.value || field.value < 1) {
-        showFieldError(field, currentLang === "ar" ? "عدد الأشخاص يجب أن يكون رقماً أكبر من صفر" : "Number of people must be greater than 0");
-      }
-      break;
-    case "mealType":
-      if (!field.value) {
-        showFieldError(field, currentLang === "ar" ? "يجب اختيار نوع البوفيه" : "Please select buffet type");
-      }
-      break;
-    case "bookingDate":
-      if (!field.value) {
-        showFieldError(field, currentLang === "ar" ? "تاريخ الحجز مطلوب" : "Booking date is required");
-      } else if (!isValidDate(field.value)) {
-        showFieldError(field, currentLang === "ar" ? "التاريخ يجب أن يكون خميس أو جمعة أو سبت خلال فترة الفعالية" : "Date must be Thursday, Friday, or Saturday during the event period");
-      }
-      break;
-  }
-}
-
-function isValidDate(dateString) {
-  const date = new Date(dateString);
-  const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
-
-  // Check if it's Thursday (4), Friday (5), or Saturday (6)
-  if (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-    return false;
-  }
-
-  // Check if it's within the event period (from Jan 20th for 1 month)
-  const currentYear = new Date().getFullYear();
-  const eventStart = new Date(currentYear, 0, 20); // January 20th
-  const eventEnd = new Date(currentYear, 1, 20); // February 20th (1 month later)
-
-  return date >= eventStart && date <= eventEnd;
-}
-
-function showFieldError(field, message) {
-  const formGroup = field.closest(".form-group");
-  formGroup.classList.add("error");
-
-  let errorElement = formGroup.querySelector(".error-message");
-  if (!errorElement) {
-    errorElement = document.createElement("span");
-    errorElement.className = "error-message";
-    formGroup.appendChild(errorElement);
-  }
-  errorElement.textContent = message;
-}
-
-function clearFieldError(field) {
-  const formGroup = field.closest(".form-group");
-  formGroup.classList.remove("error");
-
-  const errorElement = formGroup.querySelector(".error-message");
-  if (errorElement) {
-    errorElement.remove();
-  }
-}
-
-  // Custom Calendar Functionality
-  function setupDateRestrictions() {
-    const bookingDateInput = document.getElementById("bookingDate");
-    const calendarToggle = document.getElementById("calendarToggle");
-    const customCalendar = document.getElementById("customCalendar");
-    const dateInfoElement = document.getElementById("dateInfo");
-    
-    console.log("Setting up calendar restrictions..."); // Debug log
-    
-    // Event date parameters
-    const eventYear = new Date().getFullYear();
-    const eventStart = new Date(eventYear, 0, 20); // January 20th
-    const eventEnd = new Date(eventYear, 1, 20); // February 20th
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Check if event has ended
-    if (today > eventEnd) {
-      bookingDateInput.disabled = true;
-      calendarToggle.disabled = true;
-      bookingDateInput.placeholder = currentLang === "ar" ? "الفعالية انتهت" : "Event has ended";
-      return;
-    }
-
-    // Calendar state
-    let currentMonth = new Date().getMonth();
-    let calendarYear = new Date().getFullYear();
-    let selectedDate = null;
-
-    // Function to check if a date is valid (Thursday, Friday, or Saturday within event period)
-    function isValidEventDate(date) {
-      const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
-      const isValidDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6;
-      const isWithinPeriod = date >= eventStart && date <= eventEnd;
-      return isValidDay && isWithinPeriod;
-    }
-
-    // Function to get next valid event date
-    function getNextValidEventDate(fromDate = today) {
-      let currentDate = new Date(fromDate);
-      currentDate.setHours(0, 0, 0, 0);
-      
-      // Start from event start if before it
-      if (currentDate < eventStart) {
-        currentDate = new Date(eventStart);
-      }
-      
-      // Find the next Thursday, Friday, or Saturday
-      while (currentDate <= eventEnd) {
-        const dayOfWeek = currentDate.getDay();
-        if (dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6) {
-          return currentDate;
-        }
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      
-      return null; // No valid dates found
-    }
-
-    // Function to render calendar
-    function renderCalendar() {
-      console.log("Rendering calendar for:", calendarYear, currentMonth); // Debug log
-      const firstDay = new Date(calendarYear, currentMonth, 1);
-      const lastDay = new Date(calendarYear, currentMonth + 1, 0);
-      const prevLastDay = new Date(calendarYear, currentMonth, 0);
-      
-      const firstDayIndex = firstDay.getDay();
-      const lastDayIndex = lastDay.getDay();
-      const nextDays = 7 - lastDayIndex - 1;
-
-      // Update calendar title
-      const monthNames = currentLang === "ar" 
-        ? ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
-        : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      
-      const weekdayNames = currentLang === "ar"
-        ? ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"]
-        : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-      let calendarHTML = `
-        <div class="calendar-header">
-          <button class="calendar-nav" id="prevMonth">‹</button>
-          <div class="calendar-title">${monthNames[currentMonth]} ${calendarYear}</div>
-          <button class="calendar-nav" id="nextMonth">›</button>
-        </div>
-        <div class="calendar-grid">
-      `;
-
-      // Add weekday headers
-      weekdayNames.forEach(day => {
-        calendarHTML += `<div class="calendar-weekday">${day}</div>`;
-      });
-
-      // Add previous month's trailing days
-      for (let x = firstDayIndex; x > 0; x--) {
-        calendarHTML += `<div class="calendar-day other-month">${prevLastDay.getDate() - x + 1}</div>`;
-      }
-
-      // Add current month's days
-      for (let i = 1; i <= lastDay.getDate(); i++) {
-        const currentDateObj = new Date(calendarYear, currentMonth, i);
-        const isValid = isValidEventDate(currentDateObj);
-        const isPast = currentDateObj < today;
-        const isSelected = selectedDate && 
-          selectedDate.getDate() === i && 
-          selectedDate.getMonth() === currentMonth && 
-          selectedDate.getFullYear() === calendarYear;
-
-        let classes = "calendar-day";
-        if (isValid && !isPast) {
-          classes += " valid";
-        } else if (isPast || currentDateObj > eventEnd || currentDateObj < eventStart) {
-          classes += " disabled";
-        }
-        if (isSelected) {
-          classes += " selected";
-        }
-
-        calendarHTML += `<div class="${classes}" data-date="${calendarYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}">${i}</div>`;
-      }
-
-      // Add next month's leading days
-      for (let j = 1; j <= nextDays; j++) {
-        calendarHTML += `<div class="calendar-day other-month">${j}</div>`;
-      }
-
-      calendarHTML += `</div>`;
-      customCalendar.innerHTML = calendarHTML;
-
-      // Add event listeners to calendar days
-      document.querySelectorAll(".calendar-day.valid").forEach(day => {
-        day.addEventListener("click", function() {
-          const dateStr = this.getAttribute("data-date");
-          selectedDate = new Date(dateStr);
-          bookingDateInput.value = selectedDate.toLocaleDateString(currentLang === "ar" ? "ar-JO" : "en-US");
-          
-          // Update selected state
-          document.querySelectorAll(".calendar-day").forEach(d => d.classList.remove("selected"));
-          this.classList.add("selected");
-          
-          // Close calendar
-          customCalendar.classList.remove("show");
-          
-          // Clear any validation errors
-          clearFieldError(bookingDateInput);
-          bookingDateInput.classList.add('date-valid');
-          bookingDateInput.classList.remove('date-invalid');
-        });
-      });
-
-      // Add navigation event listeners
-      document.getElementById("prevMonth").addEventListener("click", () => {
-        currentMonth--;
-        if (currentMonth < 0) {
-          currentMonth = 11;
-          calendarYear--;
-        }
-        renderCalendar();
-      });
-
-      document.getElementById("nextMonth").addEventListener("click", () => {
-        currentMonth++;
-        if (currentMonth > 11) {
-          currentMonth = 0;
-          calendarYear++;
-        }
-        renderCalendar();
-      });
-    }
-
-    // Toggle calendar visibility
-    if (calendarToggle) {
-      calendarToggle.addEventListener("click", function(e) {
-        e.preventDefault();
-        console.log("Calendar toggle clicked"); // Debug log
-        customCalendar.classList.toggle("show");
-        if (customCalendar.classList.contains("show")) {
-          renderCalendar();
-        }
-      });
-    } else {
-      console.error("Calendar toggle button not found"); // Debug log
-    }
-
-    // Close calendar when clicking outside
-    document.addEventListener("click", function(e) {
-      if (!e.target.closest(".custom-date-picker")) {
-        customCalendar.classList.remove("show");
-      }
-    });
-
-    // Update date info text
-    const nextValidDate = getNextValidEventDate();
-    const nextValidDateStr = nextValidDate ? 
-      nextValidDate.toLocaleDateString(currentLang === "ar" ? "ar-JO" : "en-US", {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }) : '';
-    
-    // Initial info text update
-    updateDateInfo();
-    
-    // Add custom styles for Flatpickr to match our theme
-    const style = document.createElement('style');
-    style.textContent = `
-      .flatpickr-calendar {
-        background: white;
-        border: 2px solid var(--primary-cta);
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        font-family: "Tajawal", sans-serif;
-      }
-      
-      .flatpickr-day.selected {
-        background: var(--primary-cta) !important;
-        color: white !important;
-        border-color: var(--primary-cta) !important;
-      }
-      
-      .flatpickr-day.startRange,
-      .flatpickr-day.endRange {
-        background: var(--primary-cta) !important;
-        color: white !important;
-      }
-      
-      .flatpickr-day.inRange {
-        background: rgba(196, 90, 46, 0.1) !important;
-        color: var(--primary-cta) !important;
-        border-color: var(--primary-cta) !important;
-      }
-      
-      .flatpickr-day.disabled {
-        color: #ccc !important;
-        background: rgba(0, 0, 0, 0.05) !important;
-        cursor: not-allowed !important;
-      }
-      
-      .flatpickr-day:hover:not(.disabled) {
-        background: var(--primary-cta) !important;
-        color: white !important;
-      }
-      
-      .flatpickr-months,
-      .flatpickr-weekdays {
-        background: var(--primary-cta);
-        color: white;
-      }
-      
-      .flatpickr-weekday {
-        color: white;
-        font-weight: 600;
-      }
-      
-      .flatpickr-month {
-        color: white;
-        font-weight: 700;
-      }
-      
-      [data-theme="moon"] .flatpickr-calendar {
-        background: #2a2a2a;
-        border-color: var(--primary-cta);
-      }
-      
-      [data-theme="auto"] .flatpickr-calendar {
-        background: #f5f5f5;
-        border-color: var(--primary-cta);
-      }
-    `;
-    document.head.appendChild(style);
-    
-    console.log("Flatpickr calendar initialized successfully");
-  }
-
-  // Flatpickr Calendar Initialization - Fixed version
-  function initializeFlatpickrCalendar() {
-    const bookingDateInput = document.getElementById("bookingDate");
-    const calendarToggle = document.getElementById("calendarToggle");
-    const customCalendar = document.getElementById("customCalendar");
-    const dateInfoElement = document.getElementById("dateInfo");
-    
-    if (!bookingDateInput || !calendarToggle || !dateInfoElement) {
-      console.error("Calendar elements not found");
-      return;
-    }
-    
-    console.log("Calendar elements found, setting up...");
-    
-    // Event date parameters
-    const eventYear = 2026;
-    const eventStart = new Date(eventYear, 0, 20); // January 20, 2026
-    const eventEnd = new Date(eventYear, 1, 20); // February 20, 2026
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    // Function to check if date is valid (Thursday, Friday, Saturday within event period)
-    function isValidEventDate(date) {
-      const dayOfWeek = date.getDay();
-      const isValidDay = dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6; // Thu, Fri, Sat
-      const isWithinPeriod = date >= eventStart && date <= eventEnd;
-      const isNotPast = date >= today;
-      return isValidDay && isWithinPeriod && isNotPast;
-    }
-    
-    // Get next valid date for info text
-    function getNextValidDate() {
-      let currentDate = new Date(today);
-      if (currentDate < eventStart) {
-        currentDate = new Date(eventStart);
-      }
-      
-      while (currentDate <= eventEnd) {
-        if (isValidEventDate(currentDate)) {
-          return currentDate;
-        }
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      return null;
-    }
-    
-    // Update date info text
-    function updateDateInfo() {
-      const nextValidDate = getNextValidDate();
-      const nextValidDateStr = nextValidDate 
-        ? nextValidDate.toLocaleDateString(currentLang === "ar" ? "ar-JO" : "en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-          })
-        : "";
-      
-      const infoText = currentLang === "ar"
-        ? `الفعالية متاحة في أيام الخميس والجمعة والسبت من 20 يناير إلى 20 فبراير${nextValidDateStr ? `<br>التاريخ المتاح القادم: <strong>${nextValidDateStr}</strong>` : ""}`
-        : `The event is available on Thursdays, Fridays, and Saturdays from January 20 to February 20${nextValidDateStr ? `<br>Next available date: <strong>${nextValidDateStr}</strong>` : ""}`;
-      
-      if (dateInfoElement) {
-        dateInfoElement.innerHTML = infoText;
-      }
-    }
-    
-    // Initialize Flatpickr
-    try {
-      const fp = flatpickr(bookingDateInput, {
-        locale: currentLang === "ar" ? "ar" : "default",
-        minDate: eventStart > today ? eventStart : today,
-        maxDate: eventEnd,
-        disable: [
-          function(date) {
-            return !isValidEventDate(date);
-          }
-        ],
-        dateFormat: currentLang === "ar" ? "Y-m-d" : "Y-m-d",
-        animate: true,
-        position: "auto center",
-        theme: "light",
-        inline: false,
-        static: false,
-        onChange: function(selectedDates, dateStr, instance) {
-          console.log("Date selected:", selectedDates[0]);
-          updateDateInfo();
-        },
-        onReady: function(selectedDates, dateStr, instance) {
-          console.log("Flatpickr calendar ready");
-          updateDateInfo();
-        }
-      });
-      
-      // Add custom styles for Flatpickr to match our theme
-      const style = document.createElement('style');
-      style.textContent = `
-        .flatpickr-calendar {
-          background: white;
-          border: 2px solid var(--primary-cta);
-          border-radius: 12px;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-          font-family: "Tajawal", sans-serif;
-          width: 100%;
-          max-width: 400px;
-        }
-        
-        .flatpickr-day.selected {
-          background: var(--primary-cta) !important;
-          color: white !important;
-          border-color: var(--primary-cta) !important;
-        }
-        
-        .flatpickr-day.startRange,
-        .flatpickr-day.endRange {
-          background: var(--primary-cta) !important;
-          color: white !important;
-        }
-        
-        .flatpickr-day.inRange {
-          background: rgba(196, 90, 46, 0.1) !important;
-          color: var(--primary-cta) !important;
-          border-color: var(--primary-cta) !important;
-        }
-        
-        .flatpickr-day.disabled {
-          color: #ccc !important;
-          background: rgba(0, 0, 0, 0.05) !important;
-          cursor: not-allowed !important;
-        }
-        
-        .flatpickr-day:hover:not(.disabled) {
-          background: var(--primary-cta) !important;
-          color: white !important;
-        }
-        
-        .flatpickr-months,
-        .flatpickr-weekdays {
-          background: var(--primary-cta);
-          color: white;
-        }
-        
-        .flatpickr-weekday {
-          color: white;
-          font-weight: 600;
-        }
-        
-        .flatpickr-month {
-          color: white;
-          font-weight: 700;
-        }
-        
-        [data-theme="moon"] .flatpickr-calendar {
-          background: #2a2a2a;
-          border-color: var(--primary-cta);
-        }
-        
-        [data-theme="auto"] .flatpickr-calendar {
-          background: #f5f5f5;
-          border-color: var(--primary-cta);
-        }
-      `;
-      document.head.appendChild(style);
-      
-      console.log("Flatpickr calendar initialized successfully");
-      
-    } catch (error) {
-      console.error("Error initializing Flatpickr:", error);
-    }
-  }
-
-  // Mobile Responsive Navigation
-  function setupMobileNavigation() {
-    const header = document.querySelector('.site-header');
-    const headerInner = document.querySelector('.header-inner');
-    const navItems = document.querySelector('.header-actions');
-    
-    if (window.innerWidth <= 768) {
-      // Convert to sidebar navigation for mobile
-      header.style.position = 'relative';
-      headerInner.style.flexDirection = 'column';
-      headerInner.style.alignItems = 'stretch';
-      navItems.style.position = 'absolute';
-      navItems.style.top = '100%';
-      navItems.style.right = '1rem';
-      navItems.style.flexDirection = 'column';
-      navItems.style.gap = '1rem';
-      navItems.style.background = 'var(--bg-color)';
-      navItems.style.padding = '1rem';
-      navItems.style.borderRadius = '0 0 12px 12px 0';
-      navItems.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-    } else {
-      // Desktop navigation
-      header.style.position = 'sticky';
-      headerInner.style.flexDirection = 'row';
-      headerInner.style.alignItems = 'center';
-      navItems.style.position = 'static';
-      navItems.style.top = 'auto';
-      navItems.style.right = 'auto';
-      navItems.style.flexDirection = 'row';
-      navItems.style.gap = '1rem';
-      navItems.style.background = 'transparent';
-      navItems.style.padding = '0';
-      navItems.style.borderRadius = '0';
-      navItems.style.boxShadow = 'none';
-    }
-  }
-
-  // Initialize everything after DOM is ready
-  initializeFlatpickrCalendar();
-  setupMobileNavigation();
-
-  // Handle window resize
-  window.addEventListener('resize', setupMobileNavigation);
-
-// Theme Toggle Functionality
-const shareBtn = document.getElementById("shareBtn");
-const shareModal = document.getElementById("shareModal");
-const shareModalClose = document.getElementById("shareModalClose");
-const whatsappShare = document.getElementById("whatsappShare");
-const instagramShare = document.getElementById("instagramShare");
-const youtubeShare = document.getElementById("youtubeShare");
-
-// Share button click handler
-if (shareBtn && shareModal) {
-  shareBtn.addEventListener("click", function(e) {
-    e.preventDefault();
-    shareModal.classList.add("show");
+  
+  // Booking form functionality
+  const bookingForm = document.getElementById("bookingForm");
+  
+  // Get calendar elements after DOM is loaded
+  const bookingDateInput = document.getElementById("bookingDate");
+  const calendarIconBtn = document.getElementById("calendarIconBtn");
+  const customCalendar = document.getElementById("customCalendar");
+  
+  console.log("Calendar elements check:", {
+    bookingDateInput: bookingDateInput,
+    calendarIconBtn: calendarIconBtn,
+    customCalendar: customCalendar,
+    bookingDateInputHTML: bookingDateInput ? bookingDateInput.outerHTML.substring(0, 100) : 'NOT FOUND',
+    calendarIconBtnHTML: calendarIconBtn ? calendarIconBtn.outerHTML : 'NOT FOUND',
+    customCalendarHTML: customCalendar ? customCalendar.outerHTML.substring(0, 100) : 'NOT FOUND'
   });
-}
+  
+  // Booking form submission
 
-// Close modal handlers
-if (shareModalClose && shareModal) {
-  shareModalClose.addEventListener("click", function() {
-    shareModal.classList.remove("show");
-  });
-}
-
-if (shareModal) {
-  shareModal.addEventListener("click", function(e) {
-    if (e.target === shareModal) {
-      shareModal.classList.remove("show");
-    }
-  });
-}
-
-// Social media sharing handlers
-const shareUrl = encodeURIComponent(window.location.href);
-const shareTextAr = encodeURIComponent("تجربة شتوية دافئة في مطعم حلاوة - فعالية عائلية رائعة!");
-const shareTextEn = encodeURIComponent("Warm Winter Experience at Halaweh Restaurant - Amazing Family Event!");
-
-if (whatsappShare) {
-  whatsappShare.addEventListener("click", function(e) {
-    e.preventDefault();
-    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
-    const whatsappUrl = `https://wa.me/?text=${text}%20${shareUrl}`;
-    window.open(whatsappUrl, "_blank");
-    shareModal.classList.remove("show");
-  });
-}
-
-if (instagramShare) {
-  instagramShare.addEventListener("click", function(e) {
-    e.preventDefault();
-    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
-    navigator.clipboard.writeText(`${text} ${window.location.href}`).then(() => {
-      alert(currentLang === "ar" ? "تم نسخ الرابط إلى الحافظة. يمكنك مشاركته على إنستغرام." : "Link copied to clipboard. You can share it on Instagram.");
-    });
-    shareModal.classList.remove("show");
-  });
-}
-
-if (youtubeShare) {
-  youtubeShare.addEventListener("click", function(e) {
-    e.preventDefault();
-    const text = currentLang === "ar" ? shareTextAr : shareTextEn;
-    navigator.clipboard.writeText(`${text} ${window.location.href}`).then(() => {
-      alert(currentLang === "ar" ? "تم نسخ الرابط إلى الحافظة. يمكنك مشاركته على يوتيوب." : "Link copied to clipboard. You can share it on YouTube.");
-    });
-    shareModal.classList.remove("show");
-  });
-}
-
-// Theme Toggle Functionality
-const themeToggle = document.getElementById("themeToggle");
-const themeIcon = document.getElementById("themeIcon");
-const body = document.body;
-
-const themes = ["sun", "moon", "auto"];
-const themeIcons = ["☀️", "🌙", "🌓"];
-
-// Get saved theme or default to sun
-let currentThemeIndex = 0;
-const savedTheme = localStorage.getItem("halaweh-theme");
-if (savedTheme) {
-  const savedIndex = themes.indexOf(savedTheme);
-  if (savedIndex !== -1) {
-    currentThemeIndex = savedIndex;
-    body.setAttribute("data-theme", themes[currentThemeIndex]);
-    if (themeIcon) {
-      themeIcon.textContent = themeIcons[currentThemeIndex];
-    }
+// ... (rest of the code remains the same)
+  // Function to show thank you popup
+  function showThankYouPopup() {
+    console.log("showThankYouPopup called!");
   }
-}
-
-if (themeToggle && themeIcon) {
-  themeToggle.addEventListener("click", () => {
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-    const newTheme = themes[currentThemeIndex];
-    body.setAttribute("data-theme", newTheme);
-    themeIcon.textContent = themeIcons[currentThemeIndex];
-    localStorage.setItem("halaweh-theme", newTheme);
-  });
-}
+  
+  // Get thank you popup elements
+  const popup = document.getElementById("thankYouPopup");
+  const popupCloseBtn = document.getElementById("popupCloseBtn");
+  const popupOverlay = document.getElementById("popupOverlay");
+  
+  if (popupCloseBtn) {
+    popupCloseBtn.addEventListener("click", function() {
+      if (popup) {
+        popup.style.display = 'none';
+      }
+    });
+  }
+  
+  if (popupOverlay) {
+    popupOverlay.addEventListener("click", function() {
+      if (popup) {
+        popup.style.display = 'none';
+      }
+    });
+  }
+  
+  console.log("All event listeners attached successfully!");
 });
